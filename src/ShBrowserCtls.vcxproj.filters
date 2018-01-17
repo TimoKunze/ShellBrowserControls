@@ -1,0 +1,707 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files\ctlinterfaces">
+      <UniqueIdentifier>{53a842bc-a2dc-4e80-abf6-7bd9b0cc8bf8}</UniqueIdentifier>
+      <Extensions>ctlinterfaces\cpp</Extensions>
+    </Filter>
+    <Filter Include="Source Files\ctlinterfaces\exlvw">
+      <UniqueIdentifier>{8eea7c8a-d5da-4141-86fa-ddbaa3579263}</UniqueIdentifier>
+      <Extensions>ctlinterfaces\exlvw\cpp</Extensions>
+    </Filter>
+    <Filter Include="Source Files\ctlinterfaces\extvw">
+      <UniqueIdentifier>{27920f83-72a2-4b48-bf15-3ff0610804b1}</UniqueIdentifier>
+      <Extensions>ctlinterfaces\extvw\cpp</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Generated Files">
+      <UniqueIdentifier>{6cc7963e-d10b-4bd0-bdb4-67844900dd67}</UniqueIdentifier>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Header Files\ctlinterfaces">
+      <UniqueIdentifier>{33a52ab2-c914-4c6d-aa2a-d0e0e322f94c}</UniqueIdentifier>
+      <Extensions>ctlinterfaces\h</Extensions>
+    </Filter>
+    <Filter Include="Header Files\ctlinterfaces\exlvw">
+      <UniqueIdentifier>{041e2043-fd11-480c-a770-0da182336b4d}</UniqueIdentifier>
+      <Extensions>ctlinterfaces\exlvw\h</Extensions>
+    </Filter>
+    <Filter Include="Header Files\ctlinterfaces\extvw">
+      <UniqueIdentifier>{af9a6d27-68f8-4f00-ace9-7d1409a0f041}</UniqueIdentifier>
+      <Extensions>ctlinterfaces\extvw\h</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Generated Files">
+      <UniqueIdentifier>{11d11e91-9034-4421-acda-6636d8033cd4}</UniqueIdentifier>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AboutDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CommonProperties.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CWindowEx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EnumOLEVERB.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="helpers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ShBrowserCtls.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\AggregateImageList.cpp">
+      <Filter>Source Files\ctlinterfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\APIWrapper.cpp">
+      <Filter>Source Files\ctlinterfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\common.cpp">
+      <Filter>Source Files\ctlinterfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\DataObject.cpp">
+      <Filter>Source Files\ctlinterfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\DesktopShellFolderHook.cpp">
+      <Filter>Source Files\ctlinterfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\DropShadowAdorner.cpp">
+      <Filter>Source Files\ctlinterfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\DummyShellBrowser.cpp">
+      <Filter>Source Files\ctlinterfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\ElevationShieldTask.cpp">
+      <Filter>Source Files\ctlinterfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\LegacyImageListWrapper.cpp">
+      <Filter>Source Files\ctlinterfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\NamespaceEnumSettings.cpp">
+      <Filter>Source Files\ctlinterfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\NamespaceEnumSettingsProperties.cpp">
+      <Filter>Source Files\ctlinterfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\PhotoBorderAdorner.cpp">
+      <Filter>Source Files\ctlinterfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\RunnableTask.cpp">
+      <Filter>Source Files\ctlinterfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\SecurityZone.cpp">
+      <Filter>Source Files\ctlinterfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\SecurityZones.cpp">
+      <Filter>Source Files\ctlinterfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\SprocketAdorner.cpp">
+      <Filter>Source Files\ctlinterfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\UnifiedImageList.cpp">
+      <Filter>Source Files\ctlinterfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\exlvw\BackgroundColumnEnumTask.cpp">
+      <Filter>Source Files\ctlinterfaces\exlvw</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\exlvw\BackgroundItemEnumTask.cpp">
+      <Filter>Source Files\ctlinterfaces\exlvw</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\exlvw\IconTask.cpp">
+      <Filter>Source Files\ctlinterfaces\exlvw</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\exlvw\InsertSingleItemTask.cpp">
+      <Filter>Source Files\ctlinterfaces\exlvw</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\exlvw\LegacyExtractThumbnailFromDiskCacheTask.cpp">
+      <Filter>Source Files\ctlinterfaces\exlvw</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\exlvw\LegacyExtractThumbnailTask.cpp">
+      <Filter>Source Files\ctlinterfaces\exlvw</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\exlvw\LegacyTestThumbnailCacheTask.cpp">
+      <Filter>Source Files\ctlinterfaces\exlvw</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\exlvw\LegacyThumbnailTask.cpp">
+      <Filter>Source Files\ctlinterfaces\exlvw</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\exlvw\LegacyTileViewTask.cpp">
+      <Filter>Source Files\ctlinterfaces\exlvw</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\exlvw\OverlayTask.cpp">
+      <Filter>Source Files\ctlinterfaces\exlvw</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\exlvw\SetColumnsDlg.cpp">
+      <Filter>Source Files\ctlinterfaces\exlvw</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\exlvw\ShellListView.cpp">
+      <Filter>Source Files\ctlinterfaces\exlvw</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\exlvw\ShellListViewColumn.cpp">
+      <Filter>Source Files\ctlinterfaces\exlvw</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\exlvw\ShellListViewColumns.cpp">
+      <Filter>Source Files\ctlinterfaces\exlvw</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\exlvw\ShellListViewItem.cpp">
+      <Filter>Source Files\ctlinterfaces\exlvw</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\exlvw\ShellListViewItems.cpp">
+      <Filter>Source Files\ctlinterfaces\exlvw</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\exlvw\ShellListViewNamespace.cpp">
+      <Filter>Source Files\ctlinterfaces\exlvw</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\exlvw\ShellListViewNamespaces.cpp">
+      <Filter>Source Files\ctlinterfaces\exlvw</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\exlvw\ShLvwDefaultManagedItemPropertiesProperties.cpp">
+      <Filter>Source Files\ctlinterfaces\exlvw</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\exlvw\SlowColumnTask.cpp">
+      <Filter>Source Files\ctlinterfaces\exlvw</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\exlvw\ThumbnailsProperties.cpp">
+      <Filter>Source Files\ctlinterfaces\exlvw</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\exlvw\ThumbnailTask.cpp">
+      <Filter>Source Files\ctlinterfaces\exlvw</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\exlvw\TileViewTask.cpp">
+      <Filter>Source Files\ctlinterfaces\exlvw</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\extvw\BackgroundEnumTask.cpp">
+      <Filter>Source Files\ctlinterfaces\extvw</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\extvw\IconTask.cpp">
+      <Filter>Source Files\ctlinterfaces\extvw</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\extvw\InsertSingleItemTask.cpp">
+      <Filter>Source Files\ctlinterfaces\extvw</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\extvw\OverlayTask.cpp">
+      <Filter>Source Files\ctlinterfaces\extvw</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\extvw\ShellTreeView.cpp">
+      <Filter>Source Files\ctlinterfaces\extvw</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\extvw\ShellTreeViewItem.cpp">
+      <Filter>Source Files\ctlinterfaces\extvw</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\extvw\ShellTreeViewItems.cpp">
+      <Filter>Source Files\ctlinterfaces\extvw</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\extvw\ShellTreeViewNamespace.cpp">
+      <Filter>Source Files\ctlinterfaces\extvw</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\extvw\ShellTreeViewNamespaces.cpp">
+      <Filter>Source Files\ctlinterfaces\extvw</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\extvw\ShTvwDefaultManagedItemPropertiesProperties.cpp">
+      <Filter>Source Files\ctlinterfaces\extvw</Filter>
+    </ClCompile>
+    <ClCompile Include="ShBrowserCtlsA_i.c">
+      <Filter>Source Files\Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ShBrowserCtlsU_i.c">
+      <Filter>Source Files\Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\exlvw\InfoTipTask.cpp">
+      <Filter>Source Files\ctlinterfaces\exlvw</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\exlvw\SubItemControlTask.cpp">
+      <Filter>Source Files\ctlinterfaces\exlvw</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\exlvw\LegacyBackgroundItemEnumTask.cpp">
+      <Filter>Source Files\ctlinterfaces\exlvw</Filter>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\extvw\LegacyBackgroundEnumTask.cpp">
+      <Filter>Source Files\ctlinterfaces\extvw</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ShBrowserCtlsA.def">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="ShBrowserCtlsU.def">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="res\About.jpg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\IDE-Logo ShLvw.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\IDE-Logo ShTvw.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\Paypal.jpg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ShBrowserCtlsA.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ShBrowserCtlsU.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ShellListViewA.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ShellListViewU.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ShellTreeViewA.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ShellTreeViewU.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ToolBar disabled.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ToolBar enabled.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\CommonPropertiesA.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ThumbnailsPropertiesU.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\CommonPropertiesU.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\NamespaceEnumSettingsA.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\NamespaceEnumSettingsPropertiesA.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\NamespaceEnumSettingsPropertiesU.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\NamespaceEnumSettingsU.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\SecurityZoneA.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\SecurityZonesA.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\SecurityZonesU.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\SecurityZoneU.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ShellListViewA.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ShellListViewColumnA.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ShellListViewColumnsA.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ShellListViewColumnsU.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ShellListViewColumnU.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ShellListViewItemA.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ShellListViewItemsA.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ShellListViewItemsU.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ShellListViewItemU.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ShellListViewNamespaceA.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ShellListViewNamespacesA.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ShellListViewNamespacesU.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ShellListViewNamespaceU.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ShellListViewU.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ShellTreeViewA.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ShellTreeViewItemA.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ShellTreeViewItemsA.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ShellTreeViewItemsU.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ShellTreeViewItemU.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ShellTreeViewNamespaceA.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ShellTreeViewNamespacesA.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ShellTreeViewNamespacesU.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ShellTreeViewNamespaceU.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ShellTreeViewU.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ShLvwDefaultManagedItemPropertiesPropertiesA.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ShLvwDefaultManagedItemPropertiesPropertiesU.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ShTvwDefaultManagedItemPropertiesPropertiesA.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ShTvwDefaultManagedItemPropertiesPropertiesU.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ThumbnailsPropertiesA.rgs">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Midl Include="ShBrowserCtlsA.idl">
+      <Filter>Source Files</Filter>
+    </Midl>
+    <Midl Include="ShBrowserCtlsU.idl">
+      <Filter>Source Files</Filter>
+    </Midl>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AboutDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ClassFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CommonProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CompilerFlags.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CWindowEx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DispIDs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EnumOLEVERB.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="helpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HyperLinkEx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ICategorizeProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ICreditsProvider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\_INamespaceEnumSettingsEvents_CP.h">
+      <Filter>Header Files\ctlinterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\_ISecurityZoneEvents_CP.h">
+      <Filter>Header Files\ctlinterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\_ISecurityZonesEvents_CP.h">
+      <Filter>Header Files\ctlinterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\AggregateImageList.h">
+      <Filter>Header Files\ctlinterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\APIWrapper.h">
+      <Filter>Header Files\ctlinterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\common.h">
+      <Filter>Header Files\ctlinterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\DataObject.h">
+      <Filter>Header Files\ctlinterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\definitions.h">
+      <Filter>Header Files\ctlinterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\DesktopShellFolderHook.h">
+      <Filter>Header Files\ctlinterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\DropShadowAdorner.h">
+      <Filter>Header Files\ctlinterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\DummyShellBrowser.h">
+      <Filter>Header Files\ctlinterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\ElevationShieldTask.h">
+      <Filter>Header Files\ctlinterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\IEnumShellImageStore.h">
+      <Filter>Header Files\ctlinterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\IImageListPrivate.h">
+      <Filter>Header Files\ctlinterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\IInternalMessageListener.h">
+      <Filter>Header Files\ctlinterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\IMessageListener.h">
+      <Filter>Header Files\ctlinterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\INamespaceEnumTask.h">
+      <Filter>Header Files\ctlinterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\IPersistentChildObject.h">
+      <Filter>Header Files\ctlinterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\IShellImageStore.h">
+      <Filter>Header Files\ctlinterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\IThumbnailAdorner.h">
+      <Filter>Header Files\ctlinterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\LegacyImageListWrapper.h">
+      <Filter>Header Files\ctlinterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\NamespaceEnumSettings.h">
+      <Filter>Header Files\ctlinterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\NamespaceEnumSettingsProperties.h">
+      <Filter>Header Files\ctlinterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\PhotoBorderAdorner.h">
+      <Filter>Header Files\ctlinterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\RunnableTask.h">
+      <Filter>Header Files\ctlinterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\SecurityZone.h">
+      <Filter>Header Files\ctlinterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\SecurityZones.h">
+      <Filter>Header Files\ctlinterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\SprocketAdorner.h">
+      <Filter>Header Files\ctlinterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\UnifiedImageList.h">
+      <Filter>Header Files\ctlinterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\exlvw\_IShellListViewColumnEvents_CP.h">
+      <Filter>Header Files\ctlinterfaces\exlvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\exlvw\_IShellListViewColumnsEvents_CP.h">
+      <Filter>Header Files\ctlinterfaces\exlvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\exlvw\_IShellListViewEvents_CP.h">
+      <Filter>Header Files\ctlinterfaces\exlvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\exlvw\_IShellListViewItemEvents_CP.h">
+      <Filter>Header Files\ctlinterfaces\exlvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\exlvw\_IShellListViewItemsEvents_CP.h">
+      <Filter>Header Files\ctlinterfaces\exlvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\exlvw\_IShellListViewNamespaceEvents_CP.h">
+      <Filter>Header Files\ctlinterfaces\exlvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\exlvw\_IShellListViewNamespacesEvents_CP.h">
+      <Filter>Header Files\ctlinterfaces\exlvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\exlvw\BackgroundColumnEnumTask.h">
+      <Filter>Header Files\ctlinterfaces\exlvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\exlvw\BackgroundItemEnumTask.h">
+      <Filter>Header Files\ctlinterfaces\exlvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\exlvw\definitions.h">
+      <Filter>Header Files\ctlinterfaces\exlvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\exlvw\IconTask.h">
+      <Filter>Header Files\ctlinterfaces\exlvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\exlvw\InsertSingleItemTask.h">
+      <Filter>Header Files\ctlinterfaces\exlvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\exlvw\LegacyExtractThumbnailFromDiskCacheTask.h">
+      <Filter>Header Files\ctlinterfaces\exlvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\exlvw\LegacyExtractThumbnailTask.h">
+      <Filter>Header Files\ctlinterfaces\exlvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\exlvw\LegacyTestThumbnailCacheTask.h">
+      <Filter>Header Files\ctlinterfaces\exlvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\exlvw\LegacyThumbnailTask.h">
+      <Filter>Header Files\ctlinterfaces\exlvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\exlvw\LegacyTileViewTask.h">
+      <Filter>Header Files\ctlinterfaces\exlvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\exlvw\OverlayTask.h">
+      <Filter>Header Files\ctlinterfaces\exlvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\exlvw\SetColumnsDlg.h">
+      <Filter>Header Files\ctlinterfaces\exlvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\exlvw\ShellListView.h">
+      <Filter>Header Files\ctlinterfaces\exlvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\exlvw\ShellListViewColumn.h">
+      <Filter>Header Files\ctlinterfaces\exlvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\exlvw\ShellListViewColumns.h">
+      <Filter>Header Files\ctlinterfaces\exlvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\exlvw\ShellListViewItem.h">
+      <Filter>Header Files\ctlinterfaces\exlvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\exlvw\ShellListViewItems.h">
+      <Filter>Header Files\ctlinterfaces\exlvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\exlvw\ShellListViewNamespace.h">
+      <Filter>Header Files\ctlinterfaces\exlvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\exlvw\ShellListViewNamespaces.h">
+      <Filter>Header Files\ctlinterfaces\exlvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\exlvw\ShLvwDefaultManagedItemPropertiesProperties.h">
+      <Filter>Header Files\ctlinterfaces\exlvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\exlvw\SlowColumnTask.h">
+      <Filter>Header Files\ctlinterfaces\exlvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\exlvw\ThumbnailsProperties.h">
+      <Filter>Header Files\ctlinterfaces\exlvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\exlvw\ThumbnailTask.h">
+      <Filter>Header Files\ctlinterfaces\exlvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\exlvw\TileViewTask.h">
+      <Filter>Header Files\ctlinterfaces\exlvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\extvw\_IShellTreeViewEvents_CP.h">
+      <Filter>Header Files\ctlinterfaces\extvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\extvw\_IShellTreeViewItemEvents_CP.h">
+      <Filter>Header Files\ctlinterfaces\extvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\extvw\_IShellTreeViewItemsEvents_CP.h">
+      <Filter>Header Files\ctlinterfaces\extvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\extvw\_IShellTreeViewNamespaceEvents_CP.h">
+      <Filter>Header Files\ctlinterfaces\extvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\extvw\_IShellTreeViewNamespacesEvents_CP.h">
+      <Filter>Header Files\ctlinterfaces\extvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\extvw\BackgroundEnumTask.h">
+      <Filter>Header Files\ctlinterfaces\extvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\extvw\definitions.h">
+      <Filter>Header Files\ctlinterfaces\extvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\extvw\IconTask.h">
+      <Filter>Header Files\ctlinterfaces\extvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\extvw\InsertSingleItemTask.h">
+      <Filter>Header Files\ctlinterfaces\extvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\extvw\OverlayTask.h">
+      <Filter>Header Files\ctlinterfaces\extvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\extvw\ShellTreeView.h">
+      <Filter>Header Files\ctlinterfaces\extvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\extvw\ShellTreeViewItem.h">
+      <Filter>Header Files\ctlinterfaces\extvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\extvw\ShellTreeViewItems.h">
+      <Filter>Header Files\ctlinterfaces\extvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\extvw\ShellTreeViewNamespace.h">
+      <Filter>Header Files\ctlinterfaces\extvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\extvw\ShellTreeViewNamespaces.h">
+      <Filter>Header Files\ctlinterfaces\extvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\extvw\ShTvwDefaultManagedItemPropertiesProperties.h">
+      <Filter>Header Files\ctlinterfaces\extvw</Filter>
+    </ClInclude>
+    <ClInclude Include="RunTimeHelperEx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ShBrowserCtlsA.h">
+      <Filter>Header Files\Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ShBrowserCtlsU.h">
+      <Filter>Header Files\Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\exlvw\InfoTipTask.h">
+      <Filter>Header Files\ctlinterfaces\exlvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\exlvw\SubItemControlTask.h">
+      <Filter>Header Files\ctlinterfaces\exlvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\exlvw\LegacyBackgroundItemEnumTask.h">
+      <Filter>Header Files\ctlinterfaces\exlvw</Filter>
+    </ClInclude>
+    <ClInclude Include="ctlinterfaces\extvw\LegacyBackgroundEnumTask.h">
+      <Filter>Header Files\ctlinterfaces\extvw</Filter>
+    </ClInclude>
+    <ClInclude Include="res\resource.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="res\ShBrowserCtls.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

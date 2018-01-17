@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{86996d5b-92ba-45f0-bd3f-53e94b3ba6f9}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{d066442f-9b86-4078-84f1-12cf6141df1d}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{3219329c-2f9f-448d-b0a6-e1f533f9f3bc}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;jpg;jpeg;jpe;manifest</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Explorer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FavoritesDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MainDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="FavoritesDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MainDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\Explorer.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\48x48x8bpp\Find.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\32x32x32bpp\Find.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\32x32x8bpp\Find.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\16x16x32bpp\Find.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\16x16x8bpp\Find.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\48x48x32bpp\Find.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\32x32x8bpp\Up.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\16x16x32bpp\Up.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\16x16x8bpp\Up.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\48x48x32bpp\Up.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\48x48x8bpp\Up.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\32x32x32bpp\Up.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Explorer.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

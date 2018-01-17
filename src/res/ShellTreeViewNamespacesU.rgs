@@ -1,0 +1,25 @@
+HKCR
+{
+	ShBrowserCtlsU.ShellTreeViewNamespaces.1 = s 'TimoSoft ShellTreeViewNamespaces Class 1.5 (Unicode)'
+	{
+		CLSID = s '{42586E75-6D3A-4713-B50B-0C5B8168AB99}'
+	}
+	ShBrowserCtlsU.ShellTreeViewNamespaces = s 'TimoSoft ShellTreeViewNamespaces Class (Unicode)'
+	{
+		CLSID = s '{42586E75-6D3A-4713-B50B-0C5B8168AB99}'
+		CurVer = s 'ShBrowserCtlsU.ShellTreeViewNamespaces.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {42586E75-6D3A-4713-B50B-0C5B8168AB99} = s 'TimoSoft ShellTreeViewNamespaces Class (Unicode)'
+		{
+			ProgID = s 'ShBrowserCtlsU.ShellTreeViewNamespaces.1'
+			VersionIndependentProgID = s 'ShBrowserCtlsU.ShellTreeViewNamespaces'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{1F9B9092-BEE4-4caf-9C7B-9384AF087C63}'
+		}
+	}
+}

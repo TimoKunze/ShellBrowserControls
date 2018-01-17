@@ -1,0 +1,42 @@
+HKCR
+{
+	ShBrowserCtlsU.ShellListView.1 = s 'TimoSoft ShellListView Control 1.5 (Unicode)'
+	{
+		CLSID = s '{15767507-5A73-412b-8C94-4FB10B356A57}'
+		'Insertable'
+	}
+	ShBrowserCtlsU.ShellListView = s 'TimoSoft ShellListView Control 1.5 (Unicode)'
+	{
+		CLSID = s '{15767507-5A73-412b-8C94-4FB10B356A57}'
+		CurVer = s 'ShBrowserCtlsU.ShellListView.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {15767507-5A73-412b-8C94-4FB10B356A57} = s 'TimoSoft ShellListView Control 1.5 (Unicode)'
+		{
+			ProgID = s 'ShBrowserCtlsU.ShellListView.1'
+			VersionIndependentProgID = s 'ShBrowserCtlsU.ShellListView'
+			ForceRemove 'Programmable'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			ForceRemove 'Implemented Categories'
+			{
+				'{40FC6ED4-2438-11CF-A3DB-080036F12502}'
+				'{0DE86A57-2BAA-11CF-A229-00AA003D7352}'
+				'{0DE86A53-2BAA-11CF-A229-00AA003D7352}'
+			}
+			val AppID = s '%APPID%'
+			ForceRemove 'Control'
+			ForceRemove 'Insertable'
+			ForceRemove 'ToolboxBitmap32' = s '%MODULE%, 1'
+			'MiscStatus' = s '0'
+			{
+				'1' = s '%OLEMISC%'
+			}
+			'TypeLib' = s '{1F9B9092-BEE4-4caf-9C7B-9384AF087C63}'
+			'Version' = s '1.5'
+		}
+	}
+}

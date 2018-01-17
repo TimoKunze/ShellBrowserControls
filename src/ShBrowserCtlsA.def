@@ -1,0 +1,9 @@
+; ShBrowserCtlsA.def: Declares the module parameters. (ANSI version)
+
+LIBRARY      "ShBrowserCtlsA.ocx"
+
+EXPORTS
+	DllCanUnloadNow		PRIVATE
+	DllGetClassObject	PRIVATE
+	DllRegisterServer	PRIVATE
+	DllUnregisterServer	PRIVATE

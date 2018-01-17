@@ -1,0 +1,349 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "winres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+#ifdef UNICODE
+  IDB_SHELLLISTVIEW       BITMAP                  "ShellListViewU.bmp"
+  IDB_SHELLTREEVIEW       BITMAP                  "ShellTreeViewU.bmp"
+#else
+  IDB_SHELLLISTVIEW       BITMAP                  "ShellListViewA.bmp"
+  IDB_SHELLTREEVIEW       BITMAP                  "ShellTreeViewA.bmp"
+#endif
+IDB_TOOLBARENABLED      BITMAP                  "ToolBar enabled.bmp"
+IDB_TOOLBARDISABLED     BITMAP                  "ToolBar disabled.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// JPG
+//
+
+IDB_ABOUT               JPG                     "About.jpg"
+IDB_PAYPAL              JPG                     "Paypal.jpg"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_IDELOGOSHLVW        ICON                    "IDE-Logo ShLvw.ico"
+IDI_IDELOGOSHTVW        ICON                    "IDE-Logo ShTvw.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION VERSION_MAJOR,VERSION_MINOR,VERSION_REVISION1,VERSION_BUILD
+ PRODUCTVERSION VERSION_MAJOR,VERSION_MINOR,VERSION_REVISION1,VERSION_BUILD
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "Comments", "Designed for Visual Basic. This software is freeware!"
+#ifdef UNICODE
+            VALUE "FileDescription", "ShellBrowser ActiveX Controls (Unicode)"
+#else
+            VALUE "FileDescription", "ShellBrowser ActiveX Controls (ANSI)"
+#endif
+            VALUE "FileVersion", STRFILEVERSION
+#ifdef UNICODE
+            VALUE "InternalName", "ShBrowserCtlsU.ocx"
+#else
+            VALUE "InternalName", "ShBrowserCtlsA.ocx"
+#endif
+            VALUE "LegalCopyright", "Copyright (C) 2010-2018 Timo ""TimoSoft"" Kunze"
+#ifdef UNICODE
+            VALUE "OriginalFilename", "ShBrowserCtlsU.ocx"
+#else
+            VALUE "OriginalFilename", "ShBrowserCtlsA.ocx"
+#endif
+            VALUE "ProductName", "TimoSoft ShellBrowserControls"
+            VALUE "ProductVersion", STRPRODUCTVERSION
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// REGISTRY
+//
+
+#ifdef UNICODE
+  IDR_SHBROWSERCTLS                               REGISTRY                "ShBrowserCtlsU.rgs"
+  IDR_NAMESPACEENUMSETTINGS                       REGISTRY                "NamespaceEnumSettingsU.rgs"
+  #ifdef ACTIVATE_SECZONE_FEATURES
+    IDR_SECURITYZONES                               REGISTRY                "SecurityZonesU.rgs"
+    IDR_SECURITYZONE                                REGISTRY                "SecurityZoneU.rgs"
+  #endif
+  IDR_SHELLLISTVIEW                               REGISTRY                "ShellListViewU.rgs"
+  IDR_SHELLLISTVIEWITEMS                          REGISTRY                "ShellListViewItemsU.rgs"
+  IDR_SHELLLISTVIEWITEM                           REGISTRY                "ShellListViewItemU.rgs"
+  IDR_SHELLLISTVIEWNAMESPACES                     REGISTRY                "ShellListViewNamespacesU.rgs"
+  IDR_SHELLLISTVIEWNAMESPACE                      REGISTRY                "ShellListViewNamespaceU.rgs"
+  IDR_SHELLLISTVIEWCOLUMNS                        REGISTRY                "ShellListViewColumnsU.rgs"
+  IDR_SHELLLISTVIEWCOLUMN                         REGISTRY                "ShellListViewColumnU.rgs"
+  IDR_SHELLTREEVIEW                               REGISTRY                "ShellTreeViewU.rgs"
+  IDR_SHELLTREEVIEWITEMS                          REGISTRY                "ShellTreeViewItemsU.rgs"
+  IDR_SHELLTREEVIEWITEM                           REGISTRY                "ShellTreeViewItemU.rgs"
+  IDR_SHELLTREEVIEWNAMESPACES                     REGISTRY                "ShellTreeViewNamespacesU.rgs"
+  IDR_SHELLTREEVIEWNAMESPACE                      REGISTRY                "ShellTreeViewNamespaceU.rgs"
+  IDR_COMMONPROPERTIES                            REGISTRY                "CommonPropertiesU.rgs"
+  IDR_SHLVWDEFAULTMANAGEDITEMPROPERTIESPROPERTIES REGISTRY                "ShLvwDefaultManagedItemPropertiesPropertiesU.rgs"
+  IDR_SHTVWDEFAULTMANAGEDITEMPROPERTIESPROPERTIES REGISTRY                "ShTvwDefaultManagedItemPropertiesPropertiesU.rgs"
+  IDR_NAMESPACEENUMSETTINGSPROPERTIES             REGISTRY                "NamespaceEnumSettingsPropertiesU.rgs"
+  IDR_THUMBNAILSPROPERTIES                        REGISTRY                "ThumbnailsPropertiesU.rgs"
+#else
+  IDR_SHBROWSERCTLS                               REGISTRY                "ShBrowserCtlsA.rgs"
+  IDR_NAMESPACEENUMSETTINGS                       REGISTRY                "NamespaceEnumSettingsA.rgs"
+  #ifdef ACTIVATE_SECZONE_FEATURES
+    IDR_SECURITYZONES                               REGISTRY                "SecurityZonesA.rgs"
+    IDR_SECURITYZONE                                REGISTRY                "SecurityZoneA.rgs"
+  #endif
+  IDR_SHELLLISTVIEW                               REGISTRY                "ShellListViewA.rgs"
+  IDR_SHELLLISTVIEWITEMS                          REGISTRY                "ShellListViewItemsA.rgs"
+  IDR_SHELLLISTVIEWITEM                           REGISTRY                "ShellListViewItemA.rgs"
+  IDR_SHELLLISTVIEWNAMESPACES                     REGISTRY                "ShellListViewNamespacesA.rgs"
+  IDR_SHELLLISTVIEWNAMESPACE                      REGISTRY                "ShellListViewNamespaceA.rgs"
+  IDR_SHELLLISTVIEWCOLUMNS                        REGISTRY                "ShellListViewColumnsA.rgs"
+  IDR_SHELLLISTVIEWCOLUMN                         REGISTRY                "ShellListViewColumnA.rgs"
+  IDR_SHELLTREEVIEW                               REGISTRY                "ShellTreeViewA.rgs"
+  IDR_SHELLTREEVIEWITEMS                          REGISTRY                "ShellTreeViewItemsA.rgs"
+  IDR_SHELLTREEVIEWITEM                           REGISTRY                "ShellTreeViewItemA.rgs"
+  IDR_SHELLTREEVIEWNAMESPACES                     REGISTRY                "ShellTreeViewNamespacesA.rgs"
+  IDR_SHELLTREEVIEWNAMESPACE                      REGISTRY                "ShellTreeViewNamespaceA.rgs"
+  IDR_COMMONPROPERTIES                            REGISTRY                "CommonPropertiesA.rgs"
+  IDR_SHLVWDEFAULTMANAGEDITEMPROPERTIESPROPERTIES REGISTRY                "ShLvwDefaultManagedItemPropertiesPropertiesA.rgs"
+  IDR_SHTVWDEFAULTMANAGEDITEMPROPERTIESPROPERTIES REGISTRY                "ShTvwDefaultManagedItemPropertiesPropertiesA.rgs"
+  IDR_NAMESPACEENUMSETTINGSPROPERTIES             REGISTRY                "NamespaceEnumSettingsPropertiesA.rgs"
+  IDR_THUMBNAILSPROPERTIES                        REGISTRY                "ThumbnailsPropertiesA.rgs"
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOGEX 0, 0, 412, 230
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION
+CAPTION "About ShellBrowserControls..."
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,355,206,50,14
+    CONTROL         2,IDC_ABOUT,"Static",SS_BITMAP | SS_REALSIZEIMAGE,10,10,206,169,WS_EX_TRANSPARENT
+    LTEXT           "ShellBrowserControls",IDC_NAME,198,10,207,11,0,WS_EX_TRANSPARENT
+    LTEXT           "<Version>",IDC_VERSION,198,21,207,26,0,WS_EX_TRANSPARENT
+    CONTROL         "Written by:",IDC_AUTHOR,"Static",WS_GROUP | 0x20,198,51,207,11
+    LTEXT           "<Authors>",IDC_AUTHORS,198,62,207,13,0,WS_EX_TRANSPARENT
+    LTEXT           "Thanks go to:",IDC_THANKS,198,82,207,11,0,WS_EX_TRANSPARENT
+    LTEXT           "<Thanks>",IDC_THANKSTO,198,93,207,33,0,WS_EX_TRANSPARENT
+    LTEXT           "Special Thanks go to:",IDC_SPECIALTHANKS,198,133,207,11,0,WS_EX_TRANSPARENT
+    LTEXT           "Henk Devos",IDC_SPECIALTHANKSTOHENK,198,144,55,10,SS_NOTIFY,WS_EX_TRANSPARENT
+    LTEXT           "Jim Kueneman",IDC_SPECIALTHANKSTOJIM,263,144,55,10,SS_NOTIFY,WS_EX_TRANSPARENT
+    LTEXT           "Nikos Bozinis",IDC_SPECIALTHANKSTONIKOS,328,144,55,10,SS_NOTIFY,WS_EX_TRANSPARENT
+    CONTROL         "<SpecialThanks>",IDC_SPECIALTHANKSTO,"Static",WS_GROUP | 0x20,198,154,207,23
+    LTEXT           "Further information:",IDC_MORE,198,181,207,11,0,WS_EX_TRANSPARENT
+    LTEXT           "<Homepage>",IDC_HOMEPAGE,198,192,95,8,SS_NOTIFY,WS_EX_TRANSPARENT
+    LTEXT           "<Bugtracker>",IDC_BUGTRACKER,294,192,50,8,SS_NOTIFY,WS_EX_TRANSPARENT
+    CONTROL         3,IDC_PAYPAL,"Static",SS_BITMAP | SS_NOTIFY | SS_REALSIZEIMAGE,299,204,48,18,WS_EX_TRANSPARENT
+END
+
+IDD_COMMONPROPERTIES DIALOGEX 0, 0, 271, 136
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    CONTROL         "&Disabled events:",IDC_STATIC,"Static",WS_GROUP | 0x20,7,7,53,8
+    CONTROL         "",IDC_DISABLEDEVENTSBOX,"SysListView32",LVS_REPORT | LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | LVS_NOCOLUMNHEADER | WS_BORDER | WS_TABSTOP,7,17,115,70
+    CONTROL         "&InfoTip flags:",IDC_STATIC,"Static",WS_GROUP | 0x20,128,7,50,8
+    CONTROL         "",IDC_INFOTIPFLAGSBOX,"SysListView32",LVS_REPORT | LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | LVS_NOCOLUMNHEADER | WS_BORDER | WS_TABSTOP,128,17,135,70
+    CONTROL         "&Used system imagelists:",IDC_STATIC,"Static",WS_GROUP | 0x20,7,89,80,8
+    CONTROL         "",IDC_USESYSTEMIMAGELISTBOX,"SysListView32",LVS_REPORT | LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | LVS_NOCOLUMNHEADER | WS_BORDER | WS_TABSTOP,7,99,95,35
+END
+
+IDD_DEFAULTMANAGEDITEMPROPERTIESPROPERTIES DIALOGEX 0, 0, 271, 136
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    CONTROL         "Default &Managed Item Properties:",IDC_STATIC,"Static",WS_GROUP | 0x20,5,7,113,8
+    CONTROL         "",IDC_MANAGEDPROPERTIESBOX,"SysListView32",LVS_REPORT | LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | LVS_NOCOLUMNHEADER | WS_BORDER | WS_TABSTOP,5,17,130,117
+END
+
+IDD_NAMESPACEENUMSETTINGSPROPERTIES DIALOGEX 0, 0, 271, 136
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    CONTROL         "&Enumeration flags:",IDC_STATIC,"Static",WS_GROUP | 0x20,5,7,60,8
+    CONTROL         "",IDC_ENUMERATIONFLAGSBOX,"SysListView32",LVS_REPORT | LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | LVS_NOCOLUMNHEADER | WS_BORDER | WS_TABSTOP,5,17,100,117
+    CONTROL         "&Item in-/exclusion:",IDC_STATIC,"Static",WS_GROUP | 0x20,109,7,60,8
+    COMBOBOX        IDC_INEXCLUDEDATTRIBUTESBOX,109,17,48,33,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_ITEMTYPEBOX,159,17,48,33,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_ATTRIBUTESTYPEBOX,209,17,58,33,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "",IDC_ATTRIBUTESBOX,"SysListView32",LVS_REPORT | LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | LVS_NOCOLUMNHEADER | WS_BORDER | WS_TABSTOP,109,34,158,100
+END
+
+IDD_THUMBNAILSPROPERTIES DIALOGEX 0, 0, 271, 136
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    CONTROL         "&Display thumbnail adornments:",IDC_STATIC,"Static",WS_GROUP | 0x20,7,7,113,8
+    CONTROL         "",IDC_DISPLAYTHUMBNAILADORNMENTSBOX,"SysListView32",LVS_REPORT | LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | LVS_NOCOLUMNHEADER | WS_BORDER | WS_TABSTOP,7,17,115,70
+END
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""winres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+#ifdef UNICODE
+    "1 TYPELIB ""ShBrowserCtlsU.tlb""\r\n"
+#else
+    "1 TYPELIB ""ShBrowserCtlsA.tlb""\r\n"
+#endif
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDS_LOADSETTINGS        "Load settings from a file..."
+    IDS_SAVESETTINGS        "Save the settings to a file..."
+END
+
+STRINGTABLE 
+BEGIN
+    IDS_TITLECOMMONPROPERTIES "Common"
+    IDS_DOCSTRINGCOMMONPROPERTIES "Common Properties"
+    IDS_TITLEDEFAULTMANAGEDITEMPROPERTIESPROPERTIES "Default Managed Item Properties"
+    IDS_DOCSTRINGDEFAULTMANAGEDITEMPROPERTIESPROPERTIES 
+                            "Default ManagedProperties Properties"
+    IDS_TITLENAMESPACEENUMSETTINGSPROPERTIES "Default Namespace Enum Settings"
+    IDS_DOCSTRINGNAMESPACEENUMSETTINGSPROPERTIES 
+                            "Default NamespaceEnumSettings Properties"
+    IDS_TITLETHUMBNAILSPROPERTIES "Thumbnails"
+    IDS_DOCSTRINGTHUMBNAILSPROPERTIES "Thumbnails Properties"
+    IDS_PROJNAME            "ShBrowserCtls"
+END
+
+STRINGTABLE 
+BEGIN
+    IDPC_THUMBNAILS         "Thumbnail Mode"
+END
+
+STRINGTABLE 
+BEGIN
+    IDP_DISPLAYFILETYPEOVERLAYSFOLLOWSYSTEMSETTINGS "%i - Follow System Settings"
+    IDP_DISPLAYFILETYPEOVERLAYSNONE "%i - None"
+    IDP_DISPLAYFILETYPEOVERLAYSEXECUTABLEICON "%i - Executable Icon"
+    IDP_HANDLEOLEDRAGDROPNONE "%i - None"
+    IDP_HANDLEOLEDRAGDROPSOURCEPART "%i - Source Part"
+    IDP_HANDLEOLEDRAGDROPTARGETPART "%i - Target Part"
+    IDP_HANDLEOLEDRAGDROPTARGETPARTEX "%i - Target Part + Drop-Hiliting"
+    IDP_HANDLEOLEDRAGDROPBOTHPARTS "%i - Both Parts"
+    IDP_HANDLEOLEDRAGDROPBOTHPARTSEX "%i - Both Parts + Drop-Hiliting"
+    IDP_HIDDENITEMSSTYLENORMAL "%i - Normal"
+    IDP_HIDDENITEMSSTYLEGHOSTED "%i - Ghosted"
+    IDP_HIDDENITEMSSTYLEGHOSTEDONDEMAND "%i - Ghosted (On Demand)"
+    IDP_INITIALSORTORDERASCENDING    "%i - Ascending"
+    IDP_INITIALSORTORDERDESCENDING   "%i - Descending"
+    IDP_ITEMTYPESORTORDERSHELLITEMSFIRST "%i - Shell Items First"
+    IDP_ITEMTYPESORTORDERSHELLITEMSLAST "%i - Shell Items Last"
+    IDP_PERSISTCOLUMNSETTINGSACROSSNAMESPACESDONTPERSIST "%i - Don't Persist"
+    IDP_PERSISTCOLUMNSETTINGSACROSSNAMESPACESPERSIST "%i - Persist"
+    IDP_USEGENERICICONSNEVER "%i - Never"
+    IDP_USEGENERICICONSONLYFORSLOWITEMS "%i - Only for Slow Items"
+    IDP_USEGENERICICONSALWAYS "%i - Always"
+END
+
+STRINGTABLE 
+BEGIN
+    IDES_FORMATMISMATCH     "Specified format doesn't match format of data"
+    IDES_INVALIDOBJUSE      "Invalid object use"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#ifdef UNICODE
+  1 TYPELIB "ShBrowserCtlsU.tlb"
+#else
+  1 TYPELIB "ShBrowserCtlsA.tlb"
+#endif
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

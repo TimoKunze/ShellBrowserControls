@@ -1,0 +1,25 @@
+HKCR
+{
+	ShBrowserCtlsU.ShTvwDefaultManagedItemPropertiesProperties.1 = s 'TimoSoft ShTvwDefaultManagedItemPropertiesProperties Class 1.5 (Unicode)'
+	{
+		CLSID = s '{AEA9551A-AD30-4736-891B-3E06416D13E6}'
+	}
+	ShBrowserCtlsU.ShTvwDefaultManagedItemPropertiesProperties = s 'TimoSoft ShTvwDefaultManagedItemPropertiesProperties Class (Unicode)'
+	{
+		CLSID = s '{AEA9551A-AD30-4736-891B-3E06416D13E6}'
+		CurVer = s 'ShBrowserCtlsU.ShTvwDefaultManagedItemPropertiesProperties.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {AEA9551A-AD30-4736-891B-3E06416D13E6} = s 'TimoSoft ShTvwDefaultManagedItemPropertiesProperties Class (Unicode)'
+		{
+			ProgID = s 'ShBrowserCtlsU.ShTvwDefaultManagedItemPropertiesProperties.1'
+			VersionIndependentProgID = s 'ShBrowserCtlsU.ShTvwDefaultManagedItemPropertiesProperties'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{1F9B9092-BEE4-4caf-9C7B-9384AF087C63}'
+		}
+	}
+}

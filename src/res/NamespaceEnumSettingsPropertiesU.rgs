@@ -1,0 +1,25 @@
+HKCR
+{
+	ShBrowserCtlsU.NamespaceEnumSettingsProperties.1 = s 'TimoSoft NamespaceEnumSettingsProperties Class 1.5 (Unicode)'
+	{
+		CLSID = s '{B15CE2D8-D638-4848-AE49-EBF95C7B698A}'
+	}
+	ShBrowserCtlsU.NamespaceEnumSettingsProperties = s 'TimoSoft NamespaceEnumSettingsProperties Class (Unicode)'
+	{
+		CLSID = s '{B15CE2D8-D638-4848-AE49-EBF95C7B698A}'
+		CurVer = s 'ShBrowserCtlsU.NamespaceEnumSettingsProperties.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {B15CE2D8-D638-4848-AE49-EBF95C7B698A} = s 'TimoSoft NamespaceEnumSettingsProperties Class (Unicode)'
+		{
+			ProgID = s 'ShBrowserCtlsU.NamespaceEnumSettingsProperties.1'
+			VersionIndependentProgID = s 'ShBrowserCtlsU.NamespaceEnumSettingsProperties'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{1F9B9092-BEE4-4caf-9C7B-9384AF087C63}'
+		}
+	}
+}

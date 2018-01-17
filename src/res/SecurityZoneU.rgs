@@ -1,0 +1,25 @@
+HKCR
+{
+	ShBrowserCtlsU.SecurityZone.1 = s 'TimoSoft SecurityZone Class 1.5 (Unicode)'
+	{
+		CLSID = s '{E65CD417-A1D9-4933-A82B-066E1DE8B4DB}'
+	}
+	ShBrowserCtlsU.SecurityZone = s 'TimoSoft SecurityZone Class (Unicode)'
+	{
+		CLSID = s '{E65CD417-A1D9-4933-A82B-066E1DE8B4DB}'
+		CurVer = s 'ShBrowserCtlsU.SecurityZone.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {E65CD417-A1D9-4933-A82B-066E1DE8B4DB} = s 'TimoSoft SecurityZone Class (Unicode)'
+		{
+			ProgID = s 'ShBrowserCtlsU.SecurityZone.1'
+			VersionIndependentProgID = s 'ShBrowserCtlsU.SecurityZone'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{1F9B9092-BEE4-4caf-9C7B-9384AF087C63}'
+		}
+	}
+}

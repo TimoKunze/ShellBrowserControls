@@ -1,0 +1,25 @@
+HKCR
+{
+	ShBrowserCtlsA.ShellListViewColumn.1 = s 'TimoSoft ShellListViewColumn Class 1.5 (ANSI)'
+	{
+		CLSID = s '{55593225-EAC4-4cef-8E02-9A914139E21E}'
+	}
+	ShBrowserCtlsA.ShellListViewColumn = s 'TimoSoft ShellListViewColumn Class (ANSI)'
+	{
+		CLSID = s '{55593225-EAC4-4cef-8E02-9A914139E21E}'
+		CurVer = s 'ShBrowserCtlsA.ShellListViewColumn.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {55593225-EAC4-4cef-8E02-9A914139E21E} = s 'TimoSoft ShellListViewColumn Class (ANSI)'
+		{
+			ProgID = s 'ShBrowserCtlsA.ShellListViewColumn.1'
+			VersionIndependentProgID = s 'ShBrowserCtlsA.ShellListViewColumn'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{18FE3B91-D4FD-4286-A71E-222BE3460A18}'
+		}
+	}
+}

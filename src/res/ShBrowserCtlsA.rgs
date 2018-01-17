@@ -1,0 +1,11 @@
+HKCR
+{
+	NoRemove AppID
+	{
+		'%APPID%' = s 'ShBrowserCtlsA'
+		'ShBrowserCtlsA.OCX'
+		{
+			val AppID = s '%APPID%'
+		}
+	}
+}

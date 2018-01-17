@@ -1,0 +1,25 @@
+HKCR
+{
+	ShBrowserCtlsA.ThumbnailsProperties.1 = s 'TimoSoft ThumbnailsProperties Class 1.5 (ANSI)'
+	{
+		CLSID = s '{62AAE260-C8F4-480a-BAC1-B351A753CF33}'
+	}
+	ShBrowserCtlsA.ThumbnailsProperties = s 'TimoSoft ThumbnailsProperties Class (ANSI)'
+	{
+		CLSID = s '{62AAE260-C8F4-480a-BAC1-B351A753CF33}'
+		CurVer = s 'ShBrowserCtlsA.ThumbnailsProperties.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {62AAE260-C8F4-480a-BAC1-B351A753CF33} = s 'TimoSoft ThumbnailsProperties Class (ANSI)'
+		{
+			ProgID = s 'ShBrowserCtlsA.ThumbnailsProperties.1'
+			VersionIndependentProgID = s 'ShBrowserCtlsA.ThumbnailsProperties'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{18FE3B91-D4FD-4286-A71E-222BE3460A18}'
+		}
+	}
+}

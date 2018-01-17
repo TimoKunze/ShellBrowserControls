@@ -1,0 +1,805 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug - ANSI|Win32">
+      <Configuration>Debug - ANSI</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug - Unicode|Win32">
+      <Configuration>Debug - Unicode</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release - ANSI|Win32">
+      <Configuration>Release - ANSI</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release - Unicode|Win32">
+      <Configuration>Release - Unicode</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Template|Win32">
+      <Configuration>Template</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{9C4C3D15-3493-4EBF-85AB-C8055EADE5C6}</ProjectGuid>
+    <RootNamespace>ShBrowserCtls</RootNamespace>
+    <Keyword>AtlProj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release - Unicode|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseOfAtl>Static</UseOfAtl>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>Windows7.1SDK</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug - Unicode|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseOfAtl>Static</UseOfAtl>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>Windows7.1SDK</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release - ANSI|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseOfAtl>Static</UseOfAtl>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>Windows7.1SDK</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug - ANSI|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseOfAtl>Static</UseOfAtl>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>Windows7.1SDK</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">
+    <PlatformToolset>Windows7.1SDK</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release - Unicode|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Windows10SDK.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug - Unicode|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Windows10SDK.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release - ANSI|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Windows10SDK.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug - ANSI|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Windows10SDK.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug - ANSI|Win32'">..\build\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug - ANSI|Win32'">..\build\$(Configuration)\tmp\</IntDir>
+    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug - ANSI|Win32'">true</IgnoreImportLibrary>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug - ANSI|Win32'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug - ANSI|Win32'">true</GenerateManifest>
+    <EmbedManifest Condition="'$(Configuration)|$(Platform)'=='Debug - ANSI|Win32'">true</EmbedManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release - ANSI|Win32'">..\build\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release - ANSI|Win32'">..\build\$(Configuration)\tmp\</IntDir>
+    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release - ANSI|Win32'">true</IgnoreImportLibrary>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release - ANSI|Win32'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release - ANSI|Win32'">true</GenerateManifest>
+    <EmbedManifest Condition="'$(Configuration)|$(Platform)'=='Release - ANSI|Win32'">true</EmbedManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug - Unicode|Win32'">..\build\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug - Unicode|Win32'">..\build\$(Configuration)\tmp\</IntDir>
+    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug - Unicode|Win32'">true</IgnoreImportLibrary>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug - Unicode|Win32'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug - Unicode|Win32'">true</GenerateManifest>
+    <EmbedManifest Condition="'$(Configuration)|$(Platform)'=='Debug - Unicode|Win32'">true</EmbedManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release - Unicode|Win32'">..\build\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release - Unicode|Win32'">..\build\$(Configuration)\tmp\</IntDir>
+    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release - Unicode|Win32'">true</IgnoreImportLibrary>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release - Unicode|Win32'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release - Unicode|Win32'">true</GenerateManifest>
+    <EmbedManifest Condition="'$(Configuration)|$(Platform)'=='Release - Unicode|Win32'">true</EmbedManifest>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug - ANSI|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug - ANSI|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug - ANSI|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug - Unicode|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug - Unicode|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug - Unicode|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release - ANSI|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release - ANSI|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release - ANSI|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release - Unicode|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release - Unicode|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release - Unicode|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Template|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Template|Win32'" />
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release - Unicode|Win32'">.ocx</TargetExt>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug - ANSI|Win32'">.ocx</TargetExt>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug - Unicode|Win32'">.ocx</TargetExt>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release - ANSI|Win32'">.ocx</TargetExt>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">.ocx</TargetExt>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug - ANSI|Win32'">$(ProjectName)A</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release - ANSI|Win32'">$(ProjectName)A</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug - Unicode|Win32'">$(ProjectName)U</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release - Unicode|Win32'">$(ProjectName)U</TargetName>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug - ANSI|Win32'">D:\Projects\Libraries\WTL\Include;$(IncludePath);$(VCInstallDir)atlmfc\include</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug - Unicode|Win32'">D:\Projects\Libraries\WTL\Include;$(IncludePath);$(VCInstallDir)atlmfc\include</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release - ANSI|Win32'">D:\Projects\Libraries\WTL\Include;$(IncludePath);$(VCInstallDir)atlmfc\include</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release - Unicode|Win32'">D:\Projects\Libraries\WTL\Include;$(IncludePath);$(VCInstallDir)atlmfc\include</IncludePath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Template|Win32'">D:\Projects\Libraries\WTL\Include;$(IncludePath);$(VCInstallDir)atlmfc\include</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug - ANSI|Win32'">
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;_ANSI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <WarningLevel>4</WarningLevel>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <TypeLibraryName>res/ShBrowserCtlsA.tlb</TypeLibraryName>
+      <HeaderFileName>ShBrowserCtlsA.h</HeaderFileName>
+      <DllDataFileName>
+      </DllDataFileName>
+      <InterfaceIdentifierFileName>ShBrowserCtlsA_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>ShBrowserCtlsA_p.c</ProxyFileName>
+      <ErrorCheckAllocations>true</ErrorCheckAllocations>
+      <ErrorCheckBounds>true</ErrorCheckBounds>
+      <ErrorCheckEnumRange>true</ErrorCheckEnumRange>
+      <ErrorCheckRefPointers>true</ErrorCheckRefPointers>
+      <ErrorCheckStubData>true</ErrorCheckStubData>
+      <ValidateAllParameters>true</ValidateAllParameters>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;_USRDLL;_ANSI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <MinimalRebuild>true</MinimalRebuild>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <SmallerTypeCheck>true</SmallerTypeCheck>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <AdditionalOptions>
+      </AdditionalOptions>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <OpenMPSupport>true</OpenMPSupport>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <BrowseInformation>
+      </BrowseInformation>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <EnablePREfast>false</EnablePREfast>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;_ANSI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0000</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <RegisterOutput>true</RegisterOutput>
+      <AdditionalDependencies>comsuppw.lib;strsafe.lib;propsys.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)ShBrowserCtlsA.ocx</OutputFile>
+      <ModuleDefinitionFile>.\ShBrowserCtlsA.def</ModuleDefinitionFile>
+      <DelayLoadDLLs>uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <IgnoreEmbeddedIDL>false</IgnoreEmbeddedIDL>
+      <TypeLibraryFile>
+      </TypeLibraryFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <StripPrivateSymbols>
+      </StripPrivateSymbols>
+      <SubSystem>Windows</SubSystem>
+      <LargeAddressAware>true</LargeAddressAware>
+      <OptimizeReferences>
+      </OptimizeReferences>
+      <EnableCOMDATFolding>
+      </EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>true</DataExecutionPrevention>
+      <SupportUnloadOfDelayLoadedDLL>true</SupportUnloadOfDelayLoadedDLL>
+      <ImportLibrary>$(IntDir)ShBrowserCtlsA.lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+      <Profile>false</Profile>
+    </Link>
+    <Manifest>
+      <GenerateCatalogFiles>false</GenerateCatalogFiles>
+      <TypeLibraryFile>
+      </TypeLibraryFile>
+      <RegistrarScriptFile>
+      </RegistrarScriptFile>
+      <ComponentFileName>
+      </ComponentFileName>
+      <UpdateFileHashes>false</UpdateFileHashes>
+    </Manifest>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release - ANSI|Win32'">
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;_ANSI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <WarningLevel>4</WarningLevel>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <TypeLibraryName>res/ShBrowserCtlsA.tlb</TypeLibraryName>
+      <HeaderFileName>ShBrowserCtlsA.h</HeaderFileName>
+      <DllDataFileName>
+      </DllDataFileName>
+      <InterfaceIdentifierFileName>ShBrowserCtlsA_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>ShBrowserCtlsA_p.c</ProxyFileName>
+      <ErrorCheckAllocations>true</ErrorCheckAllocations>
+      <ErrorCheckBounds>true</ErrorCheckBounds>
+      <ErrorCheckEnumRange>true</ErrorCheckEnumRange>
+      <ErrorCheckRefPointers>true</ErrorCheckRefPointers>
+      <ErrorCheckStubData>true</ErrorCheckStubData>
+      <ValidateAllParameters>true</ValidateAllParameters>
+    </Midl>
+    <ClCompile>
+      <Optimization>Full</Optimization>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_USRDLL;_ANSI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <OpenMPSupport>true</OpenMPSupport>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <EnablePREfast>false</EnablePREfast>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;_ANSI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0000</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <RegisterOutput>true</RegisterOutput>
+      <AdditionalDependencies>comsuppw.lib;strsafe.lib;propsys.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)ShBrowserCtlsA.ocx</OutputFile>
+      <ModuleDefinitionFile>.\ShBrowserCtlsA.def</ModuleDefinitionFile>
+      <DelayLoadDLLs>uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <IgnoreEmbeddedIDL>false</IgnoreEmbeddedIDL>
+      <TypeLibraryFile>
+      </TypeLibraryFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <StripPrivateSymbols>$(OutDir)$(TargetName).pdb</StripPrivateSymbols>
+      <SubSystem>Windows</SubSystem>
+      <LargeAddressAware>true</LargeAddressAware>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>true</DataExecutionPrevention>
+      <SupportUnloadOfDelayLoadedDLL>true</SupportUnloadOfDelayLoadedDLL>
+      <ImportLibrary>$(IntDir)ShBrowserCtlsA.lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+      <Profile>true</Profile>
+    </Link>
+    <Manifest>
+      <GenerateCatalogFiles>false</GenerateCatalogFiles>
+      <TypeLibraryFile>
+      </TypeLibraryFile>
+      <RegistrarScriptFile>
+      </RegistrarScriptFile>
+      <ComponentFileName>
+      </ComponentFileName>
+      <UpdateFileHashes>false</UpdateFileHashes>
+    </Manifest>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug - Unicode|Win32'">
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <WarningLevel>4</WarningLevel>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <TypeLibraryName>res/ShBrowserCtlsU.tlb</TypeLibraryName>
+      <OutputDirectory>
+      </OutputDirectory>
+      <HeaderFileName>ShBrowserCtlsU.h</HeaderFileName>
+      <DllDataFileName>
+      </DllDataFileName>
+      <InterfaceIdentifierFileName>ShBrowserCtlsU_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>ShBrowserCtlsU_p.c</ProxyFileName>
+      <ErrorCheckAllocations>true</ErrorCheckAllocations>
+      <ErrorCheckBounds>true</ErrorCheckBounds>
+      <ErrorCheckEnumRange>true</ErrorCheckEnumRange>
+      <ErrorCheckRefPointers>true</ErrorCheckRefPointers>
+      <ErrorCheckStubData>true</ErrorCheckStubData>
+      <ValidateAllParameters>true</ValidateAllParameters>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;_USRDLL;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <MinimalRebuild>true</MinimalRebuild>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <SmallerTypeCheck>true</SmallerTypeCheck>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <OpenMPSupport>true</OpenMPSupport>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <BrowseInformation>
+      </BrowseInformation>
+      <WarningLevel>Level4</WarningLevel>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <EnablePREfast>false</EnablePREfast>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0000</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <RegisterOutput>true</RegisterOutput>
+      <AdditionalDependencies>comsuppw.lib;strsafe.lib;propsys.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)ShBrowserCtlsU.ocx</OutputFile>
+      <ModuleDefinitionFile>.\ShBrowserCtlsU.def</ModuleDefinitionFile>
+      <DelayLoadDLLs>uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <IgnoreEmbeddedIDL>false</IgnoreEmbeddedIDL>
+      <TypeLibraryFile>
+      </TypeLibraryFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <StripPrivateSymbols>
+      </StripPrivateSymbols>
+      <SubSystem>Windows</SubSystem>
+      <LargeAddressAware>true</LargeAddressAware>
+      <OptimizeReferences>
+      </OptimizeReferences>
+      <EnableCOMDATFolding>
+      </EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>true</DataExecutionPrevention>
+      <SupportUnloadOfDelayLoadedDLL>true</SupportUnloadOfDelayLoadedDLL>
+      <ImportLibrary>$(IntDir)ShBrowserCtlsU.lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+      <AllowIsolation>true</AllowIsolation>
+      <Profile>false</Profile>
+    </Link>
+    <Manifest>
+      <GenerateCatalogFiles>false</GenerateCatalogFiles>
+      <TypeLibraryFile>
+      </TypeLibraryFile>
+      <RegistrarScriptFile>
+      </RegistrarScriptFile>
+      <ComponentFileName>
+      </ComponentFileName>
+      <UpdateFileHashes>false</UpdateFileHashes>
+    </Manifest>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release - Unicode|Win32'">
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <WarningLevel>4</WarningLevel>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <TypeLibraryName>res/ShBrowserCtlsU.tlb</TypeLibraryName>
+      <HeaderFileName>ShBrowserCtlsU.h</HeaderFileName>
+      <DllDataFileName>
+      </DllDataFileName>
+      <InterfaceIdentifierFileName>ShBrowserCtlsU_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>ShBrowserCtlsU_p.c</ProxyFileName>
+      <ErrorCheckAllocations>true</ErrorCheckAllocations>
+      <ErrorCheckBounds>true</ErrorCheckBounds>
+      <ErrorCheckEnumRange>true</ErrorCheckEnumRange>
+      <ErrorCheckRefPointers>true</ErrorCheckRefPointers>
+      <ErrorCheckStubData>true</ErrorCheckStubData>
+      <ValidateAllParameters>true</ValidateAllParameters>
+    </Midl>
+    <ClCompile>
+      <Optimization>Full</Optimization>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_USRDLL;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <OpenMPSupport>true</OpenMPSupport>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <EnablePREfast>false</EnablePREfast>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0000</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <RegisterOutput>true</RegisterOutput>
+      <AdditionalDependencies>comsuppw.lib;strsafe.lib;propsys.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)ShBrowserCtlsU.ocx</OutputFile>
+      <ModuleDefinitionFile>.\ShBrowserCtlsU.def</ModuleDefinitionFile>
+      <DelayLoadDLLs>uxtheme.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <IgnoreEmbeddedIDL>false</IgnoreEmbeddedIDL>
+      <TypeLibraryFile>
+      </TypeLibraryFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <StripPrivateSymbols>$(OutDir)$(TargetName).pdb</StripPrivateSymbols>
+      <SubSystem>Windows</SubSystem>
+      <LargeAddressAware>true</LargeAddressAware>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>true</DataExecutionPrevention>
+      <SupportUnloadOfDelayLoadedDLL>true</SupportUnloadOfDelayLoadedDLL>
+      <ImportLibrary>$(IntDir)ShBrowserCtlsU.lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+      <Profile>true</Profile>
+    </Link>
+    <Manifest>
+      <GenerateCatalogFiles>false</GenerateCatalogFiles>
+      <TypeLibraryFile>
+      </TypeLibraryFile>
+      <RegistrarScriptFile>
+      </RegistrarScriptFile>
+      <ComponentFileName>
+      </ComponentFileName>
+      <UpdateFileHashes>false</UpdateFileHashes>
+    </Manifest>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="AboutDlg.cpp" />
+    <ClCompile Include="CommonProperties.cpp" />
+    <ClCompile Include="ctlinterfaces\exlvw\InfoTipTask.cpp" />
+    <ClCompile Include="ctlinterfaces\exlvw\LegacyBackgroundItemEnumTask.cpp" />
+    <ClCompile Include="ctlinterfaces\exlvw\SubItemControlTask.cpp" />
+    <ClCompile Include="ctlinterfaces\extvw\LegacyBackgroundEnumTask.cpp" />
+    <ClCompile Include="CWindowEx.cpp" />
+    <ClCompile Include="EnumOLEVERB.cpp" />
+    <ClCompile Include="helpers.cpp" />
+    <ClCompile Include="ShBrowserCtls.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug - ANSI|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug - Unicode|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release - ANSI|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release - Unicode|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\AggregateImageList.cpp" />
+    <ClCompile Include="ctlinterfaces\APIWrapper.cpp" />
+    <ClCompile Include="ctlinterfaces\common.cpp" />
+    <ClCompile Include="ctlinterfaces\DataObject.cpp" />
+    <ClCompile Include="ctlinterfaces\DesktopShellFolderHook.cpp" />
+    <ClCompile Include="ctlinterfaces\DropShadowAdorner.cpp" />
+    <ClCompile Include="ctlinterfaces\DummyShellBrowser.cpp" />
+    <ClCompile Include="ctlinterfaces\ElevationShieldTask.cpp" />
+    <ClCompile Include="ctlinterfaces\LegacyImageListWrapper.cpp" />
+    <ClCompile Include="ctlinterfaces\NamespaceEnumSettings.cpp" />
+    <ClCompile Include="ctlinterfaces\NamespaceEnumSettingsProperties.cpp" />
+    <ClCompile Include="ctlinterfaces\PhotoBorderAdorner.cpp" />
+    <ClCompile Include="ctlinterfaces\RunnableTask.cpp" />
+    <ClCompile Include="ctlinterfaces\SecurityZone.cpp" />
+    <ClCompile Include="ctlinterfaces\SecurityZones.cpp" />
+    <ClCompile Include="ctlinterfaces\SprocketAdorner.cpp" />
+    <ClCompile Include="ctlinterfaces\UnifiedImageList.cpp" />
+    <ClCompile Include="ctlinterfaces\exlvw\BackgroundColumnEnumTask.cpp" />
+    <ClCompile Include="ctlinterfaces\exlvw\BackgroundItemEnumTask.cpp" />
+    <ClCompile Include="ctlinterfaces\exlvw\IconTask.cpp" />
+    <ClCompile Include="ctlinterfaces\exlvw\InsertSingleItemTask.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug - ANSI|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Debug - ANSI|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug - Unicode|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Debug - Unicode|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release - ANSI|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release - ANSI|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release - Unicode|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release - Unicode|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\exlvw\LegacyExtractThumbnailFromDiskCacheTask.cpp" />
+    <ClCompile Include="ctlinterfaces\exlvw\LegacyExtractThumbnailTask.cpp" />
+    <ClCompile Include="ctlinterfaces\exlvw\LegacyTestThumbnailCacheTask.cpp" />
+    <ClCompile Include="ctlinterfaces\exlvw\LegacyThumbnailTask.cpp" />
+    <ClCompile Include="ctlinterfaces\exlvw\LegacyTileViewTask.cpp" />
+    <ClCompile Include="ctlinterfaces\exlvw\OverlayTask.cpp" />
+    <ClCompile Include="ctlinterfaces\exlvw\SetColumnsDlg.cpp" />
+    <ClCompile Include="ctlinterfaces\exlvw\ShellListView.cpp" />
+    <ClCompile Include="ctlinterfaces\exlvw\ShellListViewColumn.cpp" />
+    <ClCompile Include="ctlinterfaces\exlvw\ShellListViewColumns.cpp" />
+    <ClCompile Include="ctlinterfaces\exlvw\ShellListViewItem.cpp" />
+    <ClCompile Include="ctlinterfaces\exlvw\ShellListViewItems.cpp" />
+    <ClCompile Include="ctlinterfaces\exlvw\ShellListViewNamespace.cpp" />
+    <ClCompile Include="ctlinterfaces\exlvw\ShellListViewNamespaces.cpp" />
+    <ClCompile Include="ctlinterfaces\exlvw\ShLvwDefaultManagedItemPropertiesProperties.cpp" />
+    <ClCompile Include="ctlinterfaces\exlvw\SlowColumnTask.cpp" />
+    <ClCompile Include="ctlinterfaces\exlvw\ThumbnailsProperties.cpp" />
+    <ClCompile Include="ctlinterfaces\exlvw\ThumbnailTask.cpp" />
+    <ClCompile Include="ctlinterfaces\exlvw\TileViewTask.cpp" />
+    <ClCompile Include="ctlinterfaces\extvw\BackgroundEnumTask.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug - ANSI|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Debug - ANSI|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug - Unicode|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Debug - Unicode|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release - ANSI|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release - ANSI|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release - Unicode|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release - Unicode|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\extvw\IconTask.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug - ANSI|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Debug - ANSI|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug - Unicode|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Debug - Unicode|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release - ANSI|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release - ANSI|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release - Unicode|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release - Unicode|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\extvw\InsertSingleItemTask.cpp" />
+    <ClCompile Include="ctlinterfaces\extvw\OverlayTask.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug - ANSI|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Debug - ANSI|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug - Unicode|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Debug - Unicode|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release - ANSI|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release - ANSI|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release - Unicode|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <XMLDocumentationFileName Condition="'$(Configuration)|$(Platform)'=='Release - Unicode|Win32'">$(IntDir)%(Filename)1.xdc</XMLDocumentationFileName>
+    </ClCompile>
+    <ClCompile Include="ctlinterfaces\extvw\ShellTreeView.cpp" />
+    <ClCompile Include="ctlinterfaces\extvw\ShellTreeViewItem.cpp" />
+    <ClCompile Include="ctlinterfaces\extvw\ShellTreeViewItems.cpp" />
+    <ClCompile Include="ctlinterfaces\extvw\ShellTreeViewNamespace.cpp" />
+    <ClCompile Include="ctlinterfaces\extvw\ShellTreeViewNamespaces.cpp" />
+    <ClCompile Include="ctlinterfaces\extvw\ShTvwDefaultManagedItemPropertiesProperties.cpp" />
+    <ClCompile Include="ShBrowserCtlsA_i.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug - ANSI|Win32'">
+      </PrecompiledHeader>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug - Unicode|Win32'">true</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug - Unicode|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release - ANSI|Win32'">
+      </PrecompiledHeader>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release - Unicode|Win32'">true</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release - Unicode|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="ShBrowserCtlsU_i.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug - ANSI|Win32'">true</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug - ANSI|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug - Unicode|Win32'">
+      </PrecompiledHeader>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release - ANSI|Win32'">true</ExcludedFromBuild>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release - ANSI|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release - Unicode|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ShBrowserCtlsA.def" />
+    <None Include="ShBrowserCtlsU.def" />
+    <None Include="res\About.jpg" />
+    <None Include="res\IDE-Logo ShLvw.ico" />
+    <None Include="res\IDE-Logo ShTvw.ico" />
+    <None Include="res\Paypal.jpg" />
+    <None Include="res\ShBrowserCtlsA.rgs" />
+    <None Include="res\ShBrowserCtlsU.rgs" />
+    <None Include="res\ShellListViewA.bmp" />
+    <None Include="res\ShellListViewU.bmp" />
+    <None Include="res\ShellTreeViewA.bmp" />
+    <None Include="res\ShellTreeViewU.bmp" />
+    <None Include="res\ToolBar disabled.bmp" />
+    <None Include="res\ToolBar enabled.bmp" />
+    <None Include="res\CommonPropertiesA.rgs" />
+    <None Include="res\CommonPropertiesU.rgs" />
+    <None Include="res\NamespaceEnumSettingsA.rgs" />
+    <None Include="res\NamespaceEnumSettingsPropertiesA.rgs" />
+    <None Include="res\NamespaceEnumSettingsPropertiesU.rgs" />
+    <None Include="res\NamespaceEnumSettingsU.rgs" />
+    <None Include="res\SecurityZoneA.rgs" />
+    <None Include="res\SecurityZonesA.rgs" />
+    <None Include="res\SecurityZonesU.rgs" />
+    <None Include="res\SecurityZoneU.rgs" />
+    <None Include="res\ShellListViewA.rgs" />
+    <None Include="res\ShellListViewColumnA.rgs" />
+    <None Include="res\ShellListViewColumnsA.rgs" />
+    <None Include="res\ShellListViewColumnsU.rgs" />
+    <None Include="res\ShellListViewColumnU.rgs" />
+    <None Include="res\ShellListViewItemA.rgs" />
+    <None Include="res\ShellListViewItemsA.rgs" />
+    <None Include="res\ShellListViewItemsU.rgs" />
+    <None Include="res\ShellListViewItemU.rgs" />
+    <None Include="res\ShellListViewNamespaceA.rgs" />
+    <None Include="res\ShellListViewNamespacesA.rgs" />
+    <None Include="res\ShellListViewNamespacesU.rgs" />
+    <None Include="res\ShellListViewNamespaceU.rgs" />
+    <None Include="res\ShellListViewU.rgs" />
+    <None Include="res\ShellTreeViewA.rgs" />
+    <None Include="res\ShellTreeViewItemA.rgs" />
+    <None Include="res\ShellTreeViewItemsA.rgs" />
+    <None Include="res\ShellTreeViewItemsU.rgs" />
+    <None Include="res\ShellTreeViewItemU.rgs" />
+    <None Include="res\ShellTreeViewNamespaceA.rgs" />
+    <None Include="res\ShellTreeViewNamespacesA.rgs" />
+    <None Include="res\ShellTreeViewNamespacesU.rgs" />
+    <None Include="res\ShellTreeViewNamespaceU.rgs" />
+    <None Include="res\ShellTreeViewU.rgs" />
+    <None Include="res\ShLvwDefaultManagedItemPropertiesPropertiesA.rgs" />
+    <None Include="res\ShLvwDefaultManagedItemPropertiesPropertiesU.rgs" />
+    <None Include="res\ShTvwDefaultManagedItemPropertiesPropertiesA.rgs" />
+    <None Include="res\ShTvwDefaultManagedItemPropertiesPropertiesU.rgs" />
+    <None Include="res\ThumbnailsPropertiesA.rgs" />
+    <None Include="res\ThumbnailsPropertiesU.rgs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Midl Include="ShBrowserCtlsA.idl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug - Unicode|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release - Unicode|Win32'">true</ExcludedFromBuild>
+    </Midl>
+    <Midl Include="ShBrowserCtlsU.idl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug - ANSI|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release - ANSI|Win32'">true</ExcludedFromBuild>
+    </Midl>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AboutDlg.h" />
+    <ClInclude Include="ClassFactory.h" />
+    <ClInclude Include="CommonProperties.h" />
+    <ClInclude Include="CompilerFlags.h" />
+    <ClInclude Include="ctlinterfaces\exlvw\InfoTipTask.h" />
+    <ClInclude Include="ctlinterfaces\exlvw\LegacyBackgroundItemEnumTask.h" />
+    <ClInclude Include="ctlinterfaces\exlvw\SubItemControlTask.h" />
+    <ClInclude Include="ctlinterfaces\extvw\LegacyBackgroundEnumTask.h" />
+    <ClInclude Include="CWindowEx.h" />
+    <ClInclude Include="DispIDs.h" />
+    <ClInclude Include="EnumOLEVERB.h" />
+    <ClInclude Include="helpers.h" />
+    <ClInclude Include="HyperLinkEx.h" />
+    <ClInclude Include="ICategorizeProperties.h" />
+    <ClInclude Include="ICreditsProvider.h" />
+    <ClInclude Include="RunTimeHelperEx.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="ctlinterfaces\_INamespaceEnumSettingsEvents_CP.h" />
+    <ClInclude Include="ctlinterfaces\_ISecurityZoneEvents_CP.h" />
+    <ClInclude Include="ctlinterfaces\_ISecurityZonesEvents_CP.h" />
+    <ClInclude Include="ctlinterfaces\AggregateImageList.h" />
+    <ClInclude Include="ctlinterfaces\APIWrapper.h" />
+    <ClInclude Include="ctlinterfaces\common.h" />
+    <ClInclude Include="ctlinterfaces\DataObject.h" />
+    <ClInclude Include="ctlinterfaces\definitions.h" />
+    <ClInclude Include="ctlinterfaces\DesktopShellFolderHook.h" />
+    <ClInclude Include="ctlinterfaces\DropShadowAdorner.h" />
+    <ClInclude Include="ctlinterfaces\DummyShellBrowser.h" />
+    <ClInclude Include="ctlinterfaces\ElevationShieldTask.h" />
+    <ClInclude Include="ctlinterfaces\IEnumShellImageStore.h" />
+    <ClInclude Include="ctlinterfaces\IImageListPrivate.h" />
+    <ClInclude Include="ctlinterfaces\IInternalMessageListener.h" />
+    <ClInclude Include="ctlinterfaces\IMessageListener.h" />
+    <ClInclude Include="ctlinterfaces\INamespaceEnumTask.h" />
+    <ClInclude Include="ctlinterfaces\IPersistentChildObject.h" />
+    <ClInclude Include="ctlinterfaces\IShellImageStore.h" />
+    <ClInclude Include="ctlinterfaces\IThumbnailAdorner.h" />
+    <ClInclude Include="ctlinterfaces\LegacyImageListWrapper.h" />
+    <ClInclude Include="ctlinterfaces\NamespaceEnumSettings.h" />
+    <ClInclude Include="ctlinterfaces\NamespaceEnumSettingsProperties.h" />
+    <ClInclude Include="ctlinterfaces\PhotoBorderAdorner.h" />
+    <ClInclude Include="ctlinterfaces\RunnableTask.h" />
+    <ClInclude Include="ctlinterfaces\SecurityZone.h" />
+    <ClInclude Include="ctlinterfaces\SecurityZones.h" />
+    <ClInclude Include="ctlinterfaces\SprocketAdorner.h" />
+    <ClInclude Include="ctlinterfaces\UnifiedImageList.h" />
+    <ClInclude Include="ctlinterfaces\exlvw\_IShellListViewColumnEvents_CP.h" />
+    <ClInclude Include="ctlinterfaces\exlvw\_IShellListViewColumnsEvents_CP.h" />
+    <ClInclude Include="ctlinterfaces\exlvw\_IShellListViewEvents_CP.h" />
+    <ClInclude Include="ctlinterfaces\exlvw\_IShellListViewItemEvents_CP.h" />
+    <ClInclude Include="ctlinterfaces\exlvw\_IShellListViewItemsEvents_CP.h" />
+    <ClInclude Include="ctlinterfaces\exlvw\_IShellListViewNamespaceEvents_CP.h" />
+    <ClInclude Include="ctlinterfaces\exlvw\_IShellListViewNamespacesEvents_CP.h" />
+    <ClInclude Include="ctlinterfaces\exlvw\BackgroundColumnEnumTask.h" />
+    <ClInclude Include="ctlinterfaces\exlvw\BackgroundItemEnumTask.h" />
+    <ClInclude Include="ctlinterfaces\exlvw\definitions.h" />
+    <ClInclude Include="ctlinterfaces\exlvw\IconTask.h" />
+    <ClInclude Include="ctlinterfaces\exlvw\InsertSingleItemTask.h" />
+    <ClInclude Include="ctlinterfaces\exlvw\LegacyExtractThumbnailFromDiskCacheTask.h" />
+    <ClInclude Include="ctlinterfaces\exlvw\LegacyExtractThumbnailTask.h" />
+    <ClInclude Include="ctlinterfaces\exlvw\LegacyTestThumbnailCacheTask.h" />
+    <ClInclude Include="ctlinterfaces\exlvw\LegacyThumbnailTask.h" />
+    <ClInclude Include="ctlinterfaces\exlvw\LegacyTileViewTask.h" />
+    <ClInclude Include="ctlinterfaces\exlvw\OverlayTask.h" />
+    <ClInclude Include="ctlinterfaces\exlvw\SetColumnsDlg.h" />
+    <ClInclude Include="ctlinterfaces\exlvw\ShellListView.h" />
+    <ClInclude Include="ctlinterfaces\exlvw\ShellListViewColumn.h" />
+    <ClInclude Include="ctlinterfaces\exlvw\ShellListViewColumns.h" />
+    <ClInclude Include="ctlinterfaces\exlvw\ShellListViewItem.h" />
+    <ClInclude Include="ctlinterfaces\exlvw\ShellListViewItems.h" />
+    <ClInclude Include="ctlinterfaces\exlvw\ShellListViewNamespace.h" />
+    <ClInclude Include="ctlinterfaces\exlvw\ShellListViewNamespaces.h" />
+    <ClInclude Include="ctlinterfaces\exlvw\ShLvwDefaultManagedItemPropertiesProperties.h" />
+    <ClInclude Include="ctlinterfaces\exlvw\SlowColumnTask.h" />
+    <ClInclude Include="ctlinterfaces\exlvw\ThumbnailsProperties.h" />
+    <ClInclude Include="ctlinterfaces\exlvw\ThumbnailTask.h" />
+    <ClInclude Include="ctlinterfaces\exlvw\TileViewTask.h" />
+    <ClInclude Include="ctlinterfaces\extvw\_IShellTreeViewEvents_CP.h" />
+    <ClInclude Include="ctlinterfaces\extvw\_IShellTreeViewItemEvents_CP.h" />
+    <ClInclude Include="ctlinterfaces\extvw\_IShellTreeViewItemsEvents_CP.h" />
+    <ClInclude Include="ctlinterfaces\extvw\_IShellTreeViewNamespaceEvents_CP.h" />
+    <ClInclude Include="ctlinterfaces\extvw\_IShellTreeViewNamespacesEvents_CP.h" />
+    <ClInclude Include="ctlinterfaces\extvw\BackgroundEnumTask.h" />
+    <ClInclude Include="ctlinterfaces\extvw\definitions.h" />
+    <ClInclude Include="ctlinterfaces\extvw\IconTask.h" />
+    <ClInclude Include="ctlinterfaces\extvw\InsertSingleItemTask.h" />
+    <ClInclude Include="ctlinterfaces\extvw\OverlayTask.h" />
+    <ClInclude Include="ctlinterfaces\extvw\ShellTreeView.h" />
+    <ClInclude Include="ctlinterfaces\extvw\ShellTreeViewItem.h" />
+    <ClInclude Include="ctlinterfaces\extvw\ShellTreeViewItems.h" />
+    <ClInclude Include="ctlinterfaces\extvw\ShellTreeViewNamespace.h" />
+    <ClInclude Include="ctlinterfaces\extvw\ShellTreeViewNamespaces.h" />
+    <ClInclude Include="ctlinterfaces\extvw\ShTvwDefaultManagedItemPropertiesProperties.h" />
+    <ClInclude Include="ShBrowserCtlsA.h" />
+    <ClInclude Include="ShBrowserCtlsU.h" />
+    <ClInclude Include="res\resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="res\ShBrowserCtls.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="res\ShBrowserCtls.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

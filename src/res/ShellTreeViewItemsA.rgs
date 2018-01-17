@@ -1,0 +1,25 @@
+HKCR
+{
+	ShBrowserCtlsA.ShellTreeViewItems.1 = s 'TimoSoft ShellTreeViewItems Class 1.5 (ANSI)'
+	{
+		CLSID = s '{E1F1C620-F7AB-4b03-9922-0F8E7A6882D1}'
+	}
+	ShBrowserCtlsA.ShellTreeViewItems = s 'TimoSoft ShellTreeViewItems Class (ANSI)'
+	{
+		CLSID = s '{E1F1C620-F7AB-4b03-9922-0F8E7A6882D1}'
+		CurVer = s 'ShBrowserCtlsA.ShellTreeViewItems.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {E1F1C620-F7AB-4b03-9922-0F8E7A6882D1} = s 'TimoSoft ShellTreeViewItems Class (ANSI)'
+		{
+			ProgID = s 'ShBrowserCtlsA.ShellTreeViewItems.1'
+			VersionIndependentProgID = s 'ShBrowserCtlsA.ShellTreeViewItems'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{18FE3B91-D4FD-4286-A71E-222BE3460A18}'
+		}
+	}
+}

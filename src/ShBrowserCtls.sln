@@ -1,0 +1,25 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ShBrowserCtls", "ShBrowserCtls.vcxproj", "{9C4C3D15-3493-4EBF-85AB-C8055EADE5C6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug - ANSI|Win32 = Debug - ANSI|Win32
+		Debug - Unicode|Win32 = Debug - Unicode|Win32
+		Release - ANSI|Win32 = Release - ANSI|Win32
+		Release - Unicode|Win32 = Release - Unicode|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9C4C3D15-3493-4EBF-85AB-C8055EADE5C6}.Debug - ANSI|Win32.ActiveCfg = Debug - ANSI|Win32
+		{9C4C3D15-3493-4EBF-85AB-C8055EADE5C6}.Debug - ANSI|Win32.Build.0 = Debug - ANSI|Win32
+		{9C4C3D15-3493-4EBF-85AB-C8055EADE5C6}.Debug - Unicode|Win32.ActiveCfg = Debug - Unicode|Win32
+		{9C4C3D15-3493-4EBF-85AB-C8055EADE5C6}.Debug - Unicode|Win32.Build.0 = Debug - Unicode|Win32
+		{9C4C3D15-3493-4EBF-85AB-C8055EADE5C6}.Release - ANSI|Win32.ActiveCfg = Release - ANSI|Win32
+		{9C4C3D15-3493-4EBF-85AB-C8055EADE5C6}.Release - ANSI|Win32.Build.0 = Release - ANSI|Win32
+		{9C4C3D15-3493-4EBF-85AB-C8055EADE5C6}.Release - Unicode|Win32.ActiveCfg = Release - Unicode|Win32
+		{9C4C3D15-3493-4EBF-85AB-C8055EADE5C6}.Release - Unicode|Win32.Build.0 = Release - Unicode|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,25 @@
+HKCR
+{
+	ShBrowserCtlsU.CommonProperties.1 = s 'TimoSoft CommonProperties Class 1.5 (Unicode)'
+	{
+		CLSID = s '{7A2EC646-0793-473d-9239-CEB42B86C234}'
+	}
+	ShBrowserCtlsU.CommonProperties = s 'TimoSoft CommonProperties Class (Unicode)'
+	{
+		CLSID = s '{7A2EC646-0793-473d-9239-CEB42B86C234}'
+		CurVer = s 'ShBrowserCtlsU.CommonProperties.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {7A2EC646-0793-473d-9239-CEB42B86C234} = s 'TimoSoft CommonProperties Class (Unicode)'
+		{
+			ProgID = s 'ShBrowserCtlsU.CommonProperties.1'
+			VersionIndependentProgID = s 'ShBrowserCtlsU.CommonProperties'
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			'TypeLib' = s '{1F9B9092-BEE4-4caf-9C7B-9384AF087C63}'
+		}
+	}
+}
