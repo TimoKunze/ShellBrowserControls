@@ -10,10 +10,10 @@
 #define VERSION_MINOR																					5
 #define VERSION_REVISION1																			8
 #define VERSION_REVISION2																			0
-#define VERSION_BUILD																					554
-#define STRFILEVERSION																				"1.5.8.554"
+#define VERSION_BUILD																					555
+#define STRFILEVERSION																				"1.5.8.555"
 #define STRPRODUCTVERSION																			"1.5"
-#define STRTIMESTAMP																					"2018/01/16 22:51:52"
+#define STRTIMESTAMP																					"2018/01/17 22:30:50"
 
 #define IDB_SHELLLISTVIEW																			1
 #define IDB_SHELLTREEVIEW																			2
