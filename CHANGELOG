@@ -1,0 +1,184 @@
+Version 1.5.8 - DD/MM/YYYY
+
+- Project published on GitHub.
+
+
+
+Version 1.5.7 - 21/11/2017
+
+- Detaching a control from its mate could leave the image lists in a state that could cause crashes.
+
+
+
+Version 1.5.6 - 20/11/2016
+
+- Avoid flushing the system image list on Windows 8 and newer. Especially on Windows 10 it seems to be unnecessary and causing problems like garbled icons.
+
+
+
+Version 1.5.5 - 16/10/2016
+
+- Fixed duplicate sub-items for slow parent items when calling IShTreeViewItem::EnsureSubItemsAreLoaded().
+
+
+
+Version 1.5.4 - 24/01/2016
+
+- Make sure the drag image is not displayed anymore when displaying the right mouse button drag context menu.
+
+
+
+Version 1.5.3 - 15/11/2015
+
+- Fixed a crash on Windows Vista.
+- Significantly improved performance, especially for auto-update.
+
+
+
+Version 1.5.2 - 24/10/2015
+
+- Improved support for non-shell treeview items.
+- Work around a shell issue that can lead to items being inserted more than once.
+- Fixed a race condition in ShellTreeView that could lead to items being inserted more than once.
+- Fixed crashes, especially on Windows XP.
+- Initial support for Windows 10.
+
+
+
+Version 1.5.1 - 21/02/2015
+
+- Improved internal error handling.
+
+
+
+Version 1.5.0 - 24/08/2014
+
+- Added the IShListView::SecurityZones and IShTreeView::SecurityZones properties to enumerate the system's security zones.
+- Added the SecurityZone properties to item and namespace objects to retrieve the item's/namespace's security zone.
+- Fixed and enabled the auto-update improvementes, that have been introduced with version 1.4.1, for Windows 8 and 2012.
+- Fixed a crash that could occur when selecting the "Delete" command from the shell context menu.
+- Fixed potential crashes related to multi-threading.
+- Fixed a crash that occured when the system wakes up from hibernate.
+- Slightly improved performance of thumbnail loading.
+
+
+
+Version 1.4.5 - 26/01/2014
+
+- Trying to fix a crash that occured when the system wakes up from hibernate.
+- When loading an item's sub-items and for similar time-critical scenarios treat any items as slow that are not located on an ordinary drive.
+- For the UseGenericIcons property treat DLNA devices as slow.
+
+
+
+Version 1.4.4 - 03/11/2013
+
+- On Windows Vista and newer, background tasks for thumbnail retrieval are now being aborted if the item is scrolled out of view. This improves general thumbnail loading performance. Note that this improvement is activated only if at least version 1.5.3 of ExplorerListView is used.
+- Improved handling of deeply nested directory structures with extreme long file paths.
+- Fixed a crash when invoking the "Open with Media Player" context menu verb on UPnP resources.
+- Fixed a crash which occured especially on Windows XP.
+
+
+
+Version 1.4.3 - 23/06/2013
+
+- FIX: IShTreeView::EnsureItemIsLoaded did not always detect correctly whether the specified item had sub-items and therefore did not always add the expando when it had been necessary.
+- FIX: Ensure that a shell tree view item's sub-items are loaded only once.
+
+
+
+Version 1.4.2 - 19/03/2013
+
+- Fixed a potential heap corruption introduced with version 1.4.0. Heap corruptions can lead to crashes and strange behavior.
+- Fixed crashes of Details view on Windows 8.
+- Disabled the auto-update improvementes, that have been introduced with version 1.4.1, for Windows 8 and 2012. At least on Windows 8 they seem to cause an increasing number of deadlocks while on Windows Vista and 7 everything seems fine.
+
+
+
+Version 1.4.1 - 10/01/2013
+
+- Extended the ShellContextMenuStyleConstants enumeration with the flags scmsPopulateSubMenusSynchronously and scmsNoImplicitDefaultVerb.
+- Improved auto-update - on Windows Vista and newer the creation of files should be detected more often now.
+- Improved context menu support for multiple items from different namespaces.
+- Initial support for Windows 8.
+
+
+
+Version 1.4.0 - 27/08/2012
+
+- Added the IShListView::PersistColumnSettingsAcrossNamespaces property. It can be used to make the control remember sorting, column order, column alignments, captions and widths across different namespaces.
+- List view columns now will remember their width when they are hidden and later made visible again.
+
+
+
+Version 1.3.1 - 12/08/2012
+
+- Made the IShListViewColumn::Alignment, IShListViewColumn::Caption and IShListViewColumn::Width properties writable.
+- Make use of ExplorerTreeView's new 'heAuto' expando mode.
+- By default don't include the "rename" command in context menus if the attached control does not allow label-editing.
+- Improved auto-update - creation of files and directories should be detected more often now.
+
+
+
+Version 1.3.0 - 22/07/2012
+
+- Extended the ShLvwManagedItemPropertiesConstants enumeration with the flag slmipSubItemControls. ShellListView now is able to tell ExplorerListView which sub-item control it should use in which situation.
+- Reduced CPU usage in details view mode.
+- Retrieve the default column width from the property system on Windows Vista and newer.
+
+
+
+Version 1.2.2 - 27/05/2012
+
+- Fixed a crash in the column selection dialog if the control contained custom (non-shell) columns. This dialog will be improved further to actually support custom columns.
+- Reimplemented the subclassing code of the VB6 samples to make it more robust.
+
+
+
+Version 1.2.1 - 12/02/2012
+
+- Fixed a memory leak in ShellTreeView that occurred during drag'n'drop.
+- Fixed a crash that could occur while dragging multiple items from different namespaces or displaying the shell context menu of such items.
+- Improved support for dragging multiple items from different namespaces.
+- Fixed Tiles view for the recycle bin.
+- Fixed detection of unavailable network drives as slow items.
+- Don't check slow items for sub-items even on a background thread. Together with the previous fix this massively improves performance for network drives (and probably also for other slow items).
+- Don't extract the content of slow columns for slow items. It often makes the background thread hang for more than a minute and usually the result is empty anyway.
+- Improved the Explorer sample.
+
+
+
+Version 1.2.0 - 14/08/2011
+
+- Added the IShListView::UseGenericIcons property.
+- Added the IShTreeView::UseGenericIcons property.
+- Folder links to remote folders now are treated as slow items.
+- If version 1.2.0 (or newer) of ExplorerListView and version 6.0 (or newer) of comctl32.dll are used, ShellListView retrieves info tip texts asynchronously now, so the main thread no longer is hung while a slow info tip text is retrieved.
+- FIX: Certain combinations of filters in a NamespaceEnumSettings object did not work as expected.
+- FIX: IShTreeViewItem::EnsureSubItemsAreLoaded started a background thread even though you told it to load the items synchronously.
+- FIX: The "Default Namespace Enum Settings" property page could not persist the "Include hidden items" option.
+- FIX: Item renaming was partly managed even though the managed item properties did not include slmipRenaming/stmipRenaming.
+- FIX: Enumerating items in a background thread could still lock the main thread.
+- Fixed some possible deadlocks.
+- Fixed a memory leak.
+- Fixed some drawing glitches.
+
+
+
+Version 1.1.0 - 21/05/2011
+
+- Switched to Visual C++ 2010 and dropped support for Windows 2000.
+
+
+
+Version 1.0.0 - 25/01/2011
+
+- FIX: The control could crash when it was destroyed.
+- FIX: Shell details were not displayed in the Windows 7 Libraries namespace.
+- FIX: Executing a context menu command could fail or lead to strange behavior, because no working directory was set.
+
+
+
+Version 1.0.0 RC1 - 10/07/2010
+
+- First public release.
