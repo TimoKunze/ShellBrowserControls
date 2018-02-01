@@ -196,7 +196,7 @@ STDMETHODIMP ShLvwSlowColumnTask::DoInternalResume(void)
 	if(SUCCEEDED(hr)) {
 		EnterCriticalSection(properties.pCriticalSection);
 		#ifdef USE_STL
-			properties.pSlowColumnQueue->push(pResult);
+			properties.pSlowColumnQueue->push(properties.pResult);
 		#else
 			properties.pSlowColumnQueue->AddTail(properties.pResult);
 		#endif

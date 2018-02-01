@@ -344,7 +344,7 @@ STDMETHODIMP ShLvwLegacyThumbnailTask::DoInternalResume(void)
 	}
 	EnterCriticalSection(properties.pBackgroundThumbnailsCritSection);
 	#ifdef USE_STL
-		properties.pBackgroundThumbnailsQueue->push(pResult);
+		properties.pBackgroundThumbnailsQueue->push(properties.pResult);
 	#else
 		properties.pBackgroundThumbnailsQueue->AddTail(properties.pResult);
 	#endif

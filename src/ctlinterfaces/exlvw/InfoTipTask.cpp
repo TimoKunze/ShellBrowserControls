@@ -126,7 +126,7 @@ STDMETHODIMP ShLvwInfoTipTask::DoRun(void)
 
 		EnterCriticalSection(properties.pCriticalSection);
 		#ifdef USE_STL
-			properties.pInfoTipQueue->push(pResult);
+			properties.pInfoTipQueue->push(properties.pResult);
 		#else
 			properties.pInfoTipQueue->AddTail(properties.pResult);
 		#endif
