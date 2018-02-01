@@ -7,54 +7,54 @@
 ShLvwLegacyTileViewTask::ShLvwLegacyTileViewTask(void)
     : RunnableTask(TRUE)
 {
-	pBackgroundTileViewQueue = NULL;
-	pResult = NULL;
-	pCriticalSection = NULL;
+	properties.pBackgroundTileViewQueue = NULL;
+	properties.pResult = NULL;
+	properties.pCriticalSection = NULL;
 }
 
 void ShLvwLegacyTileViewTask::FinalRelease()
 {
-	if(pParentISF2) {
-		pParentISF2->Release();
-		pParentISF2 = NULL;
+	if(properties.pParentISF2) {
+		properties.pParentISF2->Release();
+		properties.pParentISF2 = NULL;
 	}
-	if(pIQueryAssociations) {
-		pIQueryAssociations->Release();
-		pIQueryAssociations = NULL;
+	if(properties.pIQueryAssociations) {
+		properties.pIQueryAssociations->Release();
+		properties.pIQueryAssociations = NULL;
 	}
-	if(pIPropertiesUI) {
-		pIPropertiesUI->Release();
-		pIPropertiesUI = NULL;
+	if(properties.pIPropertiesUI) {
+		properties.pIPropertiesUI->Release();
+		properties.pIPropertiesUI = NULL;
 	}
 	#ifdef USE_STL
-		for(std::vector<PROPERTYKEY*>::const_iterator it = propertyKeys.cbegin(); it != propertyKeys.cend(); ++it) {
+		for(std::vector<PROPERTYKEY*>::const_iterator it = properties.propertyKeys.cbegin(); it != properties.propertyKeys.cend(); ++it) {
 			delete *it;
 		}
-		propertyKeys.clear();
+		properties.propertyKeys.clear();
 	#else
-		for(size_t i = 0; i < propertyKeys.GetCount(); ++i) {
-			delete propertyKeys[i];
+		for(size_t i = 0; i < properties.propertyKeys.GetCount(); ++i) {
+			delete properties.propertyKeys[i];
 		}
-		propertyKeys.RemoveAll();
+		properties.propertyKeys.RemoveAll();
 	#endif
-	if(pTileInfoString) {
-		HeapFree(GetProcessHeap(), 0, pTileInfoString);
-		pTileInfoString = NULL;
+	if(properties.pTileInfoString) {
+		HeapFree(GetProcessHeap(), 0, properties.pTileInfoString);
+		properties.pTileInfoString = NULL;
 	}
-	if(pIDL) {
-		ILFree(pIDL);
-		pIDL = NULL;
+	if(properties.pIDL) {
+		ILFree(properties.pIDL);
+		properties.pIDL = NULL;
 	}
-	if(pIDLParentNamespace) {
-		ILFree(pIDLParentNamespace);
-		pIDLParentNamespace = NULL;
+	if(properties.pIDLParentNamespace) {
+		ILFree(properties.pIDLParentNamespace);
+		properties.pIDLParentNamespace = NULL;
 	}
-	if(pResult) {
-		if(pResult->hColumnBuffer) {
-			DPA_Destroy(pResult->hColumnBuffer);
+	if(properties.pResult) {
+		if(properties.pResult->hColumnBuffer) {
+			DPA_Destroy(properties.pResult->hColumnBuffer);
 		}
-		delete pResult;
-		pResult = NULL;
+		delete properties.pResult;
+		properties.pResult = NULL;
 	}
 }
 
@@ -65,32 +65,32 @@ void ShLvwLegacyTileViewTask::FinalRelease()
 	HRESULT ShLvwLegacyTileViewTask::Attach(HWND hWndToNotify, HWND hWndShellUIParentWindow, CAtlList<LPSHLVWBACKGROUNDTILEVIEWINFO>* pBackgroundTileViewQueue, LPCRITICAL_SECTION pCriticalSection, HANDLE hColumnsReadyEvent, PCIDLIST_ABSOLUTE pIDL, LONG itemID, PCIDLIST_ABSOLUTE pIDLParentNamespace, UINT maxColumnCount)
 #endif
 {
-	this->hWndToNotify = hWndToNotify;
-	this->hWndShellUIParentWindow = hWndShellUIParentWindow;
-	this->pBackgroundTileViewQueue = pBackgroundTileViewQueue;
-	this->pCriticalSection = pCriticalSection;
-	this->hColumnsReadyEvent = hColumnsReadyEvent;
-	this->pIDL = ILCloneFull(pIDL);
+	this->properties.hWndToNotify = hWndToNotify;
+	this->properties.hWndShellUIParentWindow = hWndShellUIParentWindow;
+	this->properties.pBackgroundTileViewQueue = pBackgroundTileViewQueue;
+	this->properties.pCriticalSection = pCriticalSection;
+	this->properties.hColumnsReadyEvent = hColumnsReadyEvent;
+	this->properties.pIDL = ILCloneFull(pIDL);
 	if(pIDLParentNamespace) {
-		this->pIDLParentNamespace = ILCloneFull(pIDLParentNamespace);
+		this->properties.pIDLParentNamespace = ILCloneFull(pIDLParentNamespace);
 	} else {
-		this->pIDLParentNamespace = NULL;
+		this->properties.pIDLParentNamespace = NULL;
 	}
-	this->maxColumnCount = maxColumnCount;
+	this->properties.maxColumnCount = maxColumnCount;
 
-	pParentISF2 = NULL;
-	pIQueryAssociations = NULL;
-	pIPropertiesUI = NULL;
-	pTileInfoString = NULL;
-	pResult = new SHLVWBACKGROUNDTILEVIEWINFO;
-	if(pResult) {
-		ZeroMemory(pResult, sizeof(SHLVWBACKGROUNDTILEVIEWINFO));
-		pResult->itemID = itemID;
-		pResult->hColumnBuffer = DPA_Create(maxColumnCount);
+	properties.pParentISF2 = NULL;
+	properties.pIQueryAssociations = NULL;
+	properties.pIPropertiesUI = NULL;
+	properties.pTileInfoString = NULL;
+	properties.pResult = new SHLVWBACKGROUNDTILEVIEWINFO;
+	if(properties.pResult) {
+		ZeroMemory(properties.pResult, sizeof(SHLVWBACKGROUNDTILEVIEWINFO));
+		properties.pResult->itemID = itemID;
+		properties.pResult->hColumnBuffer = DPA_Create(maxColumnCount);
 	} else {
 		return E_OUTOFMEMORY;
 	}
-	status = TVTS_NOTHINGDONE;
+	properties.status = TVTS_NOTHINGDONE;
 	return S_OK;
 }
 
@@ -126,46 +126,46 @@ void ShLvwLegacyTileViewTask::FinalRelease()
 
 STDMETHODIMP ShLvwLegacyTileViewTask::DoInternalResume(void)
 {
-	if(!(status == TVTS_DONE && !pResult)) {
-		ATLASSERT_POINTER(pResult, SHLVWBACKGROUNDTILEVIEWINFO);
-		ATLASSUME(pResult->hColumnBuffer);
-		ATLASSUME(pParentISF2);
+	if(!(properties.status == TVTS_DONE && !properties.pResult)) {
+		ATLASSERT_POINTER(properties.pResult, SHLVWBACKGROUNDTILEVIEWINFO);
+		ATLASSUME(properties.pResult->hColumnBuffer);
+		ATLASSUME(properties.pParentISF2);
 
 		HRESULT hr;
 
-		if(status != TVTS_DONE) {
-			ATLASSERT(status == TVTS_COLLECTINGPROPERTYKEYS || status == TVTS_FINDINGCOLUMNS);
+		if(properties.status != TVTS_DONE) {
+			ATLASSERT(properties.status == TVTS_COLLECTINGPROPERTYKEYS || properties.status == TVTS_FINDINGCOLUMNS);
 			if(WaitForSingleObject(hDoneEvent, 0) == WAIT_OBJECT_0) {
 				return (state == IRTIR_TASK_SUSPENDED ? E_PENDING : E_FAIL);
 			}
 
-			if(status == TVTS_COLLECTINGPROPERTYKEYS) {
-				if(!pTileInfoString) {
+			if(properties.status == TVTS_COLLECTINGPROPERTYKEYS) {
+				if(!properties.pTileInfoString) {
 					// retrieve a string defining which properties to display
-					ATLASSUME(pIQueryAssociations);
+					ATLASSUME(properties.pIQueryAssociations);
 
 					DWORD bufferSize = 0;
-					hr = pIQueryAssociations->GetString(ASSOCF_NOTRUNCATE, ASSOCSTR_TILEINFO, NULL, NULL, &bufferSize);
+					hr = properties.pIQueryAssociations->GetString(ASSOCF_NOTRUNCATE, ASSOCSTR_TILEINFO, NULL, NULL, &bufferSize);
 					if(hr == S_FALSE) {
-						pTileInfoString = static_cast<LPWSTR>(HeapAlloc(GetProcessHeap(), 0, (bufferSize + 1) * sizeof(WCHAR)));
-						ATLASSERT(pTileInfoString);
-						if(!pTileInfoString) {
+						properties.pTileInfoString = static_cast<LPWSTR>(HeapAlloc(GetProcessHeap(), 0, (bufferSize + 1) * sizeof(WCHAR)));
+						ATLASSERT(properties.pTileInfoString);
+						if(!properties.pTileInfoString) {
 							return E_OUTOFMEMORY;
 						}
-						hr = pIQueryAssociations->GetString(ASSOCF_NOTRUNCATE, ASSOCSTR_TILEINFO, NULL, pTileInfoString, &bufferSize);
+						hr = properties.pIQueryAssociations->GetString(ASSOCF_NOTRUNCATE, ASSOCSTR_TILEINFO, NULL, properties.pTileInfoString, &bufferSize);
 						ATLASSERT(SUCCEEDED(hr));
 					}
-					pIQueryAssociations->Release();
-					pIQueryAssociations = NULL;
+					properties.pIQueryAssociations->Release();
+					properties.pIQueryAssociations = NULL;
 
-					hr = CoCreateInstance(CLSID_PropertiesUI, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pIPropertiesUI));
+					hr = CoCreateInstance(CLSID_PropertiesUI, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&properties.pIPropertiesUI));
 					ATLASSERT(SUCCEEDED(hr));
-					if(!pTileInfoString || !pIPropertiesUI) {
+					if(!properties.pTileInfoString || !properties.pIPropertiesUI) {
 						return E_FAIL;
 					}
-					pNextTileInfoProperty = pTileInfoString;
-					if((tolower(pNextTileInfoProperty[0]) == L'p') && (tolower(pNextTileInfoProperty[1]) == L'r') && (tolower(pNextTileInfoProperty[2]) == L'o') && (tolower(pNextTileInfoProperty[3]) == L'p') && (tolower(pNextTileInfoProperty[4]) == L':')) {
-						pNextTileInfoProperty += 5;
+					properties.pNextTileInfoProperty = properties.pTileInfoString;
+					if((tolower(properties.pNextTileInfoProperty[0]) == L'p') && (tolower(properties.pNextTileInfoProperty[1]) == L'r') && (tolower(properties.pNextTileInfoProperty[2]) == L'o') && (tolower(properties.pNextTileInfoProperty[3]) == L'p') && (tolower(properties.pNextTileInfoProperty[4]) == L':')) {
+						properties.pNextTileInfoProperty += 5;
 					}
 
 					if(WaitForSingleObject(hDoneEvent, 0) == WAIT_OBJECT_0) {
@@ -174,17 +174,17 @@ STDMETHODIMP ShLvwLegacyTileViewTask::DoInternalResume(void)
 				}
 
 				// parse the retrieved string and translate each single property string into a property key
-				ATLASSUME(pIPropertiesUI);
-				ATLASSERT_POINTER(pNextTileInfoProperty, WCHAR);
-				while(pNextTileInfoProperty[0] != L'\0') {
-					LPWSTR pProperty = pNextTileInfoProperty;
-					while(pNextTileInfoProperty[0] != L'\0') {
-						if(pNextTileInfoProperty[0] == L';') {
-							pNextTileInfoProperty[0] = L'\0';
-							++pNextTileInfoProperty;
+				ATLASSUME(properties.pIPropertiesUI);
+				ATLASSERT_POINTER(properties.pNextTileInfoProperty, WCHAR);
+				while(properties.pNextTileInfoProperty[0] != L'\0') {
+					LPWSTR pProperty = properties.pNextTileInfoProperty;
+					while(properties.pNextTileInfoProperty[0] != L'\0') {
+						if(properties.pNextTileInfoProperty[0] == L';') {
+							properties.pNextTileInfoProperty[0] = L'\0';
+							++properties.pNextTileInfoProperty;
 							break;
 						}
-						++pNextTileInfoProperty;
+						++properties.pNextTileInfoProperty;
 					}
 
 					PROPERTYKEY* pPropertyKey = new PROPERTYKEY;
@@ -193,15 +193,15 @@ STDMETHODIMP ShLvwLegacyTileViewTask::DoInternalResume(void)
 					}
 					ZeroMemory(pPropertyKey, sizeof(PROPERTYKEY));
 					ULONG dummy = 0;
-					hr = pIPropertiesUI->ParsePropertyName(pProperty, &pPropertyKey->fmtid, &pPropertyKey->pid, &dummy);
+					hr = properties.pIPropertiesUI->ParsePropertyName(pProperty, &pPropertyKey->fmtid, &pPropertyKey->pid, &dummy);
 					ATLASSERT(SUCCEEDED(hr));
 					if(SUCCEEDED(hr)) {
 						#ifdef USE_STL
-							propertyKeys.push_back(pPropertyKey);
+							properties.propertyKeys.push_back(pPropertyKey);
 						#else
-							propertyKeys.Add(pPropertyKey);
+							properties.propertyKeys.Add(pPropertyKey);
 						#endif
-						if(DPA_AppendPtr(pResult->hColumnBuffer, reinterpret_cast<LPVOID>(-1)) == -1) {
+						if(DPA_AppendPtr(properties.pResult->hColumnBuffer, reinterpret_cast<LPVOID>(-1)) == -1) {
 							return E_OUTOFMEMORY;
 						}
 					}
@@ -210,35 +210,35 @@ STDMETHODIMP ShLvwLegacyTileViewTask::DoInternalResume(void)
 						return (state == IRTIR_TASK_SUSPENDED ? E_PENDING : E_FAIL);
 					}
 				}
-				status = TVTS_FINDINGCOLUMNS;
-				HeapFree(GetProcessHeap(), 0, pTileInfoString);
-				pTileInfoString = NULL;
-				pNextTileInfoProperty = NULL;
-				pIPropertiesUI->Release();
-				pIPropertiesUI = NULL;
+				properties.status = TVTS_FINDINGCOLUMNS;
+				HeapFree(GetProcessHeap(), 0, properties.pTileInfoString);
+				properties.pTileInfoString = NULL;
+				properties.pNextTileInfoProperty = NULL;
+				properties.pIPropertiesUI->Release();
+				properties.pIPropertiesUI = NULL;
 			}
 
-			if(status == TVTS_FINDINGCOLUMNS) {
+			if(properties.status == TVTS_FINDINGCOLUMNS) {
 				SHELLDETAILS shellDetails = {0};
-				while(pParentISF2->GetDetailsOf(NULL, currentRealColumnIndex, &shellDetails) == S_OK) {
+				while(properties.pParentISF2->GetDetailsOf(NULL, properties.currentRealColumnIndex, &shellDetails) == S_OK) {
 					SHCOLUMNID propertyKey = {0};
-					hr = pParentISF2->MapColumnToSCID(currentRealColumnIndex, &propertyKey);
+					hr = properties.pParentISF2->MapColumnToSCID(properties.currentRealColumnIndex, &propertyKey);
 					ATLASSERT(SUCCEEDED(hr));
 					if(SUCCEEDED(hr)) {
 						#ifdef USE_STL
-							size_t columnCount = propertyKeys.size();
+							size_t columnCount = properties.propertyKeys.size();
 						#else
-							size_t columnCount = propertyKeys.GetCount();
+							size_t columnCount = properties.propertyKeys.GetCount();
 						#endif
 						for(size_t i = 0; i < columnCount; ++i) {
-							if(propertyKey.fmtid == propertyKeys[i]->fmtid && propertyKey.pid == propertyKeys[i]->pid) {
-								DPA_SetPtr(pResult->hColumnBuffer, i, reinterpret_cast<LPVOID>(currentRealColumnIndex));
+							if(propertyKey.fmtid == properties.propertyKeys[i]->fmtid && propertyKey.pid == properties.propertyKeys[i]->pid) {
+								DPA_SetPtr(properties.pResult->hColumnBuffer, i, reinterpret_cast<LPVOID>(properties.currentRealColumnIndex));
 								break;
 							}
 						}
 					}
 
-					currentRealColumnIndex++;
+					properties.currentRealColumnIndex++;
 					if(WaitForSingleObject(hDoneEvent, 0) == WAIT_OBJECT_0) {
 						return (state == IRTIR_TASK_SUSPENDED ? E_PENDING : E_FAIL);
 					}
@@ -246,41 +246,41 @@ STDMETHODIMP ShLvwLegacyTileViewTask::DoInternalResume(void)
 
 				// now remove any columns that are still -1
 				UINT i = 0;
-				while(i < static_cast<UINT>(DPA_GetPtrCount(pResult->hColumnBuffer))) {
-					if(reinterpret_cast<int>(DPA_GetPtr(pResult->hColumnBuffer, i)) == -1) {
-						DPA_DeletePtr(pResult->hColumnBuffer, i);
+				while(i < static_cast<UINT>(DPA_GetPtrCount(properties.pResult->hColumnBuffer))) {
+					if(reinterpret_cast<int>(DPA_GetPtr(properties.pResult->hColumnBuffer, i)) == -1) {
+						DPA_DeletePtr(properties.pResult->hColumnBuffer, i);
 					} else {
 						i++;
 					}
 				}
 				// "remove" any columns that are too many
-				if(static_cast<UINT>(DPA_GetPtrCount(pResult->hColumnBuffer)) > maxColumnCount) {
-					DPA_SetPtrCount(pResult->hColumnBuffer, maxColumnCount);
+				if(static_cast<UINT>(DPA_GetPtrCount(properties.pResult->hColumnBuffer)) > properties.maxColumnCount) {
+					DPA_SetPtrCount(properties.pResult->hColumnBuffer, properties.maxColumnCount);
 				}
-				status = TVTS_DONE;
+				properties.status = TVTS_DONE;
 			}
 		}
-		ATLASSERT(status == TVTS_DONE);
+		ATLASSERT(properties.status == TVTS_DONE);
 
-		EnterCriticalSection(pCriticalSection);
+		EnterCriticalSection(properties.pCriticalSection);
 		#ifdef USE_STL
-			pBackgroundTileViewQueue->push(pResult);
+			properties.pBackgroundTileViewQueue->push(properties.pResult);
 		#else
-			pBackgroundTileViewQueue->AddTail(pResult);
+			properties.pBackgroundTileViewQueue->AddTail(properties.pResult);
 		#endif
-		pResult = NULL;
-		LeaveCriticalSection(pCriticalSection);
+		properties.pResult = NULL;
+		LeaveCriticalSection(properties.pCriticalSection);
 	}
 
-	if(IsWindow(hWndToNotify)) {
+	if(IsWindow(properties.hWndToNotify)) {
 		HANDLE handles[2];
 		handles[0] = hDoneEvent;
-		handles[1] = hColumnsReadyEvent;
+		handles[1] = properties.hColumnsReadyEvent;
 		DWORD result = WaitForMultipleObjects(2, handles, FALSE, INFINITE);
 		if(result == WAIT_OBJECT_0) {
 			return (state == IRTIR_TASK_SUSPENDED ? E_PENDING : E_FAIL);
 		} else if(result == WAIT_OBJECT_0 + 1) {
-			PostMessage(hWndToNotify, WM_TRIGGER_UPDATETILEVIEWCOLUMNS, 0, 0);
+			PostMessage(properties.hWndToNotify, WM_TRIGGER_UPDATETILEVIEWCOLUMNS, 0, 0);
 		}
 	}
 	return NOERROR;
@@ -288,23 +288,23 @@ STDMETHODIMP ShLvwLegacyTileViewTask::DoInternalResume(void)
 
 STDMETHODIMP ShLvwLegacyTileViewTask::DoRun(void)
 {
-	currentRealColumnIndex = 0;
-	pNextTileInfoProperty = NULL;
+	properties.currentRealColumnIndex = 0;
+	properties.pNextTileInfoProperty = NULL;
 
 	CComPtr<IShellFolder> pParentISF = NULL;
-	if(pIDLParentNamespace) {
-		BindToPIDL(pIDLParentNamespace, IID_PPV_ARGS(&pParentISF));
+	if(properties.pIDLParentNamespace) {
+		BindToPIDL(properties.pIDLParentNamespace, IID_PPV_ARGS(&pParentISF));
 	}
 	if(!pParentISF) {
 		return E_FAIL;
 	}
-	pParentISF->QueryInterface(IID_PPV_ARGS(&pParentISF2));
-	if(!pParentISF2) {
+	pParentISF->QueryInterface(IID_PPV_ARGS(&properties.pParentISF2));
+	if(!properties.pParentISF2) {
 		return E_FAIL;
 	}
 
-	PCITEMID_CHILD pIDLChild = ILFindLastID(pIDL);
-	HRESULT hr = pParentISF->GetUIObjectOf(hWndShellUIParentWindow, 1, &pIDLChild, IID_IQueryAssociations, NULL, reinterpret_cast<LPVOID*>(&pIQueryAssociations));
+	PCITEMID_CHILD pIDLChild = ILFindLastID(properties.pIDL);
+	HRESULT hr = pParentISF->GetUIObjectOf(properties.hWndShellUIParentWindow, 1, &pIDLChild, IID_IQueryAssociations, NULL, reinterpret_cast<LPVOID*>(&properties.pIQueryAssociations));
 	if(FAILED(hr)) {
 		return E_FAIL;
 	}
@@ -316,7 +316,7 @@ STDMETHODIMP ShLvwLegacyTileViewTask::DoRun(void)
 	if(attributes & SFGAO_FILESYSTEM) {
 		if((attributes & SFGAO_FOLDER) && ((attributes & SFGAO_STREAM) == 0)) {
 		//if(attributes & SFGAO_FOLDER) {
-			hr = pIQueryAssociations->Init(ASSOCF_INIT_DEFAULTTOFOLDER, L"Folder", NULL, NULL);
+			hr = properties.pIQueryAssociations->Init(ASSOCF_INIT_DEFAULTTOFOLDER, L"Folder", NULL, NULL);
 			initialized = SUCCEEDED(hr);
 		} else {
 			STRRET buffer;
@@ -328,9 +328,9 @@ STDMETHODIMP ShLvwLegacyTileViewTask::DoRun(void)
 				if(SUCCEEDED(hr) && pParsingName && !PathIsDirectoryW(pParsingName)) {
 					LPWSTR pExtension = PathFindExtensionW(pParsingName);
 					if(pExtension[0] == L'\0') {
-						hr = pIQueryAssociations->Init(attributes & SFGAO_FOLDER ? ASSOCF_INIT_DEFAULTTOFOLDER : ASSOCF_INIT_DEFAULTTOSTAR, L"*", NULL, NULL);
+						hr = properties.pIQueryAssociations->Init(attributes & SFGAO_FOLDER ? ASSOCF_INIT_DEFAULTTOFOLDER : ASSOCF_INIT_DEFAULTTOSTAR, L"*", NULL, NULL);
 					} else {
-						hr = pIQueryAssociations->Init(attributes & SFGAO_FOLDER ? ASSOCF_INIT_DEFAULTTOFOLDER : ASSOCF_INIT_DEFAULTTOSTAR, pExtension, NULL, NULL);
+						hr = properties.pIQueryAssociations->Init(attributes & SFGAO_FOLDER ? ASSOCF_INIT_DEFAULTTOFOLDER : ASSOCF_INIT_DEFAULTTOSTAR, pExtension, NULL, NULL);
 					}
 					initialized = SUCCEEDED(hr);
 				}
@@ -345,7 +345,7 @@ STDMETHODIMP ShLvwLegacyTileViewTask::DoRun(void)
 			hr = StrRetToStrW(&buffer, pIDLChild, &pParsingName);
 			ATLASSERT(SUCCEEDED(hr));
 			if(SUCCEEDED(hr) && pParsingName) {
-				hr = pIQueryAssociations->Init(0, pParsingName + 2/*"::"*/, NULL, NULL);
+				hr = properties.pIQueryAssociations->Init(0, pParsingName + 2/*"::"*/, NULL, NULL);
 				initialized = SUCCEEDED(hr);
 			}
 			CoTaskMemFree(pParsingName);
@@ -354,6 +354,6 @@ STDMETHODIMP ShLvwLegacyTileViewTask::DoRun(void)
 	if(!initialized) {
 		return E_FAIL;
 	}
-	status = TVTS_COLLECTINGPROPERTYKEYS;
+	properties.status = TVTS_COLLECTINGPROPERTYKEYS;
 	return E_PENDING;
 }

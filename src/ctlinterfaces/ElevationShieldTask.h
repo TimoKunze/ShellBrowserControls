@@ -80,17 +80,21 @@ public:
 	STDMETHODIMP DoRun(void);
 
 protected:
-	/// \brief <em>Specifies the window that is used as parent window for any UI that the shell may display</em>
-	HWND hWndShellUIParentWindow;
-	/// \brief <em>Specifies the window that the result is posted to</em>
-	///
-	/// Specifies the window to which to send the retrieved elevation requirements. This window must handle
-	/// the \c WM_TRIGGER_SETELEVATIONSHIELD message.
-	///
-	/// \sa WM_TRIGGER_SETELEVATIONSHIELD
-	HWND hWndToNotify;
-	/// \brief <em>Holds the fully qualified pIDL of the item for which to retrieve the elevation requirements</em>
-	PIDLIST_ABSOLUTE pIDL;
-	/// \brief <em>Specifies the item for which to retrieve the elevation requirements</em>
-	LONG itemID;
+	/// \brief <em>Holds the object's properties</em>
+	struct Properties
+	{
+		/// \brief <em>Specifies the window that is used as parent window for any UI that the shell may display</em>
+		HWND hWndShellUIParentWindow;
+		/// \brief <em>Specifies the window that the result is posted to</em>
+		///
+		/// Specifies the window to which to send the retrieved elevation requirements. This window must handle
+		/// the \c WM_TRIGGER_SETELEVATIONSHIELD message.
+		///
+		/// \sa WM_TRIGGER_SETELEVATIONSHIELD
+		HWND hWndToNotify;
+		/// \brief <em>Holds the fully qualified pIDL of the item for which to retrieve the elevation requirements</em>
+		PIDLIST_ABSOLUTE pIDL;
+		/// \brief <em>Specifies the item for which to retrieve the elevation requirements</em>
+		LONG itemID;
+	} properties;
 };

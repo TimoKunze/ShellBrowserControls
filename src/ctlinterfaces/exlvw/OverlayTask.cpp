@@ -11,24 +11,24 @@ ShLvwOverlayTask::ShLvwOverlayTask(void)
 
 void ShLvwOverlayTask::FinalRelease()
 {
-	if(pIDL) {
-		ILFree(pIDL);
-		pIDL = NULL;
+	if(properties.pIDL) {
+		ILFree(properties.pIDL);
+		properties.pIDL = NULL;
 	}
-	if(pParentISIO) {
-		pParentISIO->Release();
-		pParentISIO = NULL;
+	if(properties.pParentISIO) {
+		properties.pParentISIO->Release();
+		properties.pParentISIO = NULL;
 	}
 }
 
 
 HRESULT ShLvwOverlayTask::Attach(HWND hWndToNotify, PCIDLIST_ABSOLUTE pIDL, LONG itemID, IShellIconOverlay* pParentISIO)
 {
-	this->hWndToNotify = hWndToNotify;
-	this->pIDL = ILCloneFull(pIDL);
-	this->itemID = itemID;
-	this->pParentISIO = pParentISIO;
-	this->pParentISIO->AddRef();
+	this->properties.hWndToNotify = hWndToNotify;
+	this->properties.pIDL = ILCloneFull(pIDL);
+	this->properties.itemID = itemID;
+	this->properties.pParentISIO = pParentISIO;
+	this->properties.pParentISIO->AddRef();
 	return S_OK;
 }
 
@@ -63,9 +63,9 @@ HRESULT ShLvwOverlayTask::CreateInstance(HWND hWndToNotify, PCIDLIST_ABSOLUTE pI
 STDMETHODIMP ShLvwOverlayTask::DoRun(void)
 {
 	int overlayIndex = 0;
-	pParentISIO->GetOverlayIndex(ILFindLastID(pIDL), &overlayIndex);
+	properties.pParentISIO->GetOverlayIndex(ILFindLastID(properties.pIDL), &overlayIndex);
 	if(overlayIndex > 0) {
-		PostMessage(hWndToNotify, WM_TRIGGER_UPDATEOVERLAY, itemID, overlayIndex);
+		PostMessage(properties.hWndToNotify, WM_TRIGGER_UPDATEOVERLAY, properties.itemID, overlayIndex);
 	}
 	return NOERROR;
 }

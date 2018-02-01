@@ -6,14 +6,14 @@
 
 DropShadowAdorner::DropShadowAdorner()
 {
-	hAdornmentIcon = NULL;
+	properties.hAdornmentIcon = NULL;
 }
 
 DropShadowAdorner::~DropShadowAdorner()
 {
-	if(hAdornmentIcon) {
-		DestroyIcon(hAdornmentIcon);
-		hAdornmentIcon = NULL;
+	if(properties.hAdornmentIcon) {
+		DestroyIcon(properties.hAdornmentIcon);
+		properties.hAdornmentIcon = NULL;
 	}
 }
 
@@ -22,33 +22,33 @@ DropShadowAdorner::~DropShadowAdorner()
 // implementation of IThumbnailAdorner
 STDMETHODIMP DropShadowAdorner::SetIconSize(SIZE& targetIconSize, double /*contentAspectRatio*/)
 {
-	this->targetIconSize = targetIconSize;
+	this->properties.targetIconSize = targetIconSize;
 
 	HMODULE hImageRes = LoadLibraryEx(TEXT("imageres.dll"), NULL, LOAD_LIBRARY_AS_DATAFILE);
 	if(hImageRes) {
 		int sz = max(targetIconSize.cx, targetIconSize.cy);
-		UINT iconToLoad = FindBestMatchingIconResource(hImageRes, MAKEINTRESOURCE(191), sz, &loadedIconSize);
+		UINT iconToLoad = FindBestMatchingIconResource(hImageRes, MAKEINTRESOURCE(191), sz, &properties.loadedIconSize);
 		if(iconToLoad != 0xFFFFFFFF) {
-			extraMargins.left = 5;
-			extraMargins.right = 5;
-			extraMargins.top = 5;
-			extraMargins.bottom = 5;
+			properties.extraMargins.left = 5;
+			properties.extraMargins.right = 5;
+			properties.extraMargins.top = 5;
+			properties.extraMargins.bottom = 5;
 			if(sz <= 96) {
-				extraMargins.left = 2;
-				extraMargins.right = 2;
-				extraMargins.top = 2;
-				extraMargins.bottom = 2;
+				properties.extraMargins.left = 2;
+				properties.extraMargins.right = 2;
+				properties.extraMargins.top = 2;
+				properties.extraMargins.bottom = 2;
 			}
 			if(sz <= 48) {
-				extraMargins.left = 1;
-				extraMargins.right = 1;
-				extraMargins.top = 1;
-				extraMargins.bottom = 1;
+				properties.extraMargins.left = 1;
+				properties.extraMargins.right = 1;
+				properties.extraMargins.top = 1;
+				properties.extraMargins.bottom = 1;
 			}
 
-			if(hAdornmentIcon) {
-				DestroyIcon(hAdornmentIcon);
-				hAdornmentIcon = NULL;
+			if(properties.hAdornmentIcon) {
+				DestroyIcon(properties.hAdornmentIcon);
+				properties.hAdornmentIcon = NULL;
 			}
 			HRSRC hResource = FindResource(hImageRes, MAKEINTRESOURCE(iconToLoad), RT_ICON);
 			if(hResource) {
@@ -56,7 +56,7 @@ STDMETHODIMP DropShadowAdorner::SetIconSize(SIZE& targetIconSize, double /*conte
 				if(hMem) {
 					LPVOID pIconData = LockResource(hMem);
 					if(pIconData) {
-						hAdornmentIcon = CreateIconFromResourceEx(reinterpret_cast<PBYTE>(pIconData), SizeofResource(hImageRes, hResource), TRUE, 0x00030000, 0, 0, LR_DEFAULTCOLOR);
+						properties.hAdornmentIcon = CreateIconFromResourceEx(reinterpret_cast<PBYTE>(pIconData), SizeofResource(hImageRes, hResource), TRUE, 0x00030000, 0, 0, LR_DEFAULTCOLOR);
 					}
 				}
 			}
@@ -64,7 +64,7 @@ STDMETHODIMP DropShadowAdorner::SetIconSize(SIZE& targetIconSize, double /*conte
 		FreeLibrary(hImageRes);
 	}
 
-	if(hAdornmentIcon && FindContentAreaMargins(&contentMargins)) {
+	if(properties.hAdornmentIcon && FindContentAreaMargins(&properties.contentMargins)) {
 		return S_OK;
 	}
 	return E_FAIL;
@@ -72,13 +72,13 @@ STDMETHODIMP DropShadowAdorner::SetIconSize(SIZE& targetIconSize, double /*conte
 
 STDMETHODIMP DropShadowAdorner::GetMaxContentSize(double contentAspectRatio, LPSIZE pContentSize)
 {
-	if(!hAdornmentIcon) {
+	if(!properties.hAdornmentIcon) {
 		return E_FAIL;
 	}
 
 	SIZE contentAreaSize;
-	contentAreaSize.cx = targetIconSize.cx - contentMargins.left - contentMargins.right;
-	contentAreaSize.cy = targetIconSize.cy - contentMargins.top - contentMargins.bottom;
+	contentAreaSize.cx = properties.targetIconSize.cx - properties.contentMargins.left - properties.contentMargins.right;
+	contentAreaSize.cy = properties.targetIconSize.cy - properties.contentMargins.top - properties.contentMargins.bottom;
 
 	if(contentAspectRatio > 1.0) {
 		// the image's height is larger than its width
@@ -94,18 +94,18 @@ STDMETHODIMP DropShadowAdorner::GetMaxContentSize(double contentAspectRatio, LPS
 
 STDMETHODIMP DropShadowAdorner::GetAdornedSize(SIZE& contentSize, LPSIZE pAdornedSize)
 {
-	if(!hAdornmentIcon) {
+	if(!properties.hAdornmentIcon) {
 		return E_FAIL;
 	}
 
-	pAdornedSize->cx = contentSize.cx + contentMargins.left + contentMargins.right;
-	pAdornedSize->cy = contentSize.cy + contentMargins.top + contentMargins.bottom;
+	pAdornedSize->cx = contentSize.cx + properties.contentMargins.left + properties.contentMargins.right;
+	pAdornedSize->cy = contentSize.cy + properties.contentMargins.top + properties.contentMargins.bottom;
 	return S_OK;
 }
 
 STDMETHODIMP DropShadowAdorner::SetAdornedSize(SIZE& /*adornedSize*/)
 {
-	if(!hAdornmentIcon) {
+	if(!properties.hAdornmentIcon) {
 		return E_FAIL;
 	}
 
@@ -114,7 +114,7 @@ STDMETHODIMP DropShadowAdorner::SetAdornedSize(SIZE& /*adornedSize*/)
 
 STDMETHODIMP DropShadowAdorner::GetContentRectangle(RECT& adornedRectangle, SIZE& contentSize, LPRECT pContentRectangle, LPRECT pContentAreaRectangle, LPRECT pContentToDrawRectangle)
 {
-	CRect marginedContentRectangle(adornedRectangle.left + contentMargins.left, adornedRectangle.top + contentMargins.top, adornedRectangle.right - contentMargins.right, adornedRectangle.bottom - contentMargins.bottom);
+	CRect marginedContentRectangle(adornedRectangle.left + properties.contentMargins.left, adornedRectangle.top + properties.contentMargins.top, adornedRectangle.right - properties.contentMargins.right, adornedRectangle.bottom - properties.contentMargins.bottom);
 
 	// center the content within the adorner
 	pContentRectangle->left = marginedContentRectangle.left + ((marginedContentRectangle.Width() - contentSize.cx) >> 1);
@@ -139,7 +139,7 @@ STDMETHODIMP DropShadowAdorner::GetDrawOrder(LPBOOL pAdornmentFirst)
 
 STDMETHODIMP DropShadowAdorner::DrawIntoDIB(LPRECT pBoundingRectangle, LPRGBQUAD pBits)
 {
-	if(!hAdornmentIcon) {
+	if(!properties.hAdornmentIcon) {
 		return E_FAIL;
 	}
 
@@ -151,54 +151,54 @@ STDMETHODIMP DropShadowAdorner::DrawIntoDIB(LPRECT pBoundingRectangle, LPRGBQUAD
 	hr = CoCreateInstance(CLSID_WICImagingFactory, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pWICImagingFactory));
 	if(pWICImagingFactory) {
 		CComPtr<IWICBitmap> pWICBitmap = NULL;
-		hr = pWICImagingFactory->CreateBitmapFromHICON(hAdornmentIcon, &pWICBitmap);
+		hr = pWICImagingFactory->CreateBitmapFromHICON(properties.hAdornmentIcon, &pWICBitmap);
 		ATLASSERT(SUCCEEDED(hr));
 		if(SUCCEEDED(hr)) {
 			ATLASSUME(pWICBitmap);
 
 			// top-left corner
 			WICRect rectangleToCopy = {0};
-			rectangleToCopy.Width = contentMargins.left + extraMargins.left;
-			rectangleToCopy.Height = contentMargins.top + extraMargins.top;
+			rectangleToCopy.Width = properties.contentMargins.left + properties.extraMargins.left;
+			rectangleToCopy.Height = properties.contentMargins.top + properties.extraMargins.top;
 			ATLVERIFY(SUCCEEDED(pWICBitmap->CopyPixels(&rectangleToCopy, boundingSize.cx * sizeof(RGBQUAD), boundingSize.cx * boundingSize.cy * sizeof(RGBQUAD), reinterpret_cast<LPBYTE>(pBits))));
 			// top edge
-			rectangleToCopy.X = contentMargins.left + extraMargins.left;
-			rectangleToCopy.Width = boundingSize.cx - rectangleToCopy.X - (contentMargins.right + extraMargins.right);
+			rectangleToCopy.X = properties.contentMargins.left + properties.extraMargins.left;
+			rectangleToCopy.Width = boundingSize.cx - rectangleToCopy.X - (properties.contentMargins.right + properties.extraMargins.right);
 			int offset = rectangleToCopy.X;
 			ATLVERIFY(SUCCEEDED(pWICBitmap->CopyPixels(&rectangleToCopy, boundingSize.cx * sizeof(RGBQUAD), (boundingSize.cx * boundingSize.cy - offset) * sizeof(RGBQUAD), reinterpret_cast<LPBYTE>(pBits + offset))));
 			// top-right corner
-			rectangleToCopy.X = loadedIconSize - 1 - (contentMargins.right + extraMargins.right);
-			rectangleToCopy.Width = contentMargins.right + extraMargins.right;
+			rectangleToCopy.X = properties.loadedIconSize - 1 - (properties.contentMargins.right + properties.extraMargins.right);
+			rectangleToCopy.Width = properties.contentMargins.right + properties.extraMargins.right;
 			offset = boundingSize.cx - 1 - rectangleToCopy.Width;
 			ATLVERIFY(SUCCEEDED(pWICBitmap->CopyPixels(&rectangleToCopy, boundingSize.cx * sizeof(RGBQUAD), (boundingSize.cx * boundingSize.cy - offset) * sizeof(RGBQUAD), reinterpret_cast<LPBYTE>(pBits + offset))));
 			// left edge
 			rectangleToCopy.X = 0;
-			rectangleToCopy.Y = contentMargins.top + extraMargins.top;
-			rectangleToCopy.Width = contentMargins.left + extraMargins.left;
-			rectangleToCopy.Height = boundingSize.cy - rectangleToCopy.Y - (contentMargins.bottom + extraMargins.bottom);
+			rectangleToCopy.Y = properties.contentMargins.top + properties.extraMargins.top;
+			rectangleToCopy.Width = properties.contentMargins.left + properties.extraMargins.left;
+			rectangleToCopy.Height = boundingSize.cy - rectangleToCopy.Y - (properties.contentMargins.bottom + properties.extraMargins.bottom);
 			offset = rectangleToCopy.Y * boundingSize.cx;
 			ATLVERIFY(SUCCEEDED(pWICBitmap->CopyPixels(&rectangleToCopy, boundingSize.cx * sizeof(RGBQUAD), (boundingSize.cx * boundingSize.cy - offset) * sizeof(RGBQUAD), reinterpret_cast<LPBYTE>(pBits + offset))));
 			// right edge
-			rectangleToCopy.X = loadedIconSize - 1 - (contentMargins.right + extraMargins.right);
-			rectangleToCopy.Width = contentMargins.right + extraMargins.right;
+			rectangleToCopy.X = properties.loadedIconSize - 1 - (properties.contentMargins.right + properties.extraMargins.right);
+			rectangleToCopy.Width = properties.contentMargins.right + properties.extraMargins.right;
 			offset += boundingSize.cx - 1 - rectangleToCopy.Width;
 			ATLVERIFY(SUCCEEDED(pWICBitmap->CopyPixels(&rectangleToCopy, boundingSize.cx * sizeof(RGBQUAD), (boundingSize.cx * boundingSize.cy - offset) * sizeof(RGBQUAD), reinterpret_cast<LPBYTE>(pBits + offset))));
 			// bottom-left corner
 			rectangleToCopy.X = 0;
-			rectangleToCopy.Y = loadedIconSize - 1 - (contentMargins.bottom + extraMargins.bottom);
-			rectangleToCopy.Width = contentMargins.left + extraMargins.left;
-			rectangleToCopy.Height = contentMargins.bottom + extraMargins.bottom;
-			offset = (boundingSize.cy - 1 - (contentMargins.bottom + extraMargins.bottom)) * boundingSize.cx;
+			rectangleToCopy.Y = properties.loadedIconSize - 1 - (properties.contentMargins.bottom + properties.extraMargins.bottom);
+			rectangleToCopy.Width = properties.contentMargins.left + properties.extraMargins.left;
+			rectangleToCopy.Height = properties.contentMargins.bottom + properties.extraMargins.bottom;
+			offset = (boundingSize.cy - 1 - (properties.contentMargins.bottom + properties.extraMargins.bottom)) * boundingSize.cx;
 			ATLVERIFY(SUCCEEDED(pWICBitmap->CopyPixels(&rectangleToCopy, boundingSize.cx * sizeof(RGBQUAD), (boundingSize.cx * boundingSize.cy - offset) * sizeof(RGBQUAD), reinterpret_cast<LPBYTE>(pBits + offset))));
 			// bottom edge
-			rectangleToCopy.X = contentMargins.left + extraMargins.left;
-			rectangleToCopy.Width = boundingSize.cx - rectangleToCopy.X - (contentMargins.right + extraMargins.right);
+			rectangleToCopy.X = properties.contentMargins.left + properties.extraMargins.left;
+			rectangleToCopy.Width = boundingSize.cx - rectangleToCopy.X - (properties.contentMargins.right + properties.extraMargins.right);
 			offset += rectangleToCopy.X;
 			ATLVERIFY(SUCCEEDED(pWICBitmap->CopyPixels(&rectangleToCopy, boundingSize.cx * sizeof(RGBQUAD), (boundingSize.cx * boundingSize.cy - offset) * sizeof(RGBQUAD), reinterpret_cast<LPBYTE>(pBits + offset))));
 			// bottom-right corner
-			rectangleToCopy.X = loadedIconSize - 1 - (contentMargins.right + extraMargins.right);
-			rectangleToCopy.Width = contentMargins.right + extraMargins.right;
-			offset = (boundingSize.cy - (contentMargins.bottom + extraMargins.bottom)) * boundingSize.cx - 1 - rectangleToCopy.Width;
+			rectangleToCopy.X = properties.loadedIconSize - 1 - (properties.contentMargins.right + properties.extraMargins.right);
+			rectangleToCopy.Width = properties.contentMargins.right + properties.extraMargins.right;
+			offset = (boundingSize.cy - (properties.contentMargins.bottom + properties.extraMargins.bottom)) * boundingSize.cx - 1 - rectangleToCopy.Width;
 			ATLVERIFY(SUCCEEDED(pWICBitmap->CopyPixels(&rectangleToCopy, boundingSize.cx * sizeof(RGBQUAD), (boundingSize.cx * boundingSize.cy - offset) * sizeof(RGBQUAD), reinterpret_cast<LPBYTE>(pBits + offset))));
 		}
 	}
@@ -219,7 +219,7 @@ BOOL DropShadowAdorner::FindContentAreaMargins(LPRECT pMargins)
 	BOOL foundIt = FALSE;
 
 	ICONINFO iconInfo = {0};
-	GetIconInfo(hAdornmentIcon, &iconInfo);
+	GetIconInfo(properties.hAdornmentIcon, &iconInfo);
 	if(iconInfo.hbmMask) {
 		DeleteObject(iconInfo.hbmMask);
 	}
@@ -251,7 +251,7 @@ BOOL DropShadowAdorner::FindContentAreaMargins(LPRECT pMargins)
 			pMargins->left = 0;
 			for(pt.x = min(20, bmp.bmWidth >> 1); pt.x > 0 && !foundIt; pt.x--) {
 				// HACK: 16x16 icon is 24bpp only, but bmp.bmBitsPixel is 32?!
-				if(pBits[pt.y * bmp.bmWidth + pt.x] != static_cast<DWORD>(loadedIconSize == 16 ? 0x00FFFFFF : 0x00000000)) {
+				if(pBits[pt.y * bmp.bmWidth + pt.x] != static_cast<DWORD>(properties.loadedIconSize == 16 ? 0x00FFFFFF : 0x00000000)) {
 					foundIt = TRUE;
 					pMargins->left = pt.x + 1;
 				}
@@ -261,7 +261,7 @@ BOOL DropShadowAdorner::FindContentAreaMargins(LPRECT pMargins)
 			pMargins->top = 0;
 			for(pt.y = min(20, bmp.bmHeight >> 1); pt.y > 0 && !foundIt; pt.y--) {
 				// HACK: 16x16 icon is 24bpp only, but bmp.bmBitsPixel is 32?!
-				if(pBits[pt.y * bmp.bmWidth + pt.x] != static_cast<DWORD>(loadedIconSize == 16 ? 0x00FFFFFF : 0x00000000)) {
+				if(pBits[pt.y * bmp.bmWidth + pt.x] != static_cast<DWORD>(properties.loadedIconSize == 16 ? 0x00FFFFFF : 0x00000000)) {
 					foundIt = TRUE;
 					pMargins->top = pt.y + 1;
 				}
@@ -272,7 +272,7 @@ BOOL DropShadowAdorner::FindContentAreaMargins(LPRECT pMargins)
 			pMargins->right = 0;
 			for(pt.x = min(bmp.bmWidth - 20, bmp.bmWidth >> 1); pt.x < bmp.bmWidth && !foundIt; pt.x++) {
 				// HACK: 16x16 icon is 24bpp only, but bmp.bmBitsPixel is 32?!
-				if(pBits[pt.y * bmp.bmWidth + pt.x] != static_cast<DWORD>(loadedIconSize == 16 ? 0x00FFFFFF : 0x00000000)) {
+				if(pBits[pt.y * bmp.bmWidth + pt.x] != static_cast<DWORD>(properties.loadedIconSize == 16 ? 0x00FFFFFF : 0x00000000)) {
 					foundIt = TRUE;
 					pMargins->right = bmp.bmWidth - pt.x;
 				}
@@ -282,7 +282,7 @@ BOOL DropShadowAdorner::FindContentAreaMargins(LPRECT pMargins)
 			pMargins->bottom = 0;
 			for(pt.y = min(bmp.bmHeight - 20, bmp.bmHeight >> 1); pt.y < bmp.bmHeight && !foundIt; pt.y++) {
 				// HACK: 16x16 icon is 24bpp only, but bmp.bmBitsPixel is 32?!
-				if(pBits[pt.y * bmp.bmWidth + pt.x] != static_cast<DWORD>(loadedIconSize == 16 ? 0x00FFFFFF : 0x00000000)) {
+				if(pBits[pt.y * bmp.bmWidth + pt.x] != static_cast<DWORD>(properties.loadedIconSize == 16 ? 0x00FFFFFF : 0x00000000)) {
 					foundIt = TRUE;
 					pMargins->bottom = bmp.bmHeight - pt.y;
 				}

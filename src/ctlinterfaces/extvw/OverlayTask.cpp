@@ -11,18 +11,18 @@ ShTvwOverlayTask::ShTvwOverlayTask(void)
 
 void ShTvwOverlayTask::FinalRelease()
 {
-	if(pIDL) {
-		ILFree(pIDL);
-		pIDL = NULL;
+	if(properties.pIDL) {
+		ILFree(properties.pIDL);
+		properties.pIDL = NULL;
 	}
 }
 
 
 HRESULT ShTvwOverlayTask::Attach(HWND hWndToNotify, PCIDLIST_ABSOLUTE pIDL, HTREEITEM itemHandle)
 {
-	this->hWndToNotify = hWndToNotify;
-	this->pIDL = ILCloneFull(pIDL);
-	this->itemHandle = itemHandle;
+	this->properties.hWndToNotify = hWndToNotify;
+	this->properties.pIDL = ILCloneFull(pIDL);
+	this->properties.itemHandle = itemHandle;
 	return S_OK;
 }
 
@@ -57,14 +57,14 @@ STDMETHODIMP ShTvwOverlayTask::DoRun(void)
 {
 	CComPtr<IShellFolder> pParentISF = NULL;
 	PCUITEMID_CHILD pRelativePIDL = NULL;
-	HRESULT hr = SHBindToParent(pIDL, IID_PPV_ARGS(&pParentISF), &pRelativePIDL);
+	HRESULT hr = SHBindToParent(properties.pIDL, IID_PPV_ARGS(&pParentISF), &pRelativePIDL);
 	ATLASSERT(SUCCEEDED(hr));
 	ATLASSUME(pParentISF);
 	ATLASSERT_POINTER(pRelativePIDL, ITEMID_CHILD);
 	if(SUCCEEDED(hr)) {
 		int overlayIndex = GetOverlayIndex(pParentISF, pRelativePIDL);
 		if(overlayIndex > 0) {
-			PostMessage(hWndToNotify, WM_TRIGGER_UPDATEOVERLAY, reinterpret_cast<WPARAM>(itemHandle), overlayIndex);
+			PostMessage(properties.hWndToNotify, WM_TRIGGER_UPDATEOVERLAY, reinterpret_cast<WPARAM>(properties.itemHandle), overlayIndex);
 		}
 		hr = NOERROR;
 	}

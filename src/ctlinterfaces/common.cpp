@@ -947,7 +947,7 @@ HRESULT GetLinkTarget(HWND hWndShellUIParentWindow, PCIDLIST_ABSOLUTE pIDL, PIDL
 	if(FAILED(hr)) {     // shouldn't happen
 		// get the target's path and create a pIDL from it
 		TCHAR pBuffer[MAX_PATH];
-		HRESULT hr = GetLinkTarget(hWndShellUIParentWindow, pIDL, pBuffer, MAX_PATH);
+		hr = GetLinkTarget(hWndShellUIParentWindow, pIDL, pBuffer, MAX_PATH);
 		if(SUCCEEDED(hr)) {
 			*ppIDLTarget = APIWrapper::ILCreateFromPath_LFN(pBuffer);
 		}
@@ -2522,7 +2522,7 @@ BOOL IsRemoteFolderLink(PIDLIST_ABSOLUTE pAbsolutePIDL)
 	} else if(APIWrapper::IsSupported_PSGetPropertyDescription() && APIWrapper::IsSupported_PSGetPropertyValue()) {
 		CComPtr<IShellFolder> pParentISF = NULL;
 		PCUITEMID_CHILD pRelativePIDL = NULL;
-		HRESULT hr = SHBindToParent(pAbsolutePIDL, IID_PPV_ARGS(&pParentISF), &pRelativePIDL);
+		hr = SHBindToParent(pAbsolutePIDL, IID_PPV_ARGS(&pParentISF), &pRelativePIDL);
 		if(SUCCEEDED(hr)) {
 			ATLASSUME(pParentISF);
 			ATLASSERT_POINTER(pRelativePIDL, ITEMID_CHILD);

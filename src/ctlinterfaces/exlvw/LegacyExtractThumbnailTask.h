@@ -194,56 +194,60 @@ public:
 	STDMETHODIMP DoResume(void);
 
 protected:
-	/// \brief <em>Specifies the window that the result is posted to</em>
-	///
-	/// Specifies the window to which to send the extracted thumbnail. This window must handle the
-	/// \c WM_TRIGGER_UPDATETHUMBNAIL message.
-	///
-	/// \sa WM_TRIGGER_UPDATETHUMBNAIL
-	HWND hWndToNotify;
-	/// \brief <em>If \c TRUE, the item, for which to extract the thumbnail, is a file</em>
-	BOOL itemIsFile;
-	/// \brief <em>The \c IExtractImage object used to extract the thumbnail</em>
-	///
-	/// \sa pExtractionTask,
-	///     <a href="https://msdn.microsoft.com/en-us/library/bb761848.aspx">IExtractImage</a>
-	LPEXTRACTIMAGE pExtractImage;
-	/// \brief <em>If \c TRUE, the thumbnail disk cache is used; otherwise not</em>
-	BOOL useThumbnailDiskCache;
-	/// \brief <em>The \c IShellImageStore object used to access the disk cache</em>
-	///
-	/// \sa IShellImageStore
-	LPSHELLIMAGESTORE pThumbnailDiskCache;
-	/// \brief <em>If \c TRUE, the thumbnail disk cache is closed immediately after usage; otherwise lazy closing is used</em>
-	BOOL closeDiskCacheImmediately;
-	/// \brief <em>The \c IRunnableTask implementation of the object specified by \c pExtractImage</em>
-	///
-	/// \sa pExtractImage,
-	///     <a href="https://msdn.microsoft.com/en-us/library/bb775201.aspx">IRunnableTask</a>
-	IRunnableTask* pExtractionTask;
-	/// \brief <em>Holds the path to the item for which to extract the thumbnail</em>
-	WCHAR pItemPath[1024];
-	/// \brief <em>Holds the thumbnail's date stamp</em>
-	///
-	/// \sa <a href="https://msdn.microsoft.com/en-us/library/ms724284.aspx">FILETIME</a>
-	FILETIME dateStamp;
-	#ifdef USE_STL
-		/// \brief <em>Buffers the thumbnail information retrieved by the background thread until the image list is updated</em>
+	/// \brief <em>Holds the object's properties</em>
+	struct Properties
+	{
+		/// \brief <em>Specifies the window that the result is posted to</em>
 		///
-		/// \sa pCriticalSection, pResult, SHLVWBACKGROUNDTHUMBNAILINFO
-		std::queue<LPSHLVWBACKGROUNDTHUMBNAILINFO>* pBackgroundThumbnailsQueue;
-	#else
-		/// \brief <em>Buffers the thumbnail information retrieved by the background thread until the image list is updated</em>
+		/// Specifies the window to which to send the extracted thumbnail. This window must handle the
+		/// \c WM_TRIGGER_UPDATETHUMBNAIL message.
 		///
-		/// \sa pCriticalSection, pResult, SHLVWBACKGROUNDTHUMBNAILINFO
-		CAtlList<LPSHLVWBACKGROUNDTHUMBNAILINFO>* pBackgroundThumbnailsQueue;
-	#endif
-	/// \brief <em>Holds the thumbnail information until it is inserted into the \c pBackgroundThumbnailsQueue queue</em>
-	///
-	/// \sa pBackgroundThumbnailsQueue, SHLVWBACKGROUNDTHUMBNAILINFO
-	LPSHLVWBACKGROUNDTHUMBNAILINFO pResult;
-	/// \brief <em>The critical section used to synchronize access to \c pBackgroundThumbnailsQueue</em>
-	///
-	/// \sa pBackgroundThumbnailsQueue
-	LPCRITICAL_SECTION pCriticalSection;
+		/// \sa WM_TRIGGER_UPDATETHUMBNAIL
+		HWND hWndToNotify;
+		/// \brief <em>If \c TRUE, the item, for which to extract the thumbnail, is a file</em>
+		BOOL itemIsFile;
+		/// \brief <em>The \c IExtractImage object used to extract the thumbnail</em>
+		///
+		/// \sa pExtractionTask,
+		///     <a href="https://msdn.microsoft.com/en-us/library/bb761848.aspx">IExtractImage</a>
+		LPEXTRACTIMAGE pExtractImage;
+		/// \brief <em>If \c TRUE, the thumbnail disk cache is used; otherwise not</em>
+		BOOL useThumbnailDiskCache;
+		/// \brief <em>The \c IShellImageStore object used to access the disk cache</em>
+		///
+		/// \sa IShellImageStore
+		LPSHELLIMAGESTORE pThumbnailDiskCache;
+		/// \brief <em>If \c TRUE, the thumbnail disk cache is closed immediately after usage; otherwise lazy closing is used</em>
+		BOOL closeDiskCacheImmediately;
+		/// \brief <em>The \c IRunnableTask implementation of the object specified by \c pExtractImage</em>
+		///
+		/// \sa pExtractImage,
+		///     <a href="https://msdn.microsoft.com/en-us/library/bb775201.aspx">IRunnableTask</a>
+		IRunnableTask* pExtractionTask;
+		/// \brief <em>Holds the path to the item for which to extract the thumbnail</em>
+		WCHAR pItemPath[1024];
+		/// \brief <em>Holds the thumbnail's date stamp</em>
+		///
+		/// \sa <a href="https://msdn.microsoft.com/en-us/library/ms724284.aspx">FILETIME</a>
+		FILETIME dateStamp;
+		#ifdef USE_STL
+			/// \brief <em>Buffers the thumbnail information retrieved by the background thread until the image list is updated</em>
+			///
+			/// \sa pCriticalSection, pResult, SHLVWBACKGROUNDTHUMBNAILINFO
+			std::queue<LPSHLVWBACKGROUNDTHUMBNAILINFO>* pBackgroundThumbnailsQueue;
+		#else
+			/// \brief <em>Buffers the thumbnail information retrieved by the background thread until the image list is updated</em>
+			///
+			/// \sa pCriticalSection, pResult, SHLVWBACKGROUNDTHUMBNAILINFO
+			CAtlList<LPSHLVWBACKGROUNDTHUMBNAILINFO>* pBackgroundThumbnailsQueue;
+		#endif
+		/// \brief <em>Holds the thumbnail information until it is inserted into the \c pBackgroundThumbnailsQueue queue</em>
+		///
+		/// \sa pBackgroundThumbnailsQueue, SHLVWBACKGROUNDTHUMBNAILINFO
+		LPSHLVWBACKGROUNDTHUMBNAILINFO pResult;
+		/// \brief <em>The critical section used to synchronize access to \c pBackgroundThumbnailsQueue</em>
+		///
+		/// \sa pBackgroundThumbnailsQueue
+		LPCRITICAL_SECTION pCriticalSection;
+	} properties;
 };

@@ -4668,8 +4668,8 @@ LRESULT ShellListView::OnTriggerItemEnumComplete(UINT /*message*/, WPARAM /*wPar
 						if(i == 0) {
 							#ifdef USE_STL
 								//itemCache = properties.items;
-								for(std::unordered_map<LONG, LPSHELLLISTVIEWITEMDATA>::const_iterator iter = properties.items.cbegin(); iter != properties.items.cend(); ++iter) {
-									itemCache.push_back(std::pair<LONG, PCIDLIST_ABSOLUTE>(iter->first, iter->second->pIDL));
+								for(std::unordered_map<LONG, LPSHELLLISTVIEWITEMDATA>::const_iterator iter2 = properties.items.cbegin(); iter2 != properties.items.cend(); ++iter2) {
+									itemCache.push_back(std::pair<LONG, PCIDLIST_ABSOLUTE>(iter2->first, iter2->second->pIDL));
 								}
 							#else
 								POSITION p = properties.items.GetStartPosition();
@@ -4700,17 +4700,17 @@ LRESULT ShellListView::OnTriggerItemEnumComplete(UINT /*message*/, WPARAM /*wPar
 								int begin = (this_thread + 0) * size / num_threads;
 								int end = (this_thread + 1) * size / num_threads;
 
-								for(int i = begin; i < end; ++i) {
+								for(int j = begin; j < end; ++j) {
 									#pragma omp flush(done)
 									if(done) {
 										break;
 									}
-									if(ILIsEqual(itemCache[i].second, pIDLAbsolute)) {
+									if(ILIsEqual(itemCache[j].second, pIDLAbsolute)) {
 										done = TRUE;
 										#pragma omp flush(done)
-										existingItemID = itemCache[i].first;
+										existingItemID = itemCache[j].first;
 										foundEntry = itemCache.cbegin();
-										std::advance(foundEntry, i);
+										std::advance(foundEntry, j);
 									}
 								}
 							}

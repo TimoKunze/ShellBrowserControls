@@ -7,37 +7,37 @@
 ShLvwLegacyTestThumbnailCacheTask::ShLvwLegacyTestThumbnailCacheTask(void)
     : RunnableTask(FALSE)
 {
-	pExtractImage = NULL;
-	pThumbnailDiskCache = NULL;
-	pThumbnailPath[0] = TEXT('\0');
-	pItemPath[0] = L'\0';
-	pTasksToEnqueue = NULL;
-	pTaskToEnqueue = NULL;
-	pTasksToEnqueueCritSection = NULL;
-	pBackgroundThumbnailsQueue = NULL;
-	pBackgroundThumbnailsCritSection = NULL;
+	properties.pExtractImage = NULL;
+	properties.pThumbnailDiskCache = NULL;
+	properties.pThumbnailPath[0] = TEXT('\0');
+	properties.pItemPath[0] = L'\0';
+	properties.pTasksToEnqueue = NULL;
+	properties.pTaskToEnqueue = NULL;
+	properties.pTasksToEnqueueCritSection = NULL;
+	properties.pBackgroundThumbnailsQueue = NULL;
+	properties.pBackgroundThumbnailsCritSection = NULL;
 }
 
 void ShLvwLegacyTestThumbnailCacheTask::FinalRelease()
 {
-	if(pExtractImage) {
-		pExtractImage->Release();
-		pExtractImage = NULL;
+	if(properties.pExtractImage) {
+		properties.pExtractImage->Release();
+		properties.pExtractImage = NULL;
 	}
-	if(pThumbnailDiskCache) {
-		pThumbnailDiskCache->Release();
-		pThumbnailDiskCache = NULL;
+	if(properties.pThumbnailDiskCache) {
+		properties.pThumbnailDiskCache->Release();
+		properties.pThumbnailDiskCache = NULL;
 	}
-	if(pTaskToEnqueue) {
-		if(pTaskToEnqueue->pTask) {
-			pTaskToEnqueue->pTask->Release();
+	if(properties.pTaskToEnqueue) {
+		if(properties.pTaskToEnqueue->pTask) {
+			properties.pTaskToEnqueue->pTask->Release();
 		}
-		delete pTaskToEnqueue;
-		pTaskToEnqueue = NULL;
+		delete properties.pTaskToEnqueue;
+		properties.pTaskToEnqueue = NULL;
 	}
-	if(pIDL) {
-		ILFree(pIDL);
-		pIDL = NULL;
+	if(properties.pIDL) {
+		ILFree(properties.pIDL);
+		properties.pIDL = NULL;
 	}
 }
 
@@ -48,31 +48,31 @@ void ShLvwLegacyTestThumbnailCacheTask::FinalRelease()
 	HRESULT ShLvwLegacyTestThumbnailCacheTask::Attach(HWND hWndShellUIParentWindow, HWND hWndToNotify, CAtlList<LPSHCTLSBACKGROUNDTASKINFO>* pTasksToEnqueue, LPCRITICAL_SECTION pTasksToEnqueueCritSection, CAtlList<LPSHLVWBACKGROUNDTHUMBNAILINFO>* pBackgroundThumbnailsQueue, LPCRITICAL_SECTION pBackgroundThumbnailsCritSection, PCIDLIST_ABSOLUTE pIDL, LONG itemID, BOOL itemIsFile, LPEXTRACTIMAGE pExtractImage, BOOL useThumbnailDiskCache, LPSHELLIMAGESTORE pThumbnailDiskCache, SIZE imageSize, LPWSTR pThumbnailPath, LPWSTR pItemPath, FILETIME dateStamp, DWORD flags, DWORD priority, BOOL asynchronousExtraction)
 #endif
 {
-	this->hWndShellUIParentWindow = hWndShellUIParentWindow;
-	this->hWndToNotify = hWndToNotify;
-	this->pTasksToEnqueue = pTasksToEnqueue;
-	this->pTasksToEnqueueCritSection = pTasksToEnqueueCritSection;
-	this->pBackgroundThumbnailsQueue = pBackgroundThumbnailsQueue;
-	this->pBackgroundThumbnailsCritSection = pBackgroundThumbnailsCritSection;
-	this->itemIsFile = itemIsFile;
-	pExtractImage->QueryInterface(IID_PPV_ARGS(&this->pExtractImage));
-	this->useThumbnailDiskCache = useThumbnailDiskCache;
+	this->properties.hWndShellUIParentWindow = hWndShellUIParentWindow;
+	this->properties.hWndToNotify = hWndToNotify;
+	this->properties.pTasksToEnqueue = pTasksToEnqueue;
+	this->properties.pTasksToEnqueueCritSection = pTasksToEnqueueCritSection;
+	this->properties.pBackgroundThumbnailsQueue = pBackgroundThumbnailsQueue;
+	this->properties.pBackgroundThumbnailsCritSection = pBackgroundThumbnailsCritSection;
+	this->properties.itemIsFile = itemIsFile;
+	pExtractImage->QueryInterface(IID_PPV_ARGS(&this->properties.pExtractImage));
+	this->properties.useThumbnailDiskCache = useThumbnailDiskCache;
 	if(pThumbnailDiskCache) {
-		pThumbnailDiskCache->QueryInterface(IID_IShellImageStore, reinterpret_cast<LPVOID*>(&this->pThumbnailDiskCache));
+		pThumbnailDiskCache->QueryInterface(IID_IShellImageStore, reinterpret_cast<LPVOID*>(&this->properties.pThumbnailDiskCache));
 	}
-	this->pIDL = ILCloneFull(pIDL);
-	this->itemID = itemID;
-	this->imageSize = imageSize;
-	ATLVERIFY(SUCCEEDED(StringCchCopyNW(this->pThumbnailPath, 1024, pThumbnailPath, lstrlenW(pThumbnailPath))));
-	ATLVERIFY(SUCCEEDED(StringCchCopyNW(this->pItemPath, 1024, pItemPath, lstrlenW(pItemPath))));
-	this->dateStamp = dateStamp;
-	this->flags = flags;
-	this->priority = priority;
-	this->asynchronousExtraction = asynchronousExtraction;
+	this->properties.pIDL = ILCloneFull(pIDL);
+	this->properties.itemID = itemID;
+	this->properties.imageSize = imageSize;
+	ATLVERIFY(SUCCEEDED(StringCchCopyNW(this->properties.pThumbnailPath, 1024, pThumbnailPath, lstrlenW(pThumbnailPath))));
+	ATLVERIFY(SUCCEEDED(StringCchCopyNW(this->properties.pItemPath, 1024, pItemPath, lstrlenW(pItemPath))));
+	this->properties.dateStamp = dateStamp;
+	this->properties.flags = flags;
+	this->properties.priority = priority;
+	this->properties.asynchronousExtraction = asynchronousExtraction;
 
-	pTaskToEnqueue = new SHCTLSBACKGROUNDTASKINFO;
-	if(pTaskToEnqueue) {
-		ZeroMemory(pTaskToEnqueue, sizeof(SHCTLSBACKGROUNDTASKINFO));
+	properties.pTaskToEnqueue = new SHCTLSBACKGROUNDTASKINFO;
+	if(properties.pTaskToEnqueue) {
+		ZeroMemory(properties.pTaskToEnqueue, sizeof(SHCTLSBACKGROUNDTASKINFO));
 	} else {
 		return E_OUTOFMEMORY;
 	}
@@ -112,67 +112,67 @@ void ShLvwLegacyTestThumbnailCacheTask::FinalRelease()
 
 STDMETHODIMP ShLvwLegacyTestThumbnailCacheTask::DoRun(void)
 {
-	ATLASSERT_POINTER(pTaskToEnqueue, SHCTLSBACKGROUNDTASKINFO);
+	ATLASSERT_POINTER(properties.pTaskToEnqueue, SHCTLSBACKGROUNDTASKINFO);
 
 	CComPtr<IRunnableTask> pExtractionTask;
 	HRESULT hr = E_FAIL;
 	BOOL schedule = TRUE;
 
-	BOOL closeDiskCacheImmediately = (pThumbnailDiskCache == NULL);
-	if(useThumbnailDiskCache) {
-		if(!pThumbnailDiskCache) {
+	BOOL closeDiskCacheImmediately = (properties.pThumbnailDiskCache == NULL);
+	if(properties.useThumbnailDiskCache) {
+		if(!properties.pThumbnailDiskCache) {
 			// no cache was provided
-			hr = CoCreateInstance(CLSID_ShellThumbnailDiskCache, NULL, CLSCTX_INPROC, IID_IShellImageStore, reinterpret_cast<LPVOID*>(&pThumbnailDiskCache));
+			hr = CoCreateInstance(CLSID_ShellThumbnailDiskCache, NULL, CLSCTX_INPROC, IID_IShellImageStore, reinterpret_cast<LPVOID*>(&properties.pThumbnailDiskCache));
 			if(SUCCEEDED(hr)) {
-				CComQIPtr<IPersistFolder, &IID_IPersistFolder> pPersistFolder = pThumbnailDiskCache;
+				CComQIPtr<IPersistFolder, &IID_IPersistFolder> pPersistFolder = properties.pThumbnailDiskCache;
 				if(pPersistFolder) {
-					PIDLIST_ABSOLUTE pIDLParent = ILCloneFull(pIDL);
+					PIDLIST_ABSOLUTE pIDLParent = ILCloneFull(properties.pIDL);
 					ATLASSERT_POINTER(pIDLParent, ITEMIDLIST_ABSOLUTE);
 					if(pIDLParent) {
 						ILRemoveLastID(pIDLParent);
 						if(FAILED(pPersistFolder->Initialize(pIDLParent))) {
-							pThumbnailDiskCache->Release();
-							pThumbnailDiskCache = NULL;
+							properties.pThumbnailDiskCache->Release();
+							properties.pThumbnailDiskCache = NULL;
 						}
 						ILFree(pIDLParent);
 					} else {
-						pThumbnailDiskCache->Release();
-						pThumbnailDiskCache = NULL;
+						properties.pThumbnailDiskCache->Release();
+						properties.pThumbnailDiskCache = NULL;
 					}
 				} else {
-					pThumbnailDiskCache->Release();
-					pThumbnailDiskCache = NULL;
+					properties.pThumbnailDiskCache->Release();
+					properties.pThumbnailDiskCache = NULL;
 				}
 			}
 		}
 
-		if(itemIsFile) {
+		if(properties.itemIsFile) {
 			// check disk cache
-			ATLASSUME(pThumbnailDiskCache);
-			if(pThumbnailDiskCache) {
+			ATLASSUME(properties.pThumbnailDiskCache);
+			if(properties.pThumbnailDiskCache) {
 				DWORD lock = 0;
-				hr = pThumbnailDiskCache->Open(STGM_READ, &lock);
+				hr = properties.pThumbnailDiskCache->Open(STGM_READ, &lock);
 				if(SUCCEEDED(hr)) {
 					if(!closeDiskCacheImmediately) {
-						if(IsWindow(hWndToNotify)) {
-							closeDiskCacheImmediately = !SendMessage(hWndToNotify, WM_REPORT_THUMBNAILDISKCACHEACCESS, itemID, GetTickCount());
+						if(IsWindow(properties.hWndToNotify)) {
+							closeDiskCacheImmediately = !SendMessage(properties.hWndToNotify, WM_REPORT_THUMBNAILDISKCACHEACCESS, properties.itemID, GetTickCount());
 						}
 					}
 
 					FILETIME cacheTimeStamp;
-					hr = pThumbnailDiskCache->IsEntryInStore(pItemPath, &cacheTimeStamp);
-					if(hr == S_OK && CompareFileTime(&cacheTimeStamp, &dateStamp) == 0) {
-						hr = ShLvwLegacyExtractThumbnailFromDiskCacheTask::CreateInstance(hWndToNotify, pBackgroundThumbnailsQueue, pBackgroundThumbnailsCritSection, itemID, pItemPath, pThumbnailDiskCache, closeDiskCacheImmediately, imageSize, &pExtractionTask);
+					hr = properties.pThumbnailDiskCache->IsEntryInStore(properties.pItemPath, &cacheTimeStamp);
+					if(hr == S_OK && CompareFileTime(&cacheTimeStamp, &properties.dateStamp) == 0) {
+						hr = ShLvwLegacyExtractThumbnailFromDiskCacheTask::CreateInstance(properties.hWndToNotify, properties.pBackgroundThumbnailsQueue, properties.pBackgroundThumbnailsCritSection, properties.itemID, properties.pItemPath, properties.pThumbnailDiskCache, closeDiskCacheImmediately, properties.imageSize, &pExtractionTask);
 						if(SUCCEEDED(hr)) {
-							pTaskToEnqueue->taskID = TASKID_ShLvwExtractThumbnailFromDiskCache;
+							properties.pTaskToEnqueue->taskID = TASKID_ShLvwExtractThumbnailFromDiskCache;
 						}
 					} else {
 						hr = E_FAIL;
 					}
-					pThumbnailDiskCache->ReleaseLock(&lock);
+					properties.pThumbnailDiskCache->ReleaseLock(&lock);
 				}
 				if(closeDiskCacheImmediately) {
-					pThumbnailDiskCache->Close(NULL);
+					properties.pThumbnailDiskCache->Close(NULL);
 				}
 			}
 		}
@@ -180,10 +180,10 @@ STDMETHODIMP ShLvwLegacyTestThumbnailCacheTask::DoRun(void)
 
 	if(!pExtractionTask) {
 		// extract a fresh thumbnail
-		hr = ShLvwLegacyExtractThumbnailTask::CreateInstance(hWndToNotify, pBackgroundThumbnailsQueue, pBackgroundThumbnailsCritSection, itemID, itemIsFile, pExtractImage, useThumbnailDiskCache, pThumbnailDiskCache, closeDiskCacheImmediately, pItemPath, dateStamp, imageSize, &pExtractionTask);
+		hr = ShLvwLegacyExtractThumbnailTask::CreateInstance(properties.hWndToNotify, properties.pBackgroundThumbnailsQueue, properties.pBackgroundThumbnailsCritSection, properties.itemID, properties.itemIsFile, properties.pExtractImage, properties.useThumbnailDiskCache, properties.pThumbnailDiskCache, closeDiskCacheImmediately, properties.pItemPath, properties.dateStamp, properties.imageSize, &pExtractionTask);
 		if(SUCCEEDED(hr)) {
-			pTaskToEnqueue->taskID = TASKID_ShLvwExtractThumbnail;
-			if(!asynchronousExtraction) {
+			properties.pTaskToEnqueue->taskID = TASKID_ShLvwExtractThumbnail;
+			if(!properties.asynchronousExtraction) {
 				// run in foreground
 				hr = pExtractionTask->Run();
 				schedule = FALSE;
@@ -194,20 +194,20 @@ STDMETHODIMP ShLvwLegacyTestThumbnailCacheTask::DoRun(void)
 	if(SUCCEEDED(hr)) {
 		// a task has been created
 		if(schedule) {
-			pExtractionTask->QueryInterface(IID_PPV_ARGS(&pTaskToEnqueue->pTask));
-			pTaskToEnqueue->taskPriority = priority;
+			pExtractionTask->QueryInterface(IID_PPV_ARGS(&properties.pTaskToEnqueue->pTask));
+			properties.pTaskToEnqueue->taskPriority = properties.priority;
 
-			EnterCriticalSection(pTasksToEnqueueCritSection);
+			EnterCriticalSection(properties.pTasksToEnqueueCritSection);
 			#ifdef USE_STL
-				pTasksToEnqueue->push(pTaskToEnqueue);
+				properties.pTasksToEnqueue->push(properties.pTaskToEnqueue);
 			#else
-				pTasksToEnqueue->AddTail(pTaskToEnqueue);
+				properties.pTasksToEnqueue->AddTail(properties.pTaskToEnqueue);
 			#endif
-			pTaskToEnqueue = NULL;
-			LeaveCriticalSection(pTasksToEnqueueCritSection);
+			properties.pTaskToEnqueue = NULL;
+			LeaveCriticalSection(properties.pTasksToEnqueueCritSection);
 
-			if(IsWindow(hWndToNotify)) {
-				PostMessage(hWndToNotify, WM_TRIGGER_ENQUEUETASK, 0, 0);
+			if(IsWindow(properties.hWndToNotify)) {
+				PostMessage(properties.hWndToNotify, WM_TRIGGER_ENQUEUETASK, 0, 0);
 			}
 			return NOERROR;
 		}

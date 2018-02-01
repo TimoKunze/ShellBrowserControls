@@ -187,61 +187,65 @@ public:
 	STDMETHODIMP DoRun(void);
 
 protected:
-	/// \brief <em>The unique ID of this task</em>
-	///
-	/// \sa GetTaskID, GetNewTaskID
-	ULONGLONG taskID;
-	/// \brief <em>The object whose columns are enumerated by the task</em>
-	///
-	/// \sa GetTarget, SetTarget
-	LPDISPATCH pNamespaceObject;
+	/// \brief <em>Holds the object's properties</em>
+	struct Properties
+	{
+		/// \brief <em>The unique ID of this task</em>
+		///
+		/// \sa GetTaskID, GetNewTaskID
+		ULONGLONG taskID;
+		/// \brief <em>The object whose columns are enumerated by the task</em>
+		///
+		/// \sa GetTarget, SetTarget
+		LPDISPATCH pNamespaceObject;
 
-	/// \brief <em>Specifies the window that the results are posted to</em>
-	///
-	/// Specifies the window to which to send the retrieved columns. This window must handle the
-	/// \c WM_TRIGGER_COLUMNENUMCOMPLETE message.
-	///
-	/// \sa WM_TRIGGER_COLUMNENUMCOMPLETE
-	HWND hWndToNotify;
-	/// \brief <em>Specifies the window that is used as parent window for any UI that the shell may display</em>
-	HWND hWndShellUIParentWindow;
-	/// \brief <em>Specifies the shell index of the column at which to continue the column retrieval</em>
-	int currentRealColumnIndex;
-	/// \brief <em>Specifies the average width of a character in the column header caption</em>
-	int averageCharWidth;
-	#ifdef ACTIVATE_CHUNKED_COLUMNENUMERATIONS
-		/// \brief <em>Holds the number of columns that have been enumerated so far</em>
-		int enumeratedColumns;
-	#endif
-	/// \brief <em>Holds the fully qualified pIDL of the shell namespace for which to enumerate the columns</em>
-	PIDLIST_ABSOLUTE pIDLParent;
-	/// \brief <em>The \c IShellFolder2 object to be used</em>
-	///
-	/// \sa pParentISD,
-	///     <a href="https://msdn.microsoft.com/en-us/library/bb775055.aspx">IShellFolder2</a>
-	IShellFolder2* pParentISF2;
-	/// \brief <em>The \c IShellDetails object to be used alternatively</em>
-	///
-	/// \sa pParentISF2,
-	///     <a href="https://msdn.microsoft.com/en-us/library/bb775106.aspx">IShellDetails</a>
-	IShellDetails* pParentISD;
-	#ifdef USE_STL
-		/// \brief <em>Buffers the columns enumerated by the background thread until they are inserted into the list view</em>
+		/// \brief <em>Specifies the window that the results are posted to</em>
 		///
-		/// \sa pCriticalSection, pEnumResult, SHLVWBACKGROUNDCOLUMNENUMINFO
-		std::queue<LPSHLVWBACKGROUNDCOLUMNENUMINFO>* pEnumratedColumnsQueue;
-	#else
-		/// \brief <em>Buffers the columns enumerated by the background thread until they are inserted into the list view</em>
+		/// Specifies the window to which to send the retrieved columns. This window must handle the
+		/// \c WM_TRIGGER_COLUMNENUMCOMPLETE message.
 		///
-		/// \sa pCriticalSection, pEnumResult, SHLVWBACKGROUNDCOLUMNENUMINFO
-		CAtlList<LPSHLVWBACKGROUNDCOLUMNENUMINFO>* pEnumratedColumnsQueue;
-	#endif
-	/// \brief <em>Holds the enumerated columns until they are inserted into the \c pEnumratedColumnsQueue queue</em>
-	///
-	/// \sa pEnumratedColumnsQueue, SHLVWBACKGROUNDCOLUMNENUMINFO
-	LPSHLVWBACKGROUNDCOLUMNENUMINFO pEnumResult;
-	/// \brief <em>The critical section used to synchronize access to \c pEnumratedColumnsQueue</em>
-	///
-	/// \sa pEnumratedColumnsQueue
-	LPCRITICAL_SECTION pCriticalSection;
+		/// \sa WM_TRIGGER_COLUMNENUMCOMPLETE
+		HWND hWndToNotify;
+		/// \brief <em>Specifies the window that is used as parent window for any UI that the shell may display</em>
+		HWND hWndShellUIParentWindow;
+		/// \brief <em>Specifies the shell index of the column at which to continue the column retrieval</em>
+		int currentRealColumnIndex;
+		/// \brief <em>Specifies the average width of a character in the column header caption</em>
+		int averageCharWidth;
+		#ifdef ACTIVATE_CHUNKED_COLUMNENUMERATIONS
+			/// \brief <em>Holds the number of columns that have been enumerated so far</em>
+			int enumeratedColumns;
+		#endif
+		/// \brief <em>Holds the fully qualified pIDL of the shell namespace for which to enumerate the columns</em>
+		PIDLIST_ABSOLUTE pIDLParent;
+		/// \brief <em>The \c IShellFolder2 object to be used</em>
+		///
+		/// \sa pParentISD,
+		///     <a href="https://msdn.microsoft.com/en-us/library/bb775055.aspx">IShellFolder2</a>
+		IShellFolder2* pParentISF2;
+		/// \brief <em>The \c IShellDetails object to be used alternatively</em>
+		///
+		/// \sa pParentISF2,
+		///     <a href="https://msdn.microsoft.com/en-us/library/bb775106.aspx">IShellDetails</a>
+		IShellDetails* pParentISD;
+		#ifdef USE_STL
+			/// \brief <em>Buffers the columns enumerated by the background thread until they are inserted into the list view</em>
+			///
+			/// \sa pCriticalSection, pEnumResult, SHLVWBACKGROUNDCOLUMNENUMINFO
+			std::queue<LPSHLVWBACKGROUNDCOLUMNENUMINFO>* pEnumratedColumnsQueue;
+		#else
+			/// \brief <em>Buffers the columns enumerated by the background thread until they are inserted into the list view</em>
+			///
+			/// \sa pCriticalSection, pEnumResult, SHLVWBACKGROUNDCOLUMNENUMINFO
+			CAtlList<LPSHLVWBACKGROUNDCOLUMNENUMINFO>* pEnumratedColumnsQueue;
+		#endif
+		/// \brief <em>Holds the enumerated columns until they are inserted into the \c pEnumratedColumnsQueue queue</em>
+		///
+		/// \sa pEnumratedColumnsQueue, SHLVWBACKGROUNDCOLUMNENUMINFO
+		LPSHLVWBACKGROUNDCOLUMNENUMINFO pEnumResult;
+		/// \brief <em>The critical section used to synchronize access to \c pEnumratedColumnsQueue</em>
+		///
+		/// \sa pEnumratedColumnsQueue
+		LPCRITICAL_SECTION pCriticalSection;
+	} properties;
 };

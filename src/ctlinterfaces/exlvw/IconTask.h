@@ -93,27 +93,31 @@ public:
 	STDMETHODIMP DoRun(void);
 
 protected:
-	/// \brief <em>Specifies the window that the result is posted to</em>
-	///
-	/// Specifies the window to which to send the retrieved icon index. This window must handle the
-	/// \c WM_TRIGGER_UPDATEICON message.
-	///
-	/// \sa WM_TRIGGER_UPDATEICON
-	HWND hWndToNotify;
-	/// \brief <em>Holds the fully qualified pIDL of the item for which to retrieve the icon index</em>
-	PIDLIST_ABSOLUTE pIDL;
-	/// \brief <em>Specifies the item for which to retrieve the icon index</em>
-	LONG itemID;
-	/// \brief <em>The \c IShellIcon object to be used</em>
-	///
-	/// \sa <a href="https://msdn.microsoft.com/en-us/library/bb761277.aspx">IShellIcon</a>
-	IShellIcon* pParentISI;
-	/// \brief <em>Specifies whether to retrieve a generic icon or the item-specific icon</em>
-	///
-	/// \if UNICODE
-	///   \sa ShBrowserCtlsLibU::UseGenericIconsConstants
-	/// \else
-	///   \sa ShBrowserCtlsLibA::UseGenericIconsConstants
-	/// \endif
-	UseGenericIconsConstants useGenericIcons;
+	/// \brief <em>Holds the object's properties</em>
+	struct Properties
+	{
+		/// \brief <em>Specifies the window that the result is posted to</em>
+		///
+		/// Specifies the window to which to send the retrieved icon index. This window must handle the
+		/// \c WM_TRIGGER_UPDATEICON message.
+		///
+		/// \sa WM_TRIGGER_UPDATEICON
+		HWND hWndToNotify;
+		/// \brief <em>Holds the fully qualified pIDL of the item for which to retrieve the icon index</em>
+		PIDLIST_ABSOLUTE pIDL;
+		/// \brief <em>Specifies the item for which to retrieve the icon index</em>
+		LONG itemID;
+		/// \brief <em>The \c IShellIcon object to be used</em>
+		///
+		/// \sa <a href="https://msdn.microsoft.com/en-us/library/bb761277.aspx">IShellIcon</a>
+		IShellIcon* pParentISI;
+		/// \brief <em>Specifies whether to retrieve a generic icon or the item-specific icon</em>
+		///
+		/// \if UNICODE
+		///   \sa ShBrowserCtlsLibU::UseGenericIconsConstants
+		/// \else
+		///   \sa ShBrowserCtlsLibA::UseGenericIconsConstants
+		/// \endif
+		UseGenericIconsConstants useGenericIcons;
+	} properties;
 };

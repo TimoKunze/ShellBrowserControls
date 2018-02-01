@@ -11,21 +11,21 @@ ShTvwIconTask::ShTvwIconTask(void)
 
 void ShTvwIconTask::FinalRelease()
 {
-	if(pIDL) {
-		ILFree(pIDL);
-		pIDL = NULL;
+	if(properties.pIDL) {
+		ILFree(properties.pIDL);
+		properties.pIDL = NULL;
 	}
 }
 
 
 HRESULT ShTvwIconTask::Attach(HWND hWndToNotify, PCIDLIST_ABSOLUTE pIDL, HTREEITEM itemHandle, BOOL retrieveNormalImage, BOOL retrieveSelectedImage, UseGenericIconsConstants useGenericIcons)
 {
-	this->hWndToNotify = hWndToNotify;
-	this->pIDL = ILCloneFull(pIDL);
-	this->itemHandle = itemHandle;
-	this->retrieveNormalImage = retrieveNormalImage;
-	this->retrieveSelectedImage = retrieveSelectedImage;
-	this->useGenericIcons = useGenericIcons;
+	this->properties.hWndToNotify = hWndToNotify;
+	this->properties.pIDL = ILCloneFull(pIDL);
+	this->properties.itemHandle = itemHandle;
+	this->properties.retrieveNormalImage = retrieveNormalImage;
+	this->properties.retrieveSelectedImage = retrieveSelectedImage;
+	this->properties.useGenericIcons = useGenericIcons;
 	return S_OK;
 }
 
@@ -64,15 +64,15 @@ STDMETHODIMP ShTvwIconTask::DoRun(void)
 	CComPtr<IShellFolder> pParentISF = NULL;
 	PUITEMID_CHILD pRelativePIDL = NULL;
 
-	if(useGenericIcons != ugiNever) {
-		HRESULT hr = SHBindToParent(pIDL, IID_PPV_ARGS(&pParentISF), const_cast<PCUITEMID_CHILD*>(&pRelativePIDL));
+	if(properties.useGenericIcons != ugiNever) {
+		HRESULT hr = SHBindToParent(properties.pIDL, IID_PPV_ARGS(&pParentISF), const_cast<PCUITEMID_CHILD*>(&pRelativePIDL));
 		if(SUCCEEDED(hr)) {
 			ATLASSUME(pParentISF);
 			ATLASSERT_POINTER(pRelativePIDL, ITEMID_CHILD);
 
-			switch(useGenericIcons) {
+			switch(properties.useGenericIcons) {
 				case ugiOnlyForSlowItems:
-					getGenericIcons = IsSlowItem(pParentISF, pRelativePIDL, pIDL, FALSE, FALSE);
+					getGenericIcons = IsSlowItem(pParentISF, pRelativePIDL, properties.pIDL, FALSE, FALSE);
 					break;
 				case ugiAlways:
 					getGenericIcons = TRUE;
@@ -117,12 +117,12 @@ STDMETHODIMP ShTvwIconTask::DoRun(void)
 			}
 			if(pPath) {
 				LPWSTR pExtension = PathFindExtensionW(pPath);
-				if(retrieveNormalImage) {
+				if(properties.retrieveNormalImage) {
 					SHGetFileInfoW(pExtension, FILE_ATTRIBUTE_NORMAL, &fileInfoData, sizeof(SHFILEINFO), SHGFI_USEFILEATTRIBUTES | SHGFI_SMALLICON | SHGFI_SYSICONINDEX);
 					ATLASSERT(fileInfoData.iIcon >= 0);
 					iconIndex = fileInfoData.iIcon;
 				}
-				if(retrieveSelectedImage) {
+				if(properties.retrieveSelectedImage) {
 					SHGetFileInfoW(pExtension, FILE_ATTRIBUTE_NORMAL, &fileInfoData, sizeof(SHFILEINFO), SHGFI_USEFILEATTRIBUTES | SHGFI_SMALLICON | SHGFI_SYSICONINDEX | SHGFI_OPENICON);
 					ATLASSERT(fileInfoData.iIcon >= 0);
 					selectedIconIndex = fileInfoData.iIcon;
@@ -130,23 +130,23 @@ STDMETHODIMP ShTvwIconTask::DoRun(void)
 			}
 		} else {
 			SHFILEINFO fileInfoData = {0};
-			if(retrieveNormalImage) {
-				SHGetFileInfo(reinterpret_cast<LPCTSTR>(pIDL), 0, &fileInfoData, sizeof(SHFILEINFO), SHGFI_PIDL | SHGFI_SMALLICON | SHGFI_SYSICONINDEX);
+			if(properties.retrieveNormalImage) {
+				SHGetFileInfo(reinterpret_cast<LPCTSTR>(properties.pIDL), 0, &fileInfoData, sizeof(SHFILEINFO), SHGFI_PIDL | SHGFI_SMALLICON | SHGFI_SYSICONINDEX);
 				ATLASSERT(fileInfoData.iIcon >= 0);
 				iconIndex = fileInfoData.iIcon;
 			}
-			if(retrieveSelectedImage) {
-				SHGetFileInfo(reinterpret_cast<LPCTSTR>(pIDL), 0, &fileInfoData, sizeof(SHFILEINFO), SHGFI_PIDL | SHGFI_SMALLICON | SHGFI_SYSICONINDEX | SHGFI_OPENICON);
+			if(properties.retrieveSelectedImage) {
+				SHGetFileInfo(reinterpret_cast<LPCTSTR>(properties.pIDL), 0, &fileInfoData, sizeof(SHFILEINFO), SHGFI_PIDL | SHGFI_SMALLICON | SHGFI_SYSICONINDEX | SHGFI_OPENICON);
 				ATLASSERT(fileInfoData.iIcon >= 0);
 				selectedIconIndex = fileInfoData.iIcon;
 			}
 		}
 
 		if(iconIndex >= 0) {
-			PostMessage(hWndToNotify, WM_TRIGGER_UPDATEICON, reinterpret_cast<WPARAM>(itemHandle), iconIndex);
+			PostMessage(properties.hWndToNotify, WM_TRIGGER_UPDATEICON, reinterpret_cast<WPARAM>(properties.itemHandle), iconIndex);
 		}
 		if(selectedIconIndex >= 0) {
-			PostMessage(hWndToNotify, WM_TRIGGER_UPDATESELECTEDICON, reinterpret_cast<WPARAM>(itemHandle), selectedIconIndex);
+			PostMessage(properties.hWndToNotify, WM_TRIGGER_UPDATESELECTEDICON, reinterpret_cast<WPARAM>(properties.itemHandle), selectedIconIndex);
 		}
 	}
 

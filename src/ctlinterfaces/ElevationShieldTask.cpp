@@ -11,19 +11,19 @@ ElevationShieldTask::ElevationShieldTask(void)
 
 void ElevationShieldTask::FinalRelease()
 {
-	if(pIDL) {
-		ILFree(pIDL);
-		pIDL = NULL;
+	if(properties.pIDL) {
+		ILFree(properties.pIDL);
+		properties.pIDL = NULL;
 	}
 }
 
 
 HRESULT ElevationShieldTask::Attach(HWND hWndShellUIParentWindow, HWND hWndToNotify, PCIDLIST_ABSOLUTE pIDL, LONG itemID)
 {
-	this->hWndShellUIParentWindow = hWndShellUIParentWindow;
-	this->hWndToNotify = hWndToNotify;
-	this->itemID = itemID;
-	this->pIDL = ILCloneFull(pIDL);
+	this->properties.hWndShellUIParentWindow = hWndShellUIParentWindow;
+	this->properties.hWndToNotify = hWndToNotify;
+	this->properties.itemID = itemID;
+	this->properties.pIDL = ILCloneFull(pIDL);
 	return S_OK;
 }
 
@@ -55,9 +55,9 @@ HRESULT ElevationShieldTask::CreateInstance(HWND hWndShellUIParentWindow, HWND h
 
 STDMETHODIMP ElevationShieldTask::DoRun(void)
 {
-	if(IsElevationRequired(hWndShellUIParentWindow, pIDL)) {
+	if(IsElevationRequired(properties.hWndShellUIParentWindow, properties.pIDL)) {
 		// NOTE: As a small optimization we don't send a message if no elevation is required.
-		PostMessage(hWndToNotify, WM_TRIGGER_SETELEVATIONSHIELD, itemID, TRUE);
+		PostMessage(properties.hWndToNotify, WM_TRIGGER_SETELEVATIONSHIELD, properties.itemID, TRUE);
 	}
 	return NOERROR;
 }

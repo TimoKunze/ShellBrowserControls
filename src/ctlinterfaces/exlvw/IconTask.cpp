@@ -11,27 +11,27 @@ ShLvwIconTask::ShLvwIconTask(void)
 
 void ShLvwIconTask::FinalRelease()
 {
-	if(pIDL) {
-		ILFree(pIDL);
-		pIDL = NULL;
+	if(properties.pIDL) {
+		ILFree(properties.pIDL);
+		properties.pIDL = NULL;
 	}
-	if(pParentISI) {
-		pParentISI->Release();
-		pParentISI = NULL;
+	if(properties.pParentISI) {
+		properties.pParentISI->Release();
+		properties.pParentISI = NULL;
 	}
 }
 
 
 HRESULT ShLvwIconTask::Attach(HWND hWndToNotify, PCIDLIST_ABSOLUTE pIDL, LONG itemID, IShellIcon* pParentISI, UseGenericIconsConstants useGenericIcons)
 {
-	this->hWndToNotify = hWndToNotify;
-	this->itemID = itemID;
-	this->pIDL = ILCloneFull(pIDL);
-	this->pParentISI = pParentISI;
+	this->properties.hWndToNotify = hWndToNotify;
+	this->properties.itemID = itemID;
+	this->properties.pIDL = ILCloneFull(pIDL);
+	this->properties.pParentISI = pParentISI;
 	if(pParentISI) {
-		this->pParentISI->AddRef();
+		this->properties.pParentISI->AddRef();
 	}
-	this->useGenericIcons = useGenericIcons;
+	this->properties.useGenericIcons = useGenericIcons;
 	return S_OK;
 }
 
@@ -69,15 +69,15 @@ STDMETHODIMP ShLvwIconTask::DoRun(void)
 	CComPtr<IShellFolder> pParentISF = NULL;
 	PUITEMID_CHILD pRelativePIDL = NULL;
 
-	if(useGenericIcons != ugiNever) {
-		HRESULT hr = SHBindToParent(pIDL, IID_PPV_ARGS(&pParentISF), const_cast<PCUITEMID_CHILD*>(&pRelativePIDL));
+	if(properties.useGenericIcons != ugiNever) {
+		HRESULT hr = SHBindToParent(properties.pIDL, IID_PPV_ARGS(&pParentISF), const_cast<PCUITEMID_CHILD*>(&pRelativePIDL));
 		if(SUCCEEDED(hr)) {
 			ATLASSUME(pParentISF);
 			ATLASSERT_POINTER(pRelativePIDL, ITEMID_CHILD);
 
-			switch(useGenericIcons) {
+			switch(properties.useGenericIcons) {
 				case ugiOnlyForSlowItems:
-					getGenericIcons = IsSlowItem(pParentISF, pRelativePIDL, pIDL, FALSE, FALSE);
+					getGenericIcons = IsSlowItem(pParentISF, pRelativePIDL, properties.pIDL, FALSE, FALSE);
 					break;
 				case ugiAlways:
 					getGenericIcons = TRUE;
@@ -126,9 +126,9 @@ STDMETHODIMP ShLvwIconTask::DoRun(void)
 				iconIndex = fileInfoData.iIcon;
 			}
 		} else {
-			if(pParentISI) {
+			if(properties.pParentISI) {
 				// use IShellIcon
-				if(FAILED(pParentISI->GetIconOf(ILFindLastID(pIDL), GIL_FORSHELL, &iconIndex))) {
+				if(FAILED(properties.pParentISI->GetIconOf(ILFindLastID(properties.pIDL), GIL_FORSHELL, &iconIndex))) {
 					iconIndex = I_IMAGECALLBACK;
 				}
 			}
@@ -136,14 +136,14 @@ STDMETHODIMP ShLvwIconTask::DoRun(void)
 			if(iconIndex == I_IMAGECALLBACK) {
 				// either IShellIcon failed or we couldn't use it
 				SHFILEINFO fileInfoData = {0};
-				SHGetFileInfo(reinterpret_cast<LPCTSTR>(pIDL), 0, &fileInfoData, sizeof(SHFILEINFO), SHGFI_PIDL | SHGFI_SMALLICON | SHGFI_SYSICONINDEX);
+				SHGetFileInfo(reinterpret_cast<LPCTSTR>(properties.pIDL), 0, &fileInfoData, sizeof(SHFILEINFO), SHGFI_PIDL | SHGFI_SMALLICON | SHGFI_SYSICONINDEX);
 				ATLASSERT(fileInfoData.iIcon >= 0);
 				iconIndex = fileInfoData.iIcon;
 			}
 		}
 
 		if(iconIndex >= 0) {
-			PostMessage(hWndToNotify, WM_TRIGGER_UPDATEICON, itemID, iconIndex);
+			PostMessage(properties.hWndToNotify, WM_TRIGGER_UPDATEICON, properties.itemID, iconIndex);
 		}
 	}
 

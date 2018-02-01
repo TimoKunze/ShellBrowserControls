@@ -95,27 +95,31 @@ public:
 	STDMETHODIMP DoRun(void);
 
 protected:
-	/// \brief <em>Specifies the window that the results are posted to</em>
-	///
-	/// Specifies the window to which to send the retrieved icon indexes. This window must handle the
-	/// \c WM_TRIGGER_UPDATEICON and \c WM_TRIGGER_UPDATESELECTEDICON messages.
-	///
-	/// \sa WM_TRIGGER_UPDATEICON, WM_TRIGGER_UPDATESELECTEDICON
-	HWND hWndToNotify;
-	/// \brief <em>Holds the fully qualified pIDL of the item for which to retrieve the icon indexes</em>
-	PIDLIST_ABSOLUTE pIDL;
-	/// \brief <em>Specifies the item for which to retrieve the icon indexes</em>
-	HTREEITEM itemHandle;
-	/// \brief <em>Specifies whether the item's normal icon is retrieved</em>
-	BOOL retrieveNormalImage;
-	/// \brief <em>Specifies whether the item's normal selected icon is retrieved</em>
-	BOOL retrieveSelectedImage;
-	/// \brief <em>Specifies whether to retrieve a generic icon or the item-specific icon</em>
-	///
-	/// \if UNICODE
-	///   \sa ShBrowserCtlsLibU::UseGenericIconsConstants
-	/// \else
-	///   \sa ShBrowserCtlsLibA::UseGenericIconsConstants
-	/// \endif
-	UseGenericIconsConstants useGenericIcons;
+	/// \brief <em>Holds the object's properties</em>
+	struct Properties
+	{
+		/// \brief <em>Specifies the window that the results are posted to</em>
+		///
+		/// Specifies the window to which to send the retrieved icon indexes. This window must handle the
+		/// \c WM_TRIGGER_UPDATEICON and \c WM_TRIGGER_UPDATESELECTEDICON messages.
+		///
+		/// \sa WM_TRIGGER_UPDATEICON, WM_TRIGGER_UPDATESELECTEDICON
+		HWND hWndToNotify;
+		/// \brief <em>Holds the fully qualified pIDL of the item for which to retrieve the icon indexes</em>
+		PIDLIST_ABSOLUTE pIDL;
+		/// \brief <em>Specifies the item for which to retrieve the icon indexes</em>
+		HTREEITEM itemHandle;
+		/// \brief <em>Specifies whether the item's normal icon is retrieved</em>
+		BOOL retrieveNormalImage;
+		/// \brief <em>Specifies whether the item's normal selected icon is retrieved</em>
+		BOOL retrieveSelectedImage;
+		/// \brief <em>Specifies whether to retrieve a generic icon or the item-specific icon</em>
+		///
+		/// \if UNICODE
+		///   \sa ShBrowserCtlsLibU::UseGenericIconsConstants
+		/// \else
+		///   \sa ShBrowserCtlsLibA::UseGenericIconsConstants
+		/// \endif
+		UseGenericIconsConstants useGenericIcons;
+	} properties;
 };

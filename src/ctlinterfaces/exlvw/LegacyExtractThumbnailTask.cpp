@@ -7,35 +7,35 @@
 ShLvwLegacyExtractThumbnailTask::ShLvwLegacyExtractThumbnailTask(void)
     : RunnableTask(TRUE)
 {
-	pExtractImage = NULL;
-	pThumbnailDiskCache = NULL;
-	pItemPath[0] = L'\0';
-	pExtractionTask = NULL;
-	pBackgroundThumbnailsQueue = NULL;
-	pResult = NULL;
-	pCriticalSection = NULL;
+	properties.pExtractImage = NULL;
+	properties.pThumbnailDiskCache = NULL;
+	properties.pItemPath[0] = L'\0';
+	properties.pExtractionTask = NULL;
+	properties.pBackgroundThumbnailsQueue = NULL;
+	properties.pResult = NULL;
+	properties.pCriticalSection = NULL;
 }
 
 void ShLvwLegacyExtractThumbnailTask::FinalRelease()
 {
-	if(pExtractImage) {
-		pExtractImage->Release();
-		pExtractImage = NULL;
+	if(properties.pExtractImage) {
+		properties.pExtractImage->Release();
+		properties.pExtractImage = NULL;
 	}
-	if(pThumbnailDiskCache) {
-		pThumbnailDiskCache->Release();
-		pThumbnailDiskCache = NULL;
+	if(properties.pThumbnailDiskCache) {
+		properties.pThumbnailDiskCache->Release();
+		properties.pThumbnailDiskCache = NULL;
 	}
-	if(pExtractionTask) {
-		pExtractionTask->Release();
-		pExtractionTask = NULL;
+	if(properties.pExtractionTask) {
+		properties.pExtractionTask->Release();
+		properties.pExtractionTask = NULL;
 	}
-	if(pResult) {
-		if(pResult->hThumbnailOrIcon) {
-			DeleteObject(pResult->hThumbnailOrIcon);
+	if(properties.pResult) {
+		if(properties.pResult->hThumbnailOrIcon) {
+			DeleteObject(properties.pResult->hThumbnailOrIcon);
 		}
-		delete pResult;
-		pResult = NULL;
+		delete properties.pResult;
+		properties.pResult = NULL;
 	}
 }
 
@@ -46,27 +46,27 @@ void ShLvwLegacyExtractThumbnailTask::FinalRelease()
 	HRESULT ShLvwLegacyExtractThumbnailTask::Attach(HWND hWndToNotify, CAtlList<LPSHLVWBACKGROUNDTHUMBNAILINFO>* pBackgroundThumbnailsQueue, LPCRITICAL_SECTION pCriticalSection, LONG itemID, BOOL itemIsFile, LPEXTRACTIMAGE pExtractImage, BOOL useThumbnailDiskCache, LPSHELLIMAGESTORE pThumbnailDiskCache, BOOL closeDiskCacheImmediately, LPWSTR pItemPath, FILETIME dateStamp, SIZE imageSize)
 #endif
 {
-	this->hWndToNotify = hWndToNotify;
-	this->pBackgroundThumbnailsQueue = pBackgroundThumbnailsQueue;
-	this->pCriticalSection = pCriticalSection;
-	this->itemIsFile = itemIsFile;
-	pExtractImage->QueryInterface(IID_PPV_ARGS(&this->pExtractImage));
-	this->useThumbnailDiskCache = useThumbnailDiskCache;
+	this->properties.hWndToNotify = hWndToNotify;
+	this->properties.pBackgroundThumbnailsQueue = pBackgroundThumbnailsQueue;
+	this->properties.pCriticalSection = pCriticalSection;
+	this->properties.itemIsFile = itemIsFile;
+	pExtractImage->QueryInterface(IID_PPV_ARGS(&this->properties.pExtractImage));
+	this->properties.useThumbnailDiskCache = useThumbnailDiskCache;
 	if(pThumbnailDiskCache) {
-		pThumbnailDiskCache->QueryInterface(IID_IShellImageStore, reinterpret_cast<LPVOID*>(&this->pThumbnailDiskCache));
+		pThumbnailDiskCache->QueryInterface(IID_IShellImageStore, reinterpret_cast<LPVOID*>(&this->properties.pThumbnailDiskCache));
 	}
-	this->closeDiskCacheImmediately = closeDiskCacheImmediately;
-	ATLVERIFY(SUCCEEDED(StringCchCopyNW(this->pItemPath, 1024, pItemPath, lstrlenW(pItemPath))));
-	this->dateStamp = dateStamp;
+	this->properties.closeDiskCacheImmediately = closeDiskCacheImmediately;
+	ATLVERIFY(SUCCEEDED(StringCchCopyNW(this->properties.pItemPath, 1024, pItemPath, lstrlenW(pItemPath))));
+	this->properties.dateStamp = dateStamp;
 
-	pResult = new SHLVWBACKGROUNDTHUMBNAILINFO;
-	if(pResult) {
-		ZeroMemory(pResult, sizeof(SHLVWBACKGROUNDTHUMBNAILINFO));
-		pResult->itemID = itemID;
-		pResult->targetThumbnailSize = imageSize;
-		pResult->executableIconIndex = -1;
-		pResult->pOverlayImageResource = NULL;
-		pResult->mask = SIIF_IMAGE;
+	properties.pResult = new SHLVWBACKGROUNDTHUMBNAILINFO;
+	if(properties.pResult) {
+		ZeroMemory(properties.pResult, sizeof(SHLVWBACKGROUNDTHUMBNAILINFO));
+		properties.pResult->itemID = itemID;
+		properties.pResult->targetThumbnailSize = imageSize;
+		properties.pResult->executableIconIndex = -1;
+		properties.pResult->pOverlayImageResource = NULL;
+		properties.pResult->mask = SIIF_IMAGE;
 	} else {
 		return E_OUTOFMEMORY;
 	}
@@ -106,50 +106,50 @@ void ShLvwLegacyExtractThumbnailTask::FinalRelease()
 
 STDMETHODIMP ShLvwLegacyExtractThumbnailTask::DoRun(void)
 {
-	ATLASSERT_POINTER(pResult, SHLVWBACKGROUNDTHUMBNAILINFO);
+	ATLASSERT_POINTER(properties.pResult, SHLVWBACKGROUNDTHUMBNAILINFO);
 
-	ATLASSUME(pExtractImage);
-	pExtractImage->QueryInterface(IID_PPV_ARGS(&pExtractionTask));
+	ATLASSUME(properties.pExtractImage);
+	properties.pExtractImage->QueryInterface(IID_PPV_ARGS(&properties.pExtractionTask));
 
-	HRESULT hr = pExtractImage->Extract(&pResult->hThumbnailOrIcon);
-	if(pExtractionTask) {
-		pExtractionTask->Release();
-		pExtractionTask = NULL;
+	HRESULT hr = properties.pExtractImage->Extract(&properties.pResult->hThumbnailOrIcon);
+	if(properties.pExtractionTask) {
+		properties.pExtractionTask->Release();
+		properties.pExtractionTask = NULL;
 	}
 
 	// TODO: Maybe allow an interruption here?
 
 	if(SUCCEEDED(hr)) {
-		if(useThumbnailDiskCache && pThumbnailDiskCache) {
+		if(properties.useThumbnailDiskCache && properties.pThumbnailDiskCache) {
 			// if the item is a file, add the image to the thumbnail disk cache
-			if(itemIsFile && pResult->hThumbnailOrIcon) {
+			if(properties.itemIsFile && properties.pResult->hThumbnailOrIcon) {
 				DWORD lock;
 				BOOL lockedDiskCache = FALSE;
-				hr = pThumbnailDiskCache->Open(STGM_WRITE, &lock);
+				hr = properties.pThumbnailDiskCache->Open(STGM_WRITE, &lock);
 				if(hr == STG_E_FILENOTFOUND) {
-					hr = pThumbnailDiskCache->Create(STGM_WRITE, &lock);
+					hr = properties.pThumbnailDiskCache->Create(STGM_WRITE, &lock);
 				}
 				lockedDiskCache = SUCCEEDED(hr);
 				if(SUCCEEDED(hr)) {
-					hr = pThumbnailDiskCache->AddEntry(pItemPath, &dateStamp, STGM_WRITE, pResult->hThumbnailOrIcon);
-					if(!closeDiskCacheImmediately) {
-						if(IsWindow(hWndToNotify)) {
-							closeDiskCacheImmediately = !SendMessage(hWndToNotify, WM_REPORT_THUMBNAILDISKCACHEACCESS, pResult->itemID, GetTickCount());
+					hr = properties.pThumbnailDiskCache->AddEntry(properties.pItemPath, &properties.dateStamp, STGM_WRITE, properties.pResult->hThumbnailOrIcon);
+					if(!properties.closeDiskCacheImmediately) {
+						if(IsWindow(properties.hWndToNotify)) {
+							properties.closeDiskCacheImmediately = !SendMessage(properties.hWndToNotify, WM_REPORT_THUMBNAILDISKCACHEACCESS, properties.pResult->itemID, GetTickCount());
 						}
 					}
 					if(lockedDiskCache) {
-						hr = pThumbnailDiskCache->ReleaseLock(&lock);
+						hr = properties.pThumbnailDiskCache->ReleaseLock(&lock);
 					}
-					if(closeDiskCacheImmediately) {
-						pThumbnailDiskCache->Close(NULL);
+					if(properties.closeDiskCacheImmediately) {
+						properties.pThumbnailDiskCache->Close(NULL);
 					}
 				}
 			}
 		}
 
 		BITMAP bitmap = {0};
-		if(GetObject(pResult->hThumbnailOrIcon, sizeof(bitmap), reinterpret_cast<LPVOID*>(&bitmap))) {
-			if(bitmap.bmWidth != pResult->targetThumbnailSize.cx || bitmap.bmHeight != pResult->targetThumbnailSize.cy) {
+		if(GetObject(properties.pResult->hThumbnailOrIcon, sizeof(bitmap), reinterpret_cast<LPVOID*>(&bitmap))) {
+			if(bitmap.bmWidth != properties.pResult->targetThumbnailSize.cx || bitmap.bmHeight != properties.pResult->targetThumbnailSize.cy) {
 				CDC memoryDC;
 				memoryDC.CreateCompatibleDC();
 				if(!memoryDC.IsNull()) {
@@ -157,17 +157,17 @@ STDMETHODIMP ShLvwLegacyExtractThumbnailTask::DoRun(void)
 					if(pBitmapInfo) {
 						ZeroMemory(pBitmapInfo, sizeof(BITMAPINFO) + sizeof(RGBQUAD) * 256);
 						pBitmapInfo->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-						if(GetDIBits(memoryDC, pResult->hThumbnailOrIcon, 0, 0, NULL, pBitmapInfo, DIB_RGB_COLORS)) {
+						if(GetDIBits(memoryDC, properties.pResult->hThumbnailOrIcon, 0, 0, NULL, pBitmapInfo, DIB_RGB_COLORS)) {
 							// we have the header, now get the data
 							LPRGBQUAD pBits = static_cast<LPRGBQUAD>(HeapAlloc(GetProcessHeap(), 0, pBitmapInfo->bmiHeader.biSizeImage));
 							if(pBits) {
-								if(GetDIBits(memoryDC, pResult->hThumbnailOrIcon, 0, pBitmapInfo->bmiHeader.biHeight, pBits, pBitmapInfo, DIB_RGB_COLORS)) {
+								if(GetDIBits(memoryDC, properties.pResult->hThumbnailOrIcon, 0, pBitmapInfo->bmiHeader.biHeight, pBits, pBitmapInfo, DIB_RGB_COLORS)) {
 									RECT boundingRectangle = {0, 0, bitmap.bmWidth, bitmap.bmHeight};
-									CalculateAspectRatio(&pResult->targetThumbnailSize, &boundingRectangle);
+									CalculateAspectRatio(&properties.pResult->targetThumbnailSize, &boundingRectangle);
 									HBITMAP h = NULL;
-									if(DrawOntoWhiteBackground(pBitmapInfo, pBits, &pResult->targetThumbnailSize, &boundingRectangle, &h)) {
-										DeleteObject(pResult->hThumbnailOrIcon);
-										pResult->hThumbnailOrIcon = h;
+									if(DrawOntoWhiteBackground(pBitmapInfo, pBits, &properties.pResult->targetThumbnailSize, &boundingRectangle, &h)) {
+										DeleteObject(properties.pResult->hThumbnailOrIcon);
+										properties.pResult->hThumbnailOrIcon = h;
 									}
 								}
 								HeapFree(GetProcessHeap(), 0, pBits);
@@ -181,17 +181,17 @@ STDMETHODIMP ShLvwLegacyExtractThumbnailTask::DoRun(void)
 			}
 		}
 
-		EnterCriticalSection(pCriticalSection);
+		EnterCriticalSection(properties.pCriticalSection);
 		#ifdef USE_STL
-			pBackgroundThumbnailsQueue->push(pResult);
+			properties.pBackgroundThumbnailsQueue->push(properties.pResult);
 		#else
-			pBackgroundThumbnailsQueue->AddTail(pResult);
+			properties.pBackgroundThumbnailsQueue->AddTail(properties.pResult);
 		#endif
-		pResult = NULL;
-		LeaveCriticalSection(pCriticalSection);
+		properties.pResult = NULL;
+		LeaveCriticalSection(properties.pCriticalSection);
 
-		if(IsWindow(hWndToNotify)) {
-			PostMessage(hWndToNotify, WM_TRIGGER_UPDATETHUMBNAIL, 0, 0);
+		if(IsWindow(properties.hWndToNotify)) {
+			PostMessage(properties.hWndToNotify, WM_TRIGGER_UPDATETHUMBNAIL, 0, 0);
 		}
 	}
 	return NOERROR;
@@ -199,24 +199,24 @@ STDMETHODIMP ShLvwLegacyExtractThumbnailTask::DoRun(void)
 
 STDMETHODIMP ShLvwLegacyExtractThumbnailTask::DoKill(BOOL /*unused*/)
 {
-	if(pExtractionTask) {
-		return pExtractionTask->Kill(FALSE);
+	if(properties.pExtractionTask) {
+		return properties.pExtractionTask->Kill(FALSE);
 	}
 	return E_NOTIMPL;
 }
 
 STDMETHODIMP ShLvwLegacyExtractThumbnailTask::DoSuspend(void)
 {
-	if(pExtractionTask) {
-		return pExtractionTask->Suspend();
+	if(properties.pExtractionTask) {
+		return properties.pExtractionTask->Suspend();
 	}
 	return E_NOTIMPL;
 }
 
 STDMETHODIMP ShLvwLegacyExtractThumbnailTask::DoResume(void)
 {
-	if(pExtractionTask) {
-		return pExtractionTask->Resume();
+	if(properties.pExtractionTask) {
+		return properties.pExtractionTask->Resume();
 	}
 	return DoInternalResume();
 }

@@ -7,25 +7,25 @@
 ShLvwLegacyExtractThumbnailFromDiskCacheTask::ShLvwLegacyExtractThumbnailFromDiskCacheTask(void)
     : RunnableTask(FALSE)
 {
-	pThumbnailDiskCache = NULL;
-	pItemPath[0] = L'\0';
-	pBackgroundThumbnailsQueue = NULL;
-	pResult = NULL;
-	pCriticalSection = NULL;
+	properties.pThumbnailDiskCache = NULL;
+	properties.pItemPath[0] = L'\0';
+	properties.pBackgroundThumbnailsQueue = NULL;
+	properties.pResult = NULL;
+	properties.pCriticalSection = NULL;
 }
 
 void ShLvwLegacyExtractThumbnailFromDiskCacheTask::FinalRelease()
 {
-	if(pThumbnailDiskCache) {
-		pThumbnailDiskCache->Release();
-		pThumbnailDiskCache = NULL;
+	if(properties.pThumbnailDiskCache) {
+		properties.pThumbnailDiskCache->Release();
+		properties.pThumbnailDiskCache = NULL;
 	}
-	if(pResult) {
-		if(pResult->hThumbnailOrIcon) {
-			DeleteObject(pResult->hThumbnailOrIcon);
+	if(properties.pResult) {
+		if(properties.pResult->hThumbnailOrIcon) {
+			DeleteObject(properties.pResult->hThumbnailOrIcon);
 		}
-		delete pResult;
-		pResult = NULL;
+		delete properties.pResult;
+		properties.pResult = NULL;
 	}
 }
 
@@ -36,21 +36,21 @@ void ShLvwLegacyExtractThumbnailFromDiskCacheTask::FinalRelease()
 	HRESULT ShLvwLegacyExtractThumbnailFromDiskCacheTask::Attach(HWND hWndToNotify, CAtlList<LPSHLVWBACKGROUNDTHUMBNAILINFO>* pBackgroundThumbnailsQueue, LPCRITICAL_SECTION pCriticalSection, LONG itemID, LPWSTR pItemPath, LPSHELLIMAGESTORE pThumbnailDiskCache, BOOL closeDiskCacheImmediately, SIZE imageSize)
 #endif
 {
-	this->hWndToNotify = hWndToNotify;
-	this->pBackgroundThumbnailsQueue = pBackgroundThumbnailsQueue;
-	this->pCriticalSection = pCriticalSection;
-	pThumbnailDiskCache->QueryInterface(IID_IShellImageStore, reinterpret_cast<LPVOID*>(&this->pThumbnailDiskCache));
-	this->closeDiskCacheImmediately = closeDiskCacheImmediately;
-	ATLVERIFY(SUCCEEDED(StringCchCopyNW(this->pItemPath, 1024, pItemPath, lstrlenW(pItemPath))));
+	this->properties.hWndToNotify = hWndToNotify;
+	this->properties.pBackgroundThumbnailsQueue = pBackgroundThumbnailsQueue;
+	this->properties.pCriticalSection = pCriticalSection;
+	pThumbnailDiskCache->QueryInterface(IID_IShellImageStore, reinterpret_cast<LPVOID*>(&this->properties.pThumbnailDiskCache));
+	this->properties.closeDiskCacheImmediately = closeDiskCacheImmediately;
+	ATLVERIFY(SUCCEEDED(StringCchCopyNW(this->properties.pItemPath, 1024, pItemPath, lstrlenW(pItemPath))));
 
-	pResult = new SHLVWBACKGROUNDTHUMBNAILINFO;
-	if(pResult) {
-		ZeroMemory(pResult, sizeof(SHLVWBACKGROUNDTHUMBNAILINFO));
-		pResult->itemID = itemID;
-		pResult->targetThumbnailSize = imageSize;
-		pResult->executableIconIndex = -1;
-		pResult->pOverlayImageResource = NULL;
-		pResult->mask = SIIF_IMAGE;
+	properties.pResult = new SHLVWBACKGROUNDTHUMBNAILINFO;
+	if(properties.pResult) {
+		ZeroMemory(properties.pResult, sizeof(SHLVWBACKGROUNDTHUMBNAILINFO));
+		properties.pResult->itemID = itemID;
+		properties.pResult->targetThumbnailSize = imageSize;
+		properties.pResult->executableIconIndex = -1;
+		properties.pResult->pOverlayImageResource = NULL;
+		properties.pResult->mask = SIIF_IMAGE;
 	} else {
 		return E_OUTOFMEMORY;
 	}
@@ -90,21 +90,21 @@ void ShLvwLegacyExtractThumbnailFromDiskCacheTask::FinalRelease()
 
 STDMETHODIMP ShLvwLegacyExtractThumbnailFromDiskCacheTask::DoRun(void)
 {
-	ATLASSERT_POINTER(pResult, SHLVWBACKGROUNDTHUMBNAILINFO);
-	ATLASSUME(pThumbnailDiskCache);
+	ATLASSERT_POINTER(properties.pResult, SHLVWBACKGROUNDTHUMBNAILINFO);
+	ATLASSUME(properties.pThumbnailDiskCache);
 
 	DWORD lock = 0;
-	HRESULT hr = pThumbnailDiskCache->Open(STGM_READ, &lock);
+	HRESULT hr = properties.pThumbnailDiskCache->Open(STGM_READ, &lock);
 	if(SUCCEEDED(hr)) {
-		hr = pThumbnailDiskCache->GetEntry(pItemPath, STGM_READ, &pResult->hThumbnailOrIcon);
-		if(!closeDiskCacheImmediately) {
-			if(IsWindow(hWndToNotify)) {
-				closeDiskCacheImmediately = !SendMessage(hWndToNotify, WM_REPORT_THUMBNAILDISKCACHEACCESS, pResult->itemID, GetTickCount());
+		hr = properties.pThumbnailDiskCache->GetEntry(properties.pItemPath, STGM_READ, &properties.pResult->hThumbnailOrIcon);
+		if(!properties.closeDiskCacheImmediately) {
+			if(IsWindow(properties.hWndToNotify)) {
+				properties.closeDiskCacheImmediately = !SendMessage(properties.hWndToNotify, WM_REPORT_THUMBNAILDISKCACHEACCESS, properties.pResult->itemID, GetTickCount());
 			}
 		}
-		pThumbnailDiskCache->ReleaseLock(&lock);
-		if(closeDiskCacheImmediately) {
-			pThumbnailDiskCache->Close(NULL);
+		properties.pThumbnailDiskCache->ReleaseLock(&lock);
+		if(properties.closeDiskCacheImmediately) {
+			properties.pThumbnailDiskCache->Close(NULL);
 		}
 	}
 
@@ -112,8 +112,8 @@ STDMETHODIMP ShLvwLegacyExtractThumbnailFromDiskCacheTask::DoRun(void)
 
 	if(SUCCEEDED(hr)) {
 		BITMAP bitmap = {0};
-		if(GetObject(pResult->hThumbnailOrIcon, sizeof(bitmap), reinterpret_cast<LPVOID*>(&bitmap))) {
-			if(bitmap.bmWidth != pResult->targetThumbnailSize.cx || bitmap.bmHeight != pResult->targetThumbnailSize.cy) {
+		if(GetObject(properties.pResult->hThumbnailOrIcon, sizeof(bitmap), reinterpret_cast<LPVOID*>(&bitmap))) {
+			if(bitmap.bmWidth != properties.pResult->targetThumbnailSize.cx || bitmap.bmHeight != properties.pResult->targetThumbnailSize.cy) {
 				CDC memoryDC;
 				memoryDC.CreateCompatibleDC();
 				if(!memoryDC.IsNull()) {
@@ -121,17 +121,17 @@ STDMETHODIMP ShLvwLegacyExtractThumbnailFromDiskCacheTask::DoRun(void)
 					if(pBitmapInfo) {
 						ZeroMemory(pBitmapInfo, sizeof(BITMAPINFO) + sizeof(RGBQUAD) * 256);
 						pBitmapInfo->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-						if(GetDIBits(memoryDC, pResult->hThumbnailOrIcon, 0, 0, NULL, pBitmapInfo, DIB_RGB_COLORS)) {
+						if(GetDIBits(memoryDC, properties.pResult->hThumbnailOrIcon, 0, 0, NULL, pBitmapInfo, DIB_RGB_COLORS)) {
 							// we have the header, now get the data
 							LPRGBQUAD pBits = static_cast<LPRGBQUAD>(HeapAlloc(GetProcessHeap(), 0, pBitmapInfo->bmiHeader.biSizeImage));
 							if(pBits) {
-								if(GetDIBits(memoryDC, pResult->hThumbnailOrIcon, 0, pBitmapInfo->bmiHeader.biHeight, pBits, pBitmapInfo, DIB_RGB_COLORS)) {
+								if(GetDIBits(memoryDC, properties.pResult->hThumbnailOrIcon, 0, pBitmapInfo->bmiHeader.biHeight, pBits, pBitmapInfo, DIB_RGB_COLORS)) {
 									RECT boundingRectangle = {0, 0, bitmap.bmWidth, bitmap.bmHeight};
-									CalculateAspectRatio(&pResult->targetThumbnailSize, &boundingRectangle);
+									CalculateAspectRatio(&properties.pResult->targetThumbnailSize, &boundingRectangle);
 									HBITMAP h = NULL;
-									if(DrawOntoWhiteBackground(pBitmapInfo, pBits, &pResult->targetThumbnailSize, &boundingRectangle, &h)) {
-										DeleteObject(pResult->hThumbnailOrIcon);
-										pResult->hThumbnailOrIcon = h;
+									if(DrawOntoWhiteBackground(pBitmapInfo, pBits, &properties.pResult->targetThumbnailSize, &boundingRectangle, &h)) {
+										DeleteObject(properties.pResult->hThumbnailOrIcon);
+										properties.pResult->hThumbnailOrIcon = h;
 									}
 								}
 								HeapFree(GetProcessHeap(), 0, pBits);
@@ -145,17 +145,17 @@ STDMETHODIMP ShLvwLegacyExtractThumbnailFromDiskCacheTask::DoRun(void)
 			}
 		}
 
-		EnterCriticalSection(pCriticalSection);
+		EnterCriticalSection(properties.pCriticalSection);
 		#ifdef USE_STL
-			pBackgroundThumbnailsQueue->push(pResult);
+			properties.pBackgroundThumbnailsQueue->push(properties.pResult);
 		#else
-			pBackgroundThumbnailsQueue->AddTail(pResult);
+			properties.pBackgroundThumbnailsQueue->AddTail(properties.pResult);
 		#endif
-		pResult = NULL;
-		LeaveCriticalSection(pCriticalSection);
+			properties.pResult = NULL;
+		LeaveCriticalSection(properties.pCriticalSection);
 
-		if(IsWindow(hWndToNotify)) {
-			PostMessage(hWndToNotify, WM_TRIGGER_UPDATETHUMBNAIL, 0, 0);
+		if(IsWindow(properties.hWndToNotify)) {
+			PostMessage(properties.hWndToNotify, WM_TRIGGER_UPDATETHUMBNAIL, 0, 0);
 		}
 	}
 	return NOERROR;

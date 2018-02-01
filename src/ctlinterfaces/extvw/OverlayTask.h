@@ -74,15 +74,19 @@ public:
 	STDMETHODIMP DoRun(void);
 
 protected:
-	/// \brief <em>Specifies the window that the results are posted to</em>
-	///
-	/// Specifies the window to which to send the retrieved overlay icon index. This window
-	/// must handle the \c WM_TRIGGER_UPDATEOVERLAY message.
-	///
-	/// \sa WM_TRIGGER_UPDATEOVERLAY
-	HWND hWndToNotify;
-	/// \brief <em>Holds the fully qualified pIDL of the item for which to retrieve the overlay icon index</em>
-	PIDLIST_ABSOLUTE pIDL;
-	/// \brief <em>Specifies the item for which to retrieve the overlay icon index</em>
-	HTREEITEM itemHandle;
+	/// \brief <em>Holds the object's properties</em>
+	struct Properties
+	{
+		/// \brief <em>Specifies the window that the results are posted to</em>
+		///
+		/// Specifies the window to which to send the retrieved overlay icon index. This window
+		/// must handle the \c WM_TRIGGER_UPDATEOVERLAY message.
+		///
+		/// \sa WM_TRIGGER_UPDATEOVERLAY
+		HWND hWndToNotify;
+		/// \brief <em>Holds the fully qualified pIDL of the item for which to retrieve the overlay icon index</em>
+		PIDLIST_ABSOLUTE pIDL;
+		/// \brief <em>Specifies the item for which to retrieve the overlay icon index</em>
+		HTREEITEM itemHandle;
+	} properties;
 };

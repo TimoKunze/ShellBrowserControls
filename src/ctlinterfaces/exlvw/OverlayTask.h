@@ -21,8 +21,8 @@ DEFINE_GUID(CLSID_ShLvwOverlayTask, 0xdb922214, 0xdf4a, 0x4c7f, 0x91, 0xa7, 0x97
 
 
 class ShLvwOverlayTask :
-    public CComCoClass<ShLvwOverlayTask, &CLSID_ShLvwOverlayTask>,
-    public RunnableTask
+	public CComCoClass<ShLvwOverlayTask, &CLSID_ShLvwOverlayTask>,
+	public RunnableTask
 {
 public:
 	/// \brief <em>The constructor of this class</em>
@@ -78,19 +78,23 @@ public:
 	STDMETHODIMP DoRun(void);
 
 protected:
-	/// \brief <em>Specifies the window that the results are posted to</em>
-	///
-	/// Specifies the window to which to send the retrieved overlay icon index. This window
-	/// must handle the \c WM_TRIGGER_UPDATEOVERLAY message.
-	///
-	/// \sa WM_TRIGGER_UPDATEOVERLAY
-	HWND hWndToNotify;
-	/// \brief <em>Holds the fully qualified pIDL of the item for which to retrieve the overlay icon index</em>
-	PIDLIST_ABSOLUTE pIDL;
-	/// \brief <em>Specifies the item for which to retrieve the icon index</em>
-	LONG itemID;
-	/// \brief <em>The \c IShellIconOverlay object to be used</em>
-	///
-	/// \sa <a href="https://msdn.microsoft.com/en-us/library/bb761273.aspx">IShellIconOverlay</a>
-	IShellIconOverlay* pParentISIO;
+	/// \brief <em>Holds the object's properties</em>
+	struct Properties
+	{
+		/// \brief <em>Specifies the window that the results are posted to</em>
+		///
+		/// Specifies the window to which to send the retrieved overlay icon index. This window
+		/// must handle the \c WM_TRIGGER_UPDATEOVERLAY message.
+		///
+		/// \sa WM_TRIGGER_UPDATEOVERLAY
+		HWND hWndToNotify;
+		/// \brief <em>Holds the fully qualified pIDL of the item for which to retrieve the overlay icon index</em>
+		PIDLIST_ABSOLUTE pIDL;
+		/// \brief <em>Specifies the item for which to retrieve the icon index</em>
+		LONG itemID;
+		/// \brief <em>The \c IShellIconOverlay object to be used</em>
+		///
+		/// \sa <a href="https://msdn.microsoft.com/en-us/library/bb761273.aspx">IShellIconOverlay</a>
+		IShellIconOverlay* pParentISIO;
+	} properties;
 };

@@ -6,19 +6,19 @@
 
 SprocketAdorner::SprocketAdorner()
 {
-	hAdornmentIcon = NULL;
-	pScaledAdornmentIconBits = NULL;
+	properties.hAdornmentIcon = NULL;
+	properties.pScaledAdornmentIconBits = NULL;
 }
 
 SprocketAdorner::~SprocketAdorner()
 {
-	if(hAdornmentIcon) {
-		DestroyIcon(hAdornmentIcon);
-		hAdornmentIcon = NULL;
+	if(properties.hAdornmentIcon) {
+		DestroyIcon(properties.hAdornmentIcon);
+		properties.hAdornmentIcon = NULL;
 	}
-	if(pScaledAdornmentIconBits) {
-		HeapFree(GetProcessHeap(), 0, pScaledAdornmentIconBits);
-		pScaledAdornmentIconBits = NULL;
+	if(properties.pScaledAdornmentIconBits) {
+		HeapFree(GetProcessHeap(), 0, properties.pScaledAdornmentIconBits);
+		properties.pScaledAdornmentIconBits = NULL;
 	}
 }
 
@@ -27,21 +27,21 @@ SprocketAdorner::~SprocketAdorner()
 // implementation of IThumbnailAdorner
 STDMETHODIMP SprocketAdorner::SetIconSize(SIZE& targetIconSize, double contentAspectRatio)
 {
-	this->targetIconSize = targetIconSize;
+	this->properties.targetIconSize = targetIconSize;
 	BOOL wideScreen = (contentAspectRatio < 0.6);
 
 	HMODULE hImageRes = LoadLibraryEx(TEXT("imageres.dll"), NULL, LOAD_LIBRARY_AS_DATAFILE);
 	if(hImageRes) {
-		UINT iconToLoad = FindBestMatchingIconResource(hImageRes, MAKEINTRESOURCE(wideScreen ? 194 : 193), max(targetIconSize.cx, targetIconSize.cy), &loadedIconSize);
+		UINT iconToLoad = FindBestMatchingIconResource(hImageRes, MAKEINTRESOURCE(wideScreen ? 194 : 193), max(targetIconSize.cx, targetIconSize.cy), &properties.loadedIconSize);
 		if(iconToLoad != 0xFFFFFFFF) {
-			extraMargins.left = -5;
-			extraMargins.right = -5;
-			extraMargins.top = -3;
-			extraMargins.bottom = -3;
+			properties.extraMargins.left = -5;
+			properties.extraMargins.right = -5;
+			properties.extraMargins.top = -3;
+			properties.extraMargins.bottom = -3;
 
-			if(hAdornmentIcon) {
-				DestroyIcon(hAdornmentIcon);
-				hAdornmentIcon = NULL;
+			if(properties.hAdornmentIcon) {
+				DestroyIcon(properties.hAdornmentIcon);
+				properties.hAdornmentIcon = NULL;
 			}
 			HRSRC hResource = FindResource(hImageRes, MAKEINTRESOURCE(iconToLoad), RT_ICON);
 			if(hResource) {
@@ -49,7 +49,7 @@ STDMETHODIMP SprocketAdorner::SetIconSize(SIZE& targetIconSize, double contentAs
 				if(hMem) {
 					LPVOID pIconData = LockResource(hMem);
 					if(pIconData) {
-						hAdornmentIcon = CreateIconFromResourceEx(reinterpret_cast<PBYTE>(pIconData), SizeofResource(hImageRes, hResource), TRUE, 0x00030000, 0, 0, LR_DEFAULTCOLOR);
+						properties.hAdornmentIcon = CreateIconFromResourceEx(reinterpret_cast<PBYTE>(pIconData), SizeofResource(hImageRes, hResource), TRUE, 0x00030000, 0, 0, LR_DEFAULTCOLOR);
 					}
 				}
 			}
@@ -57,7 +57,7 @@ STDMETHODIMP SprocketAdorner::SetIconSize(SIZE& targetIconSize, double contentAs
 		FreeLibrary(hImageRes);
 	}
 
-	if(hAdornmentIcon && FindContentAreaMargins(&contentMargins)) {
+	if(properties.hAdornmentIcon && FindContentAreaMargins(&properties.contentMargins)) {
 		return S_OK;
 	}
 	return E_FAIL;
@@ -65,15 +65,15 @@ STDMETHODIMP SprocketAdorner::SetIconSize(SIZE& targetIconSize, double contentAs
 
 STDMETHODIMP SprocketAdorner::GetMaxContentSize(double contentAspectRatio, LPSIZE pContentSize)
 {
-	if(!hAdornmentIcon) {
+	if(!properties.hAdornmentIcon) {
 		return E_FAIL;
 	}
 
 	SIZE contentAreaSize;
-	contentAreaSize.cx = targetIconSize.cx - contentMargins.left - contentMargins.right;
-	contentAreaSize.cy = targetIconSize.cy - contentMargins.top - contentMargins.bottom;
-	contentAreaSize.cx -= (extraMargins.left + extraMargins.right);
-	contentAreaSize.cy -= (extraMargins.top + extraMargins.bottom);
+	contentAreaSize.cx = properties.targetIconSize.cx - properties.contentMargins.left - properties.contentMargins.right;
+	contentAreaSize.cy = properties.targetIconSize.cy - properties.contentMargins.top - properties.contentMargins.bottom;
+	contentAreaSize.cx -= (properties.extraMargins.left + properties.extraMargins.right);
+	contentAreaSize.cy -= (properties.extraMargins.top + properties.extraMargins.bottom);
 
 	if(contentAspectRatio > 1.0) {
 		// the image's height is larger than its width
@@ -89,29 +89,29 @@ STDMETHODIMP SprocketAdorner::GetMaxContentSize(double contentAspectRatio, LPSIZ
 
 STDMETHODIMP SprocketAdorner::GetAdornedSize(SIZE& contentSize, LPSIZE pAdornedSize)
 {
-	if(!hAdornmentIcon) {
+	if(!properties.hAdornmentIcon) {
 		return E_FAIL;
 	}
 
-	pAdornedSize->cx = contentSize.cx + contentMargins.left + contentMargins.right;
-	pAdornedSize->cy = contentSize.cy + contentMargins.top + contentMargins.bottom;
-	pAdornedSize->cx += (extraMargins.left + extraMargins.right);
-	pAdornedSize->cy += (extraMargins.top + extraMargins.bottom);
+	pAdornedSize->cx = contentSize.cx + properties.contentMargins.left + properties.contentMargins.right;
+	pAdornedSize->cy = contentSize.cy + properties.contentMargins.top + properties.contentMargins.bottom;
+	pAdornedSize->cx += (properties.extraMargins.left + properties.extraMargins.right);
+	pAdornedSize->cy += (properties.extraMargins.top + properties.extraMargins.bottom);
 	return S_OK;
 }
 
 STDMETHODIMP SprocketAdorner::SetAdornedSize(SIZE& adornedSize)
 {
-	if(!hAdornmentIcon) {
+	if(!properties.hAdornmentIcon) {
 		return E_FAIL;
 	}
 
-	if(pScaledAdornmentIconBits) {
-		HeapFree(GetProcessHeap(), 0, pScaledAdornmentIconBits);
-		pScaledAdornmentIconBits = NULL;
+	if(properties.pScaledAdornmentIconBits) {
+		HeapFree(GetProcessHeap(), 0, properties.pScaledAdornmentIconBits);
+		properties.pScaledAdornmentIconBits = NULL;
 	}
 
-	scaledAdornmentIconSize = adornedSize;
+	properties.scaledAdornmentIconSize = adornedSize;
 
 	CComPtr<IWICImagingFactory> pWICImagingFactory = NULL;
 	HRESULT hr = CoCreateInstance(CLSID_WICImagingFactory, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pWICImagingFactory));
@@ -122,18 +122,18 @@ STDMETHODIMP SprocketAdorner::SetAdornedSize(SIZE& adornedSize)
 		if(SUCCEEDED(hr)) {
 			ATLASSUME(pWICBitmapScaler);
 			CComPtr<IWICBitmap> pWICBitmap = NULL;
-			hr = pWICImagingFactory->CreateBitmapFromHICON(hAdornmentIcon, &pWICBitmap);
+			hr = pWICImagingFactory->CreateBitmapFromHICON(properties.hAdornmentIcon, &pWICBitmap);
 			ATLASSERT(SUCCEEDED(hr));
 			if(SUCCEEDED(hr)) {
 				ATLASSUME(pWICBitmap);
-				hr = pWICBitmapScaler->Initialize(pWICBitmap, scaledAdornmentIconSize.cx, scaledAdornmentIconSize.cy, WICBitmapInterpolationModeFant);
+				hr = pWICBitmapScaler->Initialize(pWICBitmap, properties.scaledAdornmentIconSize.cx, properties.scaledAdornmentIconSize.cy, WICBitmapInterpolationModeFant);
 				ATLASSERT(SUCCEEDED(hr));
 				if(SUCCEEDED(hr)) {
-					pScaledAdornmentIconBits = static_cast<LPRGBQUAD>(HeapAlloc(GetProcessHeap(), 0, scaledAdornmentIconSize.cx * scaledAdornmentIconSize.cy * sizeof(RGBQUAD)));
-					if(pScaledAdornmentIconBits) {
-						hr = pWICBitmapScaler->CopyPixels(NULL, scaledAdornmentIconSize.cx * sizeof(RGBQUAD), scaledAdornmentIconSize.cy * scaledAdornmentIconSize.cx * sizeof(RGBQUAD), reinterpret_cast<LPBYTE>(pScaledAdornmentIconBits));
+					properties.pScaledAdornmentIconBits = static_cast<LPRGBQUAD>(HeapAlloc(GetProcessHeap(), 0, properties.scaledAdornmentIconSize.cx * properties.scaledAdornmentIconSize.cy * sizeof(RGBQUAD)));
+					if(properties.pScaledAdornmentIconBits) {
+						hr = pWICBitmapScaler->CopyPixels(NULL, properties.scaledAdornmentIconSize.cx * sizeof(RGBQUAD), properties.scaledAdornmentIconSize.cy * properties.scaledAdornmentIconSize.cx * sizeof(RGBQUAD), reinterpret_cast<LPBYTE>(properties.pScaledAdornmentIconBits));
 						if(SUCCEEDED(hr)) {
-							FindContentAreaMargins(&scaledContentMargins);
+							FindContentAreaMargins(&properties.scaledContentMargins);
 						}
 					}
 				}
@@ -145,14 +145,14 @@ STDMETHODIMP SprocketAdorner::SetAdornedSize(SIZE& adornedSize)
 
 STDMETHODIMP SprocketAdorner::GetContentRectangle(RECT& adornedRectangle, SIZE& contentSize, LPRECT pContentRectangle, LPRECT pContentAreaRectangle, LPRECT pContentToDrawRectangle)
 {
-	RECT margins = (pScaledAdornmentIconBits ? scaledContentMargins : contentMargins);
+	RECT margins = (properties.pScaledAdornmentIconBits ? properties.scaledContentMargins : properties.contentMargins);
 
 	CRect marginedContentRectangle(adornedRectangle.left + margins.left, adornedRectangle.top + margins.top, adornedRectangle.right - margins.right, adornedRectangle.bottom - margins.bottom);
 	*pContentAreaRectangle = marginedContentRectangle;
-	marginedContentRectangle.left += extraMargins.left;
-	marginedContentRectangle.top += extraMargins.top;
-	marginedContentRectangle.right -= extraMargins.right;
-	marginedContentRectangle.bottom -= extraMargins.bottom;
+	marginedContentRectangle.left += properties.extraMargins.left;
+	marginedContentRectangle.top += properties.extraMargins.top;
+	marginedContentRectangle.right -= properties.extraMargins.right;
+	marginedContentRectangle.bottom -= properties.extraMargins.bottom;
 
 	double aspectRatio = static_cast<double>(contentSize.cy) / static_cast<double>(contentSize.cx);
 	int debtY = marginedContentRectangle.Height() - contentSize.cy;
@@ -179,11 +179,11 @@ STDMETHODIMP SprocketAdorner::GetDrawOrder(LPBOOL pAdornmentFirst)
 
 STDMETHODIMP SprocketAdorner::DrawIntoDIB(LPRECT /*pBoundingRectangle*/, LPRGBQUAD pBits)
 {
-	if(!hAdornmentIcon || !pScaledAdornmentIconBits) {
+	if(!properties.hAdornmentIcon || !properties.pScaledAdornmentIconBits) {
 		return E_FAIL;
 	}
 
-	CopyMemory(pBits, pScaledAdornmentIconBits, scaledAdornmentIconSize.cx * scaledAdornmentIconSize.cy * sizeof(RGBQUAD));
+	CopyMemory(pBits, properties.pScaledAdornmentIconBits, properties.scaledAdornmentIconSize.cx * properties.scaledAdornmentIconSize.cy * sizeof(RGBQUAD));
 	return S_OK;
 }
 
@@ -320,12 +320,12 @@ BOOL SprocketAdorner::FindContentAreaMargins(LPRECT pMargins)
 	LPDWORD pBits = NULL;
 	SIZE bitmapSize = {0};
 
-	if(pScaledAdornmentIconBits) {
-		pBits = reinterpret_cast<LPDWORD>(pScaledAdornmentIconBits);
-		bitmapSize = scaledAdornmentIconSize;
+	if(properties.pScaledAdornmentIconBits) {
+		pBits = reinterpret_cast<LPDWORD>(properties.pScaledAdornmentIconBits);
+		bitmapSize = properties.scaledAdornmentIconSize;
 	} else {
 		ICONINFO iconInfo = {0};
-		GetIconInfo(hAdornmentIcon, &iconInfo);
+		GetIconInfo(properties.hAdornmentIcon, &iconInfo);
 		if(iconInfo.hbmMask) {
 			DeleteObject(iconInfo.hbmMask);
 		}
