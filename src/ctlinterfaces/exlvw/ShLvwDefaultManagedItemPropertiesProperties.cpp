@@ -46,7 +46,7 @@ LRESULT ShLvwDefaultManagedItemPropertiesProperties::OnInitDialog(UINT /*message
 	controls.managedPropertiesList.AddColumn(TEXT(""), 0);
 
 	// setup the toolbar
-	WTL::CRect toolbarRect;
+	CRect toolbarRect;
 	GetClientRect(&toolbarRect);
 	toolbarRect.OffsetRect(0, 2);
 	toolbarRect.left += toolbarRect.right - 46;

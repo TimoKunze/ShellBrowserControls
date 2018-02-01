@@ -365,7 +365,7 @@ STDMETHODIMP AggregateImageList_Draw_Legacy(AggregateImageList* pThis, Aggregate
 			iconInfo.hbmColor = pIconInfo->hBmp;
 			HBITMAP hMaskBmp = CreateBitmap(bmp.bmWidth, bmp.bmHeight, 1, 1, NULL);
 			if(hMaskBmp) {
-				WTL::CDC dc;
+				CDC dc;
 				dc.CreateCompatibleDC();
 				HBITMAP hOldBitmap = dc.SelectBitmap(hMaskBmp);
 				RECT rc = {0, 0, bmp.bmWidth, bmp.bmHeight};
@@ -419,7 +419,7 @@ STDMETHODIMP AggregateImageList_Draw_Legacy(AggregateImageList* pThis, Aggregate
 			hMainBitmap = CreateDIBSection(NULL, &bitmapInfo, DIB_RGB_COLORS, reinterpret_cast<LPVOID*>(&pBits), NULL, 0);
 			if(pBits) {
 				ZeroMemory(pBits, bitmapInfo.bmiHeader.biSizeImage);
-				WTL::CDC dc;
+				CDC dc;
 				dc.CreateCompatibleDC();
 				HBITMAP hOldBmp = dc.SelectBitmap(hMainBitmap);
 				ImageList_Draw(pThis->wrappedImageLists.hFallback, pIconInfo->systemIconIndex, dc, 0, 0, ILD_TRANSPARENT);
@@ -488,7 +488,7 @@ STDMETHODIMP AggregateImageList_Draw_Legacy(AggregateImageList* pThis, Aggregate
 			HBITMAP hOverlayBitmap = CreateDIBSection(NULL, &bitmapInfo, DIB_RGB_COLORS, reinterpret_cast<LPVOID*>(&pBits), NULL, 0);
 			if(pBits) {
 				ZeroMemory(pBits, bitmapInfo.bmiHeader.biSizeImage);
-				WTL::CDC dc;
+				CDC dc;
 				dc.CreateCompatibleDC();
 				HBITMAP hOldBmp = dc.SelectBitmap(hOverlayBitmap);
 				ImageList_Draw(pThis->wrappedImageLists.hExecutableOverlays, pIconInfo->overlay.iconIndex, dc, 0, 0, ILD_TRANSPARENT);
@@ -563,7 +563,7 @@ STDMETHODIMP AggregateImageList_Draw_Legacy(AggregateImageList* pThis, Aggregate
 				HBITMAP hOverlayBitmap = CreateDIBSection(NULL, &bitmapInfo, DIB_RGB_COLORS, reinterpret_cast<LPVOID*>(&pBits), NULL, 0);
 				if(pBits) {
 					ZeroMemory(pBits, bitmapInfo.bmiHeader.biSizeImage);
-					WTL::CDC dc;
+					CDC dc;
 					dc.CreateCompatibleDC();
 					HBITMAP hOldBmp = dc.SelectBitmap(hOverlayBitmap);
 					ImageList_Draw(pThis->wrappedImageLists.hOverlays, pOverlayData[overlayIndex], dc, 0, 0, ILD_TRANSPARENT);
@@ -646,7 +646,7 @@ STDMETHODIMP AggregateImageList_Draw_Legacy(AggregateImageList* pThis, Aggregate
 	}
 	params.Frame = 255 - (params.fState & ILS_ALPHA ? params.Frame : 0);
 
-	WTL::CDC dc;
+	CDC dc;
 	dc.CreateCompatibleDC();
 	HBITMAP hOldBmp = NULL;
 	HBITMAP hBlendedBitmap = NULL;
@@ -1854,7 +1854,7 @@ BOOL ImageList_DrawIndirect_HQScaling(AggregateImageList* pInstance, IMAGELISTDR
 
 							if(flags & AII_USELEGACYDISPLAYCODE) {
 								params.Frame = 255 - params.Frame;
-								WTL::CDC dc;
+								CDC dc;
 								dc.CreateCompatibleDC();
 								HBITMAP hOldBmp = NULL;
 								HBITMAP hBlendedBitmap = NULL;

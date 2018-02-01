@@ -118,7 +118,7 @@ STDMETHODIMP PhotoBorderAdorner::SetAdornedSize(SIZE& /*adornedSize*/)
 
 STDMETHODIMP PhotoBorderAdorner::GetContentRectangle(RECT& adornedRectangle, SIZE& contentSize, LPRECT pContentRectangle, LPRECT pContentAreaRectangle, LPRECT pContentToDrawRectangle)
 {
-	WTL::CRect marginedContentRectangle(adornedRectangle.left + contentMargins.left, adornedRectangle.top + contentMargins.top, adornedRectangle.right - contentMargins.right, adornedRectangle.bottom - contentMargins.bottom);
+	CRect marginedContentRectangle(adornedRectangle.left + contentMargins.left, adornedRectangle.top + contentMargins.top, adornedRectangle.right - contentMargins.right, adornedRectangle.bottom - contentMargins.bottom);
 	marginedContentRectangle.left += extraMargins.left;
 	marginedContentRectangle.top += extraMargins.top;
 	marginedContentRectangle.right -= extraMargins.right;
@@ -153,7 +153,7 @@ STDMETHODIMP PhotoBorderAdorner::DrawIntoDIB(LPRECT pBoundingRectangle, LPRGBQUA
 
 	HRESULT hr = E_FAIL;
 
-	SIZE boundingSize = WTL::CRect(pBoundingRectangle).Size();
+	SIZE boundingSize = CRect(pBoundingRectangle).Size();
 
 	CComPtr<IWICImagingFactory> pWICImagingFactory = NULL;
 	hr = CoCreateInstance(CLSID_WICImagingFactory, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&pWICImagingFactory));

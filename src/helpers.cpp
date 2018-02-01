@@ -359,7 +359,7 @@ LPWSTR MLLoadDialogTitle(HINSTANCE hModule, LPTSTR pResourceName)
 		if(hDialogTemplate) {
 			LPBYTE pDialogTemplate = reinterpret_cast<LPBYTE>(LockResource(hDialogTemplate));
 			if(pDialogTemplate) {
-				ATLASSERT(reinterpret_cast<DLGTEMPLATEEX*>(pDialogTemplate)->signature == 0xFFFF);
+				ATLASSERT(*reinterpret_cast<WORD*>(pDialogTemplate + sizeof(WORD)) == 0xFFFF);
 				LPWSTR p = reinterpret_cast<LPWSTR>(pDialogTemplate + 26);
 				// skip menu
 				if(*p == 0xFFFF) {
@@ -722,10 +722,10 @@ HIMAGELIST SetupStateImageList(HIMAGELIST hStateImageList)
 
 					HBITMAP hPreviousBitmap = memoryDC.SelectBitmap(bitmap);
 
-					WTL::CRect rc(0, 0, iconSize.cx, iconSize.cy);
+					CRect rc(0, 0, iconSize.cx, iconSize.cy);
 					SIZE partSize;
 					themingEngine.GetThemePartSize(memoryDC, BP_CHECKBOX, CBS_MIXEDNORMAL, NULL, TS_TRUE, &partSize);
-					rc.OffsetRect((iconSize.cx - partSize.cx) / 2, (iconSize.cy - partSize.cy) / 2);
+					rc.OffsetRect((iconSize.cx - partSize.cx) >> 1, (iconSize.cy - partSize.cy) >> 1);
 					themingEngine.DrawThemeBackground(memoryDC, BP_CHECKBOX, CBS_MIXEDNORMAL, &rc);
 
 					memoryDC.SelectBitmap(hPreviousBitmap);

@@ -147,7 +147,7 @@ STDMETHODIMP SprocketAdorner::GetContentRectangle(RECT& adornedRectangle, SIZE& 
 {
 	RECT margins = (pScaledAdornmentIconBits ? scaledContentMargins : contentMargins);
 
-	WTL::CRect marginedContentRectangle(adornedRectangle.left + margins.left, adornedRectangle.top + margins.top, adornedRectangle.right - margins.right, adornedRectangle.bottom - margins.bottom);
+	CRect marginedContentRectangle(adornedRectangle.left + margins.left, adornedRectangle.top + margins.top, adornedRectangle.right - margins.right, adornedRectangle.bottom - margins.bottom);
 	*pContentAreaRectangle = marginedContentRectangle;
 	marginedContentRectangle.left += extraMargins.left;
 	marginedContentRectangle.top += extraMargins.top;

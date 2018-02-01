@@ -259,7 +259,7 @@ STDMETHODIMP UnifiedImageList_Draw_Legacy(UnifiedImageList* pThis, UnifiedIconIn
 			hMainBitmap = CreateDIBSection(NULL, &bitmapInfo, DIB_RGB_COLORS, reinterpret_cast<LPVOID*>(&pBits), NULL, 0);
 			if(pBits) {
 				ZeroMemory(pBits, bitmapInfo.bmiHeader.biSizeImage);
-				WTL::CDC dc;
+				CDC dc;
 				dc.CreateCompatibleDC();
 				HBITMAP hOldBmp = dc.SelectBitmap(hMainBitmap);
 				ImageList_Draw(hImageListToUse, iconToUse, dc, 0, 0, ILD_TRANSPARENT);
@@ -333,7 +333,7 @@ STDMETHODIMP UnifiedImageList_Draw_Legacy(UnifiedImageList* pThis, UnifiedIconIn
 	}
 	params.Frame = 255 - (params.fState & ILS_ALPHA ? params.Frame : 0);
 
-	WTL::CDC dc;
+	CDC dc;
 	dc.CreateCompatibleDC();
 	HBITMAP hOldBmp = NULL;
 	HBITMAP hBlendedBitmap = NULL;
@@ -1124,7 +1124,7 @@ BOOL ImageList_DrawIndirect_HQScaling(UnifiedImageList* pInstance, IMAGELISTDRAW
 
 							if(flags & AII_USELEGACYDISPLAYCODE) {
 								params.Frame = 255 - params.Frame;
-								WTL::CDC dc;
+								CDC dc;
 								dc.CreateCompatibleDC();
 								HBITMAP hOldBmp = NULL;
 								HBITMAP hBlendedBitmap = NULL;
@@ -1293,7 +1293,7 @@ BOOL ImageList_DrawIndirect_HQScaling(UnifiedImageList* pInstance, IMAGELISTDRAW
 
 					if(flags & AII_USELEGACYDISPLAYCODE) {
 						params.Frame = 255 - params.Frame;
-						WTL::CDC dc;
+						CDC dc;
 						dc.CreateCompatibleDC();
 						HBITMAP hOldBmp = NULL;
 						HBITMAP hBlendedBitmap = NULL;

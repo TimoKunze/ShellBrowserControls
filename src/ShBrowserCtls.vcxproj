@@ -506,7 +506,7 @@
     <ClCompile Include="ctlinterfaces\exlvw\LegacyBackgroundItemEnumTask.cpp" />
     <ClCompile Include="ctlinterfaces\exlvw\SubItemControlTask.cpp" />
     <ClCompile Include="ctlinterfaces\extvw\LegacyBackgroundEnumTask.cpp" />
-    <ClCompile Include="CWindowEx.cpp" />
+    <ClCompile Include="CWindowEx2.cpp" />
     <ClCompile Include="EnumOLEVERB.cpp" />
     <ClCompile Include="helpers.cpp" />
     <ClCompile Include="ShBrowserCtls.cpp" />
@@ -702,7 +702,7 @@
     <ClInclude Include="ctlinterfaces\exlvw\LegacyBackgroundItemEnumTask.h" />
     <ClInclude Include="ctlinterfaces\exlvw\SubItemControlTask.h" />
     <ClInclude Include="ctlinterfaces\extvw\LegacyBackgroundEnumTask.h" />
-    <ClInclude Include="CWindowEx.h" />
+    <ClInclude Include="CWindowEx2.h" />
     <ClInclude Include="DispIDs.h" />
     <ClInclude Include="EnumOLEVERB.h" />
     <ClInclude Include="helpers.h" />

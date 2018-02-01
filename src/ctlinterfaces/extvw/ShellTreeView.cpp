@@ -4567,7 +4567,7 @@ HRESULT ShellTreeView::OnInternalContextMenu(UINT /*message*/, WPARAM /*wParam*/
 	if((pMenuPosition->x == -1) && (pMenuPosition->y == -1)) {
 		hContextMenuItem = reinterpret_cast<HTREEITEM>(attachedControl.SendMessage(TVM_GETNEXTITEM, TVGN_CARET, 0));
 		if(hContextMenuItem) {
-			WTL::CRect itemRectangle;
+			CRect itemRectangle;
 			*reinterpret_cast<HTREEITEM*>(&itemRectangle) = hContextMenuItem;
 			if(attachedControl.SendMessage(TVM_GETITEMRECT, TRUE, reinterpret_cast<LPARAM>(&itemRectangle))) {
 				*pMenuPosition = itemRectangle.CenterPoint();

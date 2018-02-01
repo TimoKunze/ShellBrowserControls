@@ -6668,7 +6668,7 @@ HRESULT ShellListView::OnInternalContextMenu(UINT /*message*/, WPARAM wParam, LP
 		if(selectedItems > 0) {
 			contextMenuItemIndex = static_cast<int>(attachedControl.SendMessage(LVM_GETNEXTITEM, static_cast<WPARAM>(-1), MAKELPARAM(LVNI_SELECTED, 0)));
 			if(contextMenuItemIndex != -1) {
-				WTL::CRect itemRectangle;
+				CRect itemRectangle;
 				itemRectangle.left = LVIR_LABEL;
 				if(attachedControl.SendMessage(LVM_GETITEMRECT, contextMenuItemIndex, reinterpret_cast<LPARAM>(&itemRectangle))) {
 					*pMenuPosition = itemRectangle.CenterPoint();
@@ -8914,7 +8914,7 @@ HRESULT ShellListView::RemoveNamespace(PCIDLIST_ABSOLUTE pIDLNamespace, BOOL exa
 			/* The control should have sent us a notification about the deletion. The notification handler
 				 should have freed the pIDL. */
 		} else {
-			CWindowEx(attachedControl).InternalSetRedraw(FALSE);
+			CWindowEx2(attachedControl).InternalSetRedraw(FALSE);
 			#ifdef USE_STL
 				for(size_t i = 0; i < itemsToRemove.size(); ++i) {
 			#else
@@ -8924,7 +8924,7 @@ HRESULT ShellListView::RemoveNamespace(PCIDLIST_ABSOLUTE pIDLNamespace, BOOL exa
 				/* The control should have sent us a notification about the deletion. The notification handler
 					 should have freed the pIDL. */
 			}
-			CWindowEx(attachedControl).InternalSetRedraw(TRUE);
+			CWindowEx2(attachedControl).InternalSetRedraw(TRUE);
 		}
 		hr = S_OK;
 	} else {

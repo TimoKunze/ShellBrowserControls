@@ -21,7 +21,7 @@
 #else
 	#include "../../ShBrowserCtlsA.h"
 #endif
-#include "../../CWindowEx.h"
+#include "../../CWindowEx2.h"
 #include "definitions.h"
 #include "SetColumnsDlg.h"
 #include "BackgroundColumnEnumTask.h"

@@ -309,10 +309,10 @@ STDMETHODIMP ShLvwThumbnailTask::DoInternalResume(void)
 				adornedSize.cy = min(pResult->targetThumbnailSize.cy, adornedSize.cy);
 				ATLVERIFY(SUCCEEDED(pThumbnailAdorner->SetAdornedSize(adornedSize)));
 			}
-			WTL::CRect adornedRectangle(0, 0, adornedSize.cx, adornedSize.cy);
-			WTL::CRect contentRectangle(0, 0, contentSize.cx, contentSize.cy);
-			WTL::CRect contentAreaRectangle(0, 0, contentSize.cx, contentSize.cy);
-			WTL::CRect contentToDrawRectangle(0, 0, contentSize.cx, contentSize.cy);
+			CRect adornedRectangle(0, 0, adornedSize.cx, adornedSize.cy);
+			CRect contentRectangle(0, 0, contentSize.cx, contentSize.cy);
+			CRect contentAreaRectangle(0, 0, contentSize.cx, contentSize.cy);
+			CRect contentToDrawRectangle(0, 0, contentSize.cx, contentSize.cy);
 			if(pThumbnailAdorner) {
 				ATLVERIFY(SUCCEEDED(pThumbnailAdorner->GetContentRectangle(adornedRectangle, contentSize, &contentRectangle, &contentAreaRectangle, &contentToDrawRectangle)));
 			}

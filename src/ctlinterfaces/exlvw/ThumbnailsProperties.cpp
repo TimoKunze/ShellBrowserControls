@@ -31,7 +31,7 @@ STDMETHODIMP ThumbnailsProperties::Activate(HWND hWndParent, LPCRECT pRect, BOOL
 	controls.displayThumbnailAdornmentsList.AddColumn(TEXT(""), 0);
 
 	// setup the toolbar
-	WTL::CRect toolbarRect;
+	CRect toolbarRect;
 	GetClientRect(&toolbarRect);
 	toolbarRect.OffsetRect(0, 2);
 	toolbarRect.left += toolbarRect.right - 46;
