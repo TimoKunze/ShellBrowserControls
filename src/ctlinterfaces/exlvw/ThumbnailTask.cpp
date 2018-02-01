@@ -8,38 +8,38 @@
 ShLvwThumbnailTask::ShLvwThumbnailTask(void)
     : RunnableTask(TRUE)
 {
-	pShellItem = NULL;
-	pImageFactory = NULL;
-	pExecutableString = NULL;
-	pBackgroundThumbnailsQueue = NULL;
-	pResult = NULL;
-	pCriticalSection = NULL;
+	properties.pShellItem = NULL;
+	properties.pImageFactory = NULL;
+	properties.pExecutableString = NULL;
+	properties.pBackgroundThumbnailsQueue = NULL;
+	properties.pResult = NULL;
+	properties.pCriticalSection = NULL;
 }
 
 void ShLvwThumbnailTask::FinalRelease()
 {
-	if(pShellItem) {
-		pShellItem->Release();
-		pShellItem = NULL;
+	if(properties.pShellItem) {
+		properties.pShellItem->Release();
+		properties.pShellItem = NULL;
 	}
-	if(pImageFactory) {
-		pImageFactory->Release();
-		pImageFactory = NULL;
+	if(properties.pImageFactory) {
+		properties.pImageFactory->Release();
+		properties.pImageFactory = NULL;
 	}
-	if(pExecutableString) {
-		HeapFree(GetProcessHeap(), 0, pExecutableString);
-		pExecutableString = NULL;
+	if(properties.pExecutableString) {
+		HeapFree(GetProcessHeap(), 0, properties.pExecutableString);
+		properties.pExecutableString = NULL;
 	}
-	if(pResult) {
-		if(pResult->hThumbnailOrIcon) {
-			DeleteObject(pResult->hThumbnailOrIcon);
+	if(properties.pResult) {
+		if(properties.pResult->hThumbnailOrIcon) {
+			DeleteObject(properties.pResult->hThumbnailOrIcon);
 		}
-		delete pResult;
-		pResult = NULL;
+		delete properties.pResult;
+		properties.pResult = NULL;
 	}
-	if(pIDL) {
-		ILFree(pIDL);
-		pIDL = NULL;
+	if(properties.pIDL) {
+		ILFree(properties.pIDL);
+		properties.pIDL = NULL;
 	}
 }
 
@@ -50,27 +50,27 @@ void ShLvwThumbnailTask::FinalRelease()
 	HRESULT ShLvwThumbnailTask::Attach(HWND hWndShellUIParentWindow, HWND hWndToNotify, CAtlList<LPSHLVWBACKGROUNDTHUMBNAILINFO>* pBackgroundThumbnailsQueue, LPCRITICAL_SECTION pCriticalSection, PCIDLIST_ABSOLUTE pIDL, LONG itemID, SIZE imageSize, ShLvwDisplayThumbnailAdornmentsConstants displayThumbnailAdornments, ShLvwDisplayFileTypeOverlaysConstants displayFileTypeOverlays, BOOL isComctl32600OrNewer)
 #endif
 {
-	this->hWndShellUIParentWindow = hWndShellUIParentWindow;
-	this->hWndToNotify = hWndToNotify;
-	this->pBackgroundThumbnailsQueue = pBackgroundThumbnailsQueue;
-	this->pCriticalSection = pCriticalSection;
-	this->pIDL = ILCloneFull(pIDL);
-	this->displayThumbnailAdornments = displayThumbnailAdornments;
-	this->displayFileTypeOverlays = displayFileTypeOverlays;
-	this->isComctl32600OrNewer = isComctl32600OrNewer;
+	this->properties.hWndShellUIParentWindow = hWndShellUIParentWindow;
+	this->properties.hWndToNotify = hWndToNotify;
+	this->properties.pBackgroundThumbnailsQueue = pBackgroundThumbnailsQueue;
+	this->properties.pCriticalSection = pCriticalSection;
+	this->properties.pIDL = ILCloneFull(pIDL);
+	this->properties.displayThumbnailAdornments = displayThumbnailAdornments;
+	this->properties.displayFileTypeOverlays = displayFileTypeOverlays;
+	this->properties.isComctl32600OrNewer = isComctl32600OrNewer;
 
-	pResult = new SHLVWBACKGROUNDTHUMBNAILINFO;
-	if(pResult) {
-		ZeroMemory(pResult, sizeof(SHLVWBACKGROUNDTHUMBNAILINFO));
-		pResult->itemID = itemID;
-		pResult->targetThumbnailSize = imageSize;
-		pResult->executableIconIndex = -1;
-		pResult->pOverlayImageResource = NULL;
+	properties.pResult = new SHLVWBACKGROUNDTHUMBNAILINFO;
+	if(properties.pResult) {
+		ZeroMemory(properties.pResult, sizeof(SHLVWBACKGROUNDTHUMBNAILINFO));
+		properties.pResult->itemID = itemID;
+		properties.pResult->targetThumbnailSize = imageSize;
+		properties.pResult->executableIconIndex = -1;
+		properties.pResult->pOverlayImageResource = NULL;
 	} else {
 		return E_OUTOFMEMORY;
 	}
 
-	status = TTS_NOTHINGDONE;
+	properties.status = TTS_NOTHINGDONE;
 	return S_OK;
 }
 
@@ -106,7 +106,7 @@ void ShLvwThumbnailTask::FinalRelease()
 
 STDMETHODIMP ShLvwThumbnailTask::DoInternalResume(void)
 {
-	ATLASSERT_POINTER(pResult, SHLVWBACKGROUNDTHUMBNAILINFO);
+	ATLASSERT_POINTER(properties.pResult, SHLVWBACKGROUNDTHUMBNAILINFO);
 
 	if(WaitForSingleObject(hDoneEvent, 0) == WAIT_OBJECT_0) {
 		return (state == IRTIR_TASK_SUSPENDED ? E_PENDING : E_FAIL);
@@ -114,49 +114,49 @@ STDMETHODIMP ShLvwThumbnailTask::DoInternalResume(void)
 
 	HRESULT hr;
 
-	if(status == TTS_RETRIEVINGFLAGS1 || status == TTS_RETRIEVINGIMAGE/* || status == TTS_RETRIEVINGEXECUTABLEICON*/) {
+	if(properties.status == TTS_RETRIEVINGFLAGS1 || properties.status == TTS_RETRIEVINGIMAGE/* || properties.status == TTS_RETRIEVINGEXECUTABLEICON*/) {
 		if(ShouldTaskBeAborted()) {
-			pResult->aborted = TRUE;
-			status = TTS_DONE;
+			properties.pResult->aborted = TRUE;
+			properties.status = TTS_DONE;
 		}
 	}
 
-	if(status == TTS_RETRIEVINGFLAGS1) {
-		if(pResult->targetThumbnailSize.cx >= 32) {
-			ATLASSUME(pShellItem);
-			pShellItem->QueryInterface(IID_PPV_ARGS(&pImageFactory));
-			ATLASSUME(pImageFactory);
-			if(pImageFactory) {
+	if(properties.status == TTS_RETRIEVINGFLAGS1) {
+		if(properties.pResult->targetThumbnailSize.cx >= 32) {
+			ATLASSUME(properties.pShellItem);
+			properties.pShellItem->QueryInterface(IID_PPV_ARGS(&properties.pImageFactory));
+			ATLASSUME(properties.pImageFactory);
+			if(properties.pImageFactory) {
 				HBITMAP hThumbnail = NULL;
-				pImageFactory->GetImage(pResult->targetThumbnailSize, SIIGBF_THUMBNAILONLY, &hThumbnail);
+				properties.pImageFactory->GetImage(properties.pResult->targetThumbnailSize, SIIGBF_THUMBNAILONLY, &hThumbnail);
 				if(hThumbnail) {
 					DeleteObject(hThumbnail);
-					pResult->flags |= AII_HASTHUMBNAIL;
+					properties.pResult->flags |= AII_HASTHUMBNAIL;
 				}
 			}
-			if(pResult->flags & AII_HASTHUMBNAIL) {
+			if(properties.pResult->flags & AII_HASTHUMBNAIL) {
 				SFGAOF attributes = 0;
-				hr = pShellItem->GetAttributes(SFGAO_FOLDER, &attributes);
+				hr = properties.pShellItem->GetAttributes(SFGAO_FOLDER, &attributes);
 				if(SUCCEEDED(hr) && (attributes & SFGAO_FOLDER) == SFGAO_FOLDER) {
-					pResult->flags |= AII_NOFILETYPEOVERLAY;
+					properties.pResult->flags |= AII_NOFILETYPEOVERLAY;
 				} else {
 					LPWSTR pOverlayImageResource = NULL;
 					DWORD thumbnailAdornment = 1;			// drop shadow is the default
-					if(displayThumbnailAdornments != sldtaNone && SUCCEEDED(GetThumbnailAdornment(hWndShellUIParentWindow, pIDL, TRUE, &thumbnailAdornment, &pOverlayImageResource))) {
-						if(displayThumbnailAdornments != sldtaAny) {
+					if(properties.displayThumbnailAdornments != sldtaNone && SUCCEEDED(GetThumbnailAdornment(properties.hWndShellUIParentWindow, properties.pIDL, TRUE, &thumbnailAdornment, &pOverlayImageResource))) {
+						if(properties.displayThumbnailAdornments != sldtaAny) {
 							switch(thumbnailAdornment) {
 								case 1:			// drop shadow
-									if(!(displayThumbnailAdornments & sldtaDropShadow)) {
+									if(!(properties.displayThumbnailAdornments & sldtaDropShadow)) {
 										thumbnailAdornment = 0;
 									}
 									break;
 								case 2:			// photo border
-									if(!(displayThumbnailAdornments & sldtaPhotoBorder)) {
+									if(!(properties.displayThumbnailAdornments & sldtaPhotoBorder)) {
 										thumbnailAdornment = 0;
 									}
 									break;
 								case 3:			// video sprockets
-									if(!(displayThumbnailAdornments & sldtaVideoSprocket)) {
+									if(!(properties.displayThumbnailAdornments & sldtaVideoSprocket)) {
 										thumbnailAdornment = 0;
 									}
 									break;
@@ -167,93 +167,93 @@ STDMETHODIMP ShLvwThumbnailTask::DoInternalResume(void)
 					}
 					switch(thumbnailAdornment) {
 						case 0:			// no adornment
-							pResult->flags |= AII_NOADORNMENT;
+							properties.pResult->flags |= AII_NOADORNMENT;
 							break;
 						case 1:			// drop shadow
-							pResult->flags |= AII_DROPSHADOWADORNMENT;
+							properties.pResult->flags |= AII_DROPSHADOWADORNMENT;
 							break;
 						case 2:			// photo border
-							pResult->flags |= AII_PHOTOBORDERADORNMENT;
+							properties.pResult->flags |= AII_PHOTOBORDERADORNMENT;
 							break;
 						case 3:			// video sprockets
-							pResult->flags |= AII_VIDEOSPROCKETADORNMENT;
+							properties.pResult->flags |= AII_VIDEOSPROCKETADORNMENT;
 							break;
 						default:
 							ATLASSERT(FALSE && "Unknown adornment setting");
-							pResult->flags |= AII_DROPSHADOWADORNMENT;
+							properties.pResult->flags |= AII_DROPSHADOWADORNMENT;
 							break;
 					}
 					// retrieve TypeOverlay setting
-					pResult->pOverlayImageResource = NULL;
-					if(displayFileTypeOverlays == sldftoFollowSystemSettings) {
+					properties.pResult->pOverlayImageResource = NULL;
+					if(properties.displayFileTypeOverlays == sldftoFollowSystemSettings) {
 						SHELLSTATE shellState = {0};
 						SHGetSetSettings(&shellState, SSF_SHOWTYPEOVERLAY, FALSE);
 						if(shellState.fShowTypeOverlay) {
 							if(pOverlayImageResource) {
-								pResult->pOverlayImageResource = pOverlayImageResource;
+								properties.pResult->pOverlayImageResource = pOverlayImageResource;
 								hr = S_OK;
 							} else {
-								hr = GetThumbnailTypeOverlay(hWndShellUIParentWindow, pIDL, TRUE, &pResult->pOverlayImageResource);
+								hr = GetThumbnailTypeOverlay(properties.hWndShellUIParentWindow, properties.pIDL, TRUE, &properties.pResult->pOverlayImageResource);
 							}
 
 							if(SUCCEEDED(hr)) {
-								if(pResult->pOverlayImageResource) {
-									if(lstrlenW(pResult->pOverlayImageResource) > 0) {
-										pResult->flags |= AII_IMAGERESOURCEOVERLAY;
+								if(properties.pResult->pOverlayImageResource) {
+									if(lstrlenW(properties.pResult->pOverlayImageResource) > 0) {
+										properties.pResult->flags |= AII_IMAGERESOURCEOVERLAY;
 									} else {
-										pResult->flags |= AII_NOFILETYPEOVERLAY;
+										properties.pResult->flags |= AII_NOFILETYPEOVERLAY;
 									}
 								} else {
-									pResult->flags |= AII_EXECUTABLEICONOVERLAY;
+									properties.pResult->flags |= AII_EXECUTABLEICONOVERLAY;
 								}
 							} else {
-								pResult->flags |= AII_EXECUTABLEICONOVERLAY;
+								properties.pResult->flags |= AII_EXECUTABLEICONOVERLAY;
 							}
 						}
-					} else if(displayFileTypeOverlays & sldftoExecutableIcon) {
-						pResult->flags |= AII_EXECUTABLEICONOVERLAY;
+					} else if(properties.displayFileTypeOverlays & sldftoExecutableIcon) {
+						properties.pResult->flags |= AII_EXECUTABLEICONOVERLAY;
 					}
 
-					if(pOverlayImageResource && pOverlayImageResource != pResult->pOverlayImageResource) {
+					if(pOverlayImageResource && pOverlayImageResource != properties.pResult->pOverlayImageResource) {
 						CoTaskMemFree(pOverlayImageResource);
 						pOverlayImageResource = NULL;
 					}
 				}
 			}
 		}
-		status = TTS_RETRIEVINGFLAGS2;
+		properties.status = TTS_RETRIEVINGFLAGS2;
 		if(WaitForSingleObject(hDoneEvent, 0) == WAIT_OBJECT_0) {
 			return (state == IRTIR_TASK_SUSPENDED ? E_PENDING : E_FAIL);
 		}
 	}
 
-	if(status == TTS_RETRIEVINGFLAGS2) {
-		if(IsElevationRequired(hWndShellUIParentWindow, pIDL)) {
-			pResult->flags |= AII_DISPLAYELEVATIONOVERLAY;
-			if(pResult->flags & AII_HASTHUMBNAIL) {
-				if((pResult->flags & AII_FILETYPEOVERLAYMASK) == AII_NOFILETYPEOVERLAY) {
+	if(properties.status == TTS_RETRIEVINGFLAGS2) {
+		if(IsElevationRequired(properties.hWndShellUIParentWindow, properties.pIDL)) {
+			properties.pResult->flags |= AII_DISPLAYELEVATIONOVERLAY;
+			if(properties.pResult->flags & AII_HASTHUMBNAIL) {
+				if((properties.pResult->flags & AII_FILETYPEOVERLAYMASK) == AII_NOFILETYPEOVERLAY) {
 					/* The thumbnail may have a size that leads to complications when we draw the elevation shield
 					 * directly onto it. Therefore we force display of executable icon. The elevation shield will be
 					 * stamped onto the executable icon then.
 					 */
-					pResult->flags &= ~AII_FILETYPEOVERLAYMASK;
-					pResult->flags |= AII_EXECUTABLEICONOVERLAY;
+					properties.pResult->flags &= ~AII_FILETYPEOVERLAYMASK;
+					properties.pResult->flags |= AII_EXECUTABLEICONOVERLAY;
 				}
 			}
 		}
-		status = (pResult->targetThumbnailSize.cx >= 32 ? TTS_RETRIEVINGIMAGE : TTS_DONE);
+		properties.status = (properties.pResult->targetThumbnailSize.cx >= 32 ? TTS_RETRIEVINGIMAGE : TTS_DONE);
 		if(WaitForSingleObject(hDoneEvent, 0) == WAIT_OBJECT_0) {
 			return (state == IRTIR_TASK_SUSPENDED ? E_PENDING : E_FAIL);
 		}
 	}
 
-	if(status == TTS_RETRIEVINGIMAGE) {
+	if(properties.status == TTS_RETRIEVINGIMAGE) {
 		HBITMAP hThumbnail = NULL;
 		CComPtr<IThumbnailAdorner> pThumbnailAdorner = NULL;
-		SIZE contentSize = pResult->targetThumbnailSize;
+		SIZE contentSize = properties.pResult->targetThumbnailSize;
 		double aspectRatio = 1.0;
-		if(pResult->flags & AII_HASTHUMBNAIL) {
-			switch(pResult->flags & AII_ADORNMENTMASK) {
+		if(properties.pResult->flags & AII_HASTHUMBNAIL) {
+			switch(properties.pResult->flags & AII_ADORNMENTMASK) {
 				case AII_DROPSHADOWADORNMENT:
 					pThumbnailAdorner = ClassFactory::InitDropShadowAdorner();
 					break;
@@ -265,7 +265,7 @@ STDMETHODIMP ShLvwThumbnailTask::DoInternalResume(void)
 					break;
 			}
 			if(pThumbnailAdorner) {
-				pImageFactory->GetImage(pResult->targetThumbnailSize, SIIGBF_BIGGERSIZEOK, &hThumbnail);
+				properties.pImageFactory->GetImage(properties.pResult->targetThumbnailSize, SIIGBF_BIGGERSIZEOK, &hThumbnail);
 				if(hThumbnail) {
 					BITMAP bmp = {0};
 					GetObject(hThumbnail, sizeof(BITMAP), &bmp);
@@ -276,14 +276,14 @@ STDMETHODIMP ShLvwThumbnailTask::DoInternalResume(void)
 				}
 
 				// this will load the adorner icon
-				ATLVERIFY(SUCCEEDED(pThumbnailAdorner->SetIconSize(pResult->targetThumbnailSize, aspectRatio)));
+				ATLVERIFY(SUCCEEDED(pThumbnailAdorner->SetIconSize(properties.pResult->targetThumbnailSize, aspectRatio)));
 				// now calculate the size of the content area
 				ATLVERIFY(SUCCEEDED(pThumbnailAdorner->GetMaxContentSize(aspectRatio, &contentSize)));
 			}
 		}
 
-		ATLASSUME(pImageFactory);
-		pImageFactory->GetImage(contentSize, SIIGBF_BIGGERSIZEOK, &hThumbnail);
+		ATLASSUME(properties.pImageFactory);
+		properties.pImageFactory->GetImage(contentSize, SIIGBF_BIGGERSIZEOK, &hThumbnail);
 		if(hThumbnail) {
 			BITMAP bmp = {0};
 			GetObject(hThumbnail, sizeof(BITMAP), &bmp);
@@ -292,11 +292,11 @@ STDMETHODIMP ShLvwThumbnailTask::DoInternalResume(void)
 				DeleteObject(hThumbnail);
 				hThumbnail = NULL;
 
-				pImageFactory->GetImage(contentSize, 0, &hThumbnail);
+				properties.pImageFactory->GetImage(contentSize, 0, &hThumbnail);
 			}
 		}
-		pImageFactory->Release();
-		pImageFactory = NULL;
+		properties.pImageFactory->Release();
+		properties.pImageFactory = NULL;
 		if(hThumbnail) {
 			BITMAP bmp = {0};
 			GetObject(hThumbnail, sizeof(BITMAP), &bmp);
@@ -305,8 +305,8 @@ STDMETHODIMP ShLvwThumbnailTask::DoInternalResume(void)
 			SIZE adornedSize = contentSize;
 			if(pThumbnailAdorner) {
 				ATLVERIFY(SUCCEEDED(pThumbnailAdorner->GetAdornedSize(contentSize, &adornedSize)));
-				adornedSize.cx = min(pResult->targetThumbnailSize.cx, adornedSize.cx);
-				adornedSize.cy = min(pResult->targetThumbnailSize.cy, adornedSize.cy);
+				adornedSize.cx = min(properties.pResult->targetThumbnailSize.cx, adornedSize.cx);
+				adornedSize.cy = min(properties.pResult->targetThumbnailSize.cy, adornedSize.cy);
 				ATLVERIFY(SUCCEEDED(pThumbnailAdorner->SetAdornedSize(adornedSize)));
 			}
 			CRect adornedRectangle(0, 0, adornedSize.cx, adornedSize.cy);
@@ -407,7 +407,7 @@ STDMETHODIMP ShLvwThumbnailTask::DoInternalResume(void)
 										}
 									}
 								}
-								pResult->hThumbnailOrIcon = hBitmap;
+								properties.pResult->hThumbnailOrIcon = hBitmap;
 							}
 						}
 					}
@@ -415,39 +415,39 @@ STDMETHODIMP ShLvwThumbnailTask::DoInternalResume(void)
 			}
 			DeleteObject(hThumbnail);
 		}
-		status = TTS_RETRIEVINGEXECUTABLEICON;
+		properties.status = TTS_RETRIEVINGEXECUTABLEICON;
 		if(WaitForSingleObject(hDoneEvent, 0) == WAIT_OBJECT_0) {
 			return (state == IRTIR_TASK_SUSPENDED ? E_PENDING : E_FAIL);
 		}
 	}
 
-	if(status == TTS_RETRIEVINGEXECUTABLEICON) {
-		if(!pExecutableString) {
-			ATLASSUME(pShellItem);
+	if(properties.status == TTS_RETRIEVINGEXECUTABLEICON) {
+		if(!properties.pExecutableString) {
+			ATLASSUME(properties.pShellItem);
 			CComPtr<IQueryAssociations> pIQueryAssociations = NULL;
 			SFGAOF attributes = 0;
-			hr = pShellItem->GetAttributes(SFGAO_LINK, &attributes);
+			hr = properties.pShellItem->GetAttributes(SFGAO_LINK, &attributes);
 			if(SUCCEEDED(hr) && (attributes & SFGAO_LINK) == SFGAO_LINK) {
 				CComPtr<IShellItem> pTargetItem = NULL;
-				hr = pShellItem->BindToHandler(NULL, BHID_LinkTargetItem, IID_PPV_ARGS(&pTargetItem));
+				hr = properties.pShellItem->BindToHandler(NULL, BHID_LinkTargetItem, IID_PPV_ARGS(&pTargetItem));
 				if(SUCCEEDED(hr)) {
 					ATLASSUME(pTargetItem);
 					hr = pTargetItem->BindToHandler(NULL, BHID_AssociationArray, IID_PPV_ARGS(&pIQueryAssociations));
 				}
 			} else {
-				hr = pShellItem->BindToHandler(NULL, BHID_AssociationArray, IID_PPV_ARGS(&pIQueryAssociations));
+				hr = properties.pShellItem->BindToHandler(NULL, BHID_AssociationArray, IID_PPV_ARGS(&pIQueryAssociations));
 			}
 			if(SUCCEEDED(hr)) {
 				ATLASSUME(pIQueryAssociations);
 				DWORD bufferSize = 0;
 				hr = pIQueryAssociations->GetString(ASSOCF_NOTRUNCATE | ASSOCF_REMAPRUNDLL, ASSOCSTR_EXECUTABLE, NULL, NULL, &bufferSize);
 				if(hr == S_FALSE) {
-					pExecutableString = static_cast<LPWSTR>(HeapAlloc(GetProcessHeap(), 0, (bufferSize + 1) * sizeof(WCHAR)));
-					ATLASSERT(pExecutableString);
-					if(!pExecutableString) {
+					properties.pExecutableString = static_cast<LPWSTR>(HeapAlloc(GetProcessHeap(), 0, (bufferSize + 1) * sizeof(WCHAR)));
+					ATLASSERT(properties.pExecutableString);
+					if(!properties.pExecutableString) {
 						return E_OUTOFMEMORY;
 					}
-					hr = pIQueryAssociations->GetString(ASSOCF_NOTRUNCATE | ASSOCF_REMAPRUNDLL, ASSOCSTR_EXECUTABLE, NULL, pExecutableString, &bufferSize);
+					hr = pIQueryAssociations->GetString(ASSOCF_NOTRUNCATE | ASSOCF_REMAPRUNDLL, ASSOCSTR_EXECUTABLE, NULL, properties.pExecutableString, &bufferSize);
 					ATLASSERT(SUCCEEDED(hr));
 				}
 			}
@@ -455,38 +455,38 @@ STDMETHODIMP ShLvwThumbnailTask::DoInternalResume(void)
 		if(WaitForSingleObject(hDoneEvent, 0) == WAIT_OBJECT_0) {
 			return (state == IRTIR_TASK_SUSPENDED ? E_PENDING : E_FAIL);
 		}
-		if(pExecutableString) {
+		if(properties.pExecutableString) {
 			SHFILEINFOW fileInfoData = {0};
-			SHGetFileInfoW(pExecutableString, 0, &fileInfoData, sizeof(SHFILEINFO), SHGFI_SMALLICON | SHGFI_SYSICONINDEX);
+			SHGetFileInfoW(properties.pExecutableString, 0, &fileInfoData, sizeof(SHFILEINFO), SHGFI_SMALLICON | SHGFI_SYSICONINDEX);
 			ATLASSERT(fileInfoData.iIcon >= 0);
-			pResult->executableIconIndex = fileInfoData.iIcon;
+			properties.pResult->executableIconIndex = fileInfoData.iIcon;
 
-			status = TTS_DONE;
-			HeapFree(GetProcessHeap(), 0, pExecutableString);
-			pExecutableString = NULL;
+			properties.status = TTS_DONE;
+			HeapFree(GetProcessHeap(), 0, properties.pExecutableString);
+			properties.pExecutableString = NULL;
 		} else {
-			status = TTS_DONE;
+			properties.status = TTS_DONE;
 		}
-		pShellItem->Release();
-		pShellItem = NULL;
+		properties.pShellItem->Release();
+		properties.pShellItem = NULL;
 		if(WaitForSingleObject(hDoneEvent, 0) == WAIT_OBJECT_0) {
 			return (state == IRTIR_TASK_SUSPENDED ? E_PENDING : E_FAIL);
 		}
 	}
-	ATLASSERT(status == TTS_DONE);
+	ATLASSERT(properties.status == TTS_DONE);
 
-	pResult->mask = SIIF_OVERLAYIMAGE | SIIF_FLAGS | SIIF_IMAGE;
-	EnterCriticalSection(pCriticalSection);
+	properties.pResult->mask = SIIF_OVERLAYIMAGE | SIIF_FLAGS | SIIF_IMAGE;
+	EnterCriticalSection(properties.pCriticalSection);
 	#ifdef USE_STL
-		pBackgroundThumbnailsQueue->push(pResult);
+		properties.pBackgroundThumbnailsQueue->push(properties.pResult);
 	#else
-		pBackgroundThumbnailsQueue->AddTail(pResult);
+		properties.pBackgroundThumbnailsQueue->AddTail(properties.pResult);
 	#endif
-	pResult = NULL;
-	LeaveCriticalSection(pCriticalSection);
+		properties.pResult = NULL;
+	LeaveCriticalSection(properties.pCriticalSection);
 
-	if(IsWindow(hWndToNotify)) {
-		PostMessage(hWndToNotify, WM_TRIGGER_UPDATETHUMBNAIL, 0, 0);
+	if(IsWindow(properties.hWndToNotify)) {
+		PostMessage(properties.hWndToNotify, WM_TRIGGER_UPDATETHUMBNAIL, 0, 0);
 	}
 	return NOERROR;
 }
@@ -494,12 +494,12 @@ STDMETHODIMP ShLvwThumbnailTask::DoInternalResume(void)
 STDMETHODIMP ShLvwThumbnailTask::DoRun(void)
 {
 	if(APIWrapper::IsSupported_SHCreateItemFromIDList()) {
-		ATLVERIFY(SUCCEEDED(APIWrapper::SHCreateItemFromIDList(pIDL, IID_PPV_ARGS(&pShellItem), NULL)));
+		ATLVERIFY(SUCCEEDED(APIWrapper::SHCreateItemFromIDList(properties.pIDL, IID_PPV_ARGS(&properties.pShellItem), NULL)));
 	}
-	if(!pShellItem) {
+	if(!properties.pShellItem) {
 		return E_FAIL;
 	}
-	status = TTS_RETRIEVINGFLAGS1;
+	properties.status = TTS_RETRIEVINGFLAGS1;
 	return E_PENDING;
 }
 
@@ -511,9 +511,9 @@ BOOL ShLvwThumbnailTask::ShouldTaskBeAborted(void)
 	 */
 
 	BOOL abort = FALSE;
-	if(isComctl32600OrNewer && pResult) {
+	if(properties.isComctl32600OrNewer && properties.pResult) {
 		BOOL visible = TRUE;
-		if(SUCCEEDED(SendMessage(hWndToNotify, WM_ISLVWITEMVISIBLE, static_cast<WPARAM>(pResult->itemID), reinterpret_cast<LPARAM>(&visible)))) {
+		if(SUCCEEDED(SendMessage(properties.hWndToNotify, WM_ISLVWITEMVISIBLE, static_cast<WPARAM>(properties.pResult->itemID), reinterpret_cast<LPARAM>(&visible)))) {
 			abort = !visible;
 		}
 	}

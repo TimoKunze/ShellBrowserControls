@@ -222,69 +222,6 @@ protected:
 	/// \return \c TRUE if the task should be aborted; otherwise \c FALSE.
 	BOOL ShouldTaskBeAborted(void);
 
-	/// \brief <em>Specifies the window that is used as parent window for any UI that the shell may display</em>
-	HWND hWndShellUIParentWindow;
-	/// \brief <em>Specifies the window that the result is posted to</em>
-	///
-	/// Specifies the window to which to send the retrieved thumbnail. This window must handle the
-	/// \c WM_TRIGGER_UPDATETHUMBNAIL message.
-	///
-	/// \sa WM_TRIGGER_UPDATETHUMBNAIL
-	HWND hWndToNotify;
-	/// \brief <em>Holds the fully qualified pIDL of the item for which to retrieve the thumbnail</em>
-	///
-	/// \sa pShellItem
-	PIDLIST_ABSOLUTE pIDL;
-	/// \brief <em>Specifies the thumbnail adornments to apply</em>
-	///
-	/// \if UNICODE
-	///   \sa IThumbnailAdorner, ShBrowserCtlsLibU::ShLvwDisplayThumbnailAdornmentsConstants
-	/// \else
-	///   \sa IThumbnailAdorner, ShBrowserCtlsLibA::ShLvwDisplayThumbnailAdornmentsConstants
-	/// \endif
-	ShLvwDisplayThumbnailAdornmentsConstants displayThumbnailAdornments;
-	/// \brief <em>Specifies for which items the \c AII_NOFILETYPEOVERLAY flag shall be set</em>
-	///
-	/// \if UNICODE
-	///   \sa AII_NOFILETYPEOVERLAY, ShBrowserCtlsLibU::ShLvwDisplayFileTypeOverlaysConstants
-	/// \else
-	///   \sa AII_NOFILETYPEOVERLAY, ShBrowserCtlsLibA::ShLvwDisplayFileTypeOverlaysConstants
-	/// \endif
-	ShLvwDisplayFileTypeOverlaysConstants displayFileTypeOverlays;
-	#ifdef USE_STL
-		/// \brief <em>Buffers the thumbnail information retrieved by the background thread until the image list is updated</em>
-		///
-		/// \sa pCriticalSection, pResult, SHLVWBACKGROUNDTHUMBNAILINFO
-		std::queue<LPSHLVWBACKGROUNDTHUMBNAILINFO>* pBackgroundThumbnailsQueue;
-	#else
-		/// \brief <em>Buffers the thumbnail information retrieved by the background thread until the image list is updated</em>
-		///
-		/// \sa pCriticalSection, pResult, SHLVWBACKGROUNDTHUMBNAILINFO
-		CAtlList<LPSHLVWBACKGROUNDTHUMBNAILINFO>* pBackgroundThumbnailsQueue;
-	#endif
-	/// \brief <em>Holds the thumbnail information until it is inserted into the \c pBackgroundThumbnailsQueue queue</em>
-	///
-	/// \sa pBackgroundThumbnailsQueue, SHLVWBACKGROUNDTHUMBNAILINFO
-	LPSHLVWBACKGROUNDTHUMBNAILINFO pResult;
-	/// \brief <em>The critical section used to synchronize access to \c pBackgroundThumbnailsQueue</em>
-	///
-	/// \sa pBackgroundThumbnailsQueue
-	LPCRITICAL_SECTION pCriticalSection;
-	/// \brief <em>The \c IShellItem object for which to retrieve the thumbnail</em>
-	///
-	/// \sa pIDL,
-	///     <a href="https://msdn.microsoft.com/en-us/library/bb761144.aspx">IShellItem</a>
-	IShellItem* pShellItem;
-	/// \brief <em>The \c IShellItemImageFactory object used to retrieve the thumbnail</em>
-	///
-	/// \sa pShellItem,
-	///     <a href="https://msdn.microsoft.com/en-us/library/bb761084.aspx">IShellItemImageFactory</a>
-	IShellItemImageFactory* pImageFactory;
-	/// \brief <em>Temporarily holds the path to the item's executable</em>
-	LPWSTR pExecutableString;
-	/// \brief <em>If set to \c TRUE, we're running with version 6.0 or newer of comctl32.dll</em>
-	UINT isComctl32600OrNewer : 1;
-
 	typedef DWORD THUMBNAILTASKSTATUS;
 	/// \brief <em>Possible value for the \c status member, meaning that nothing has been done yet</em>
 	#define TTS_NOTHINGDONE								0x0
@@ -298,6 +235,74 @@ protected:
 	#define TTS_RETRIEVINGFLAGS2					0x4
 	/// \brief <em>Possible value for the \c status member, meaning that all work has been done</em>
 	#define TTS_DONE											0x5
-	/// \brief <em>Specifies how much work is done</em>
-	THUMBNAILTASKSTATUS status : 3;
+
+	/// \brief <em>Holds the object's properties</em>
+	struct Properties
+	{
+		/// \brief <em>Specifies the window that is used as parent window for any UI that the shell may display</em>
+		HWND hWndShellUIParentWindow;
+		/// \brief <em>Specifies the window that the result is posted to</em>
+		///
+		/// Specifies the window to which to send the retrieved thumbnail. This window must handle the
+		/// \c WM_TRIGGER_UPDATETHUMBNAIL message.
+		///
+		/// \sa WM_TRIGGER_UPDATETHUMBNAIL
+		HWND hWndToNotify;
+		/// \brief <em>Holds the fully qualified pIDL of the item for which to retrieve the thumbnail</em>
+		///
+		/// \sa pShellItem
+		PIDLIST_ABSOLUTE pIDL;
+		/// \brief <em>Specifies the thumbnail adornments to apply</em>
+		///
+		/// \if UNICODE
+		///   \sa IThumbnailAdorner, ShBrowserCtlsLibU::ShLvwDisplayThumbnailAdornmentsConstants
+		/// \else
+		///   \sa IThumbnailAdorner, ShBrowserCtlsLibA::ShLvwDisplayThumbnailAdornmentsConstants
+		/// \endif
+		ShLvwDisplayThumbnailAdornmentsConstants displayThumbnailAdornments;
+		/// \brief <em>Specifies for which items the \c AII_NOFILETYPEOVERLAY flag shall be set</em>
+		///
+		/// \if UNICODE
+		///   \sa AII_NOFILETYPEOVERLAY, ShBrowserCtlsLibU::ShLvwDisplayFileTypeOverlaysConstants
+		/// \else
+		///   \sa AII_NOFILETYPEOVERLAY, ShBrowserCtlsLibA::ShLvwDisplayFileTypeOverlaysConstants
+		/// \endif
+		ShLvwDisplayFileTypeOverlaysConstants displayFileTypeOverlays;
+		#ifdef USE_STL
+			/// \brief <em>Buffers the thumbnail information retrieved by the background thread until the image list is updated</em>
+			///
+			/// \sa pCriticalSection, pResult, SHLVWBACKGROUNDTHUMBNAILINFO
+			std::queue<LPSHLVWBACKGROUNDTHUMBNAILINFO>* pBackgroundThumbnailsQueue;
+		#else
+			/// \brief <em>Buffers the thumbnail information retrieved by the background thread until the image list is updated</em>
+			///
+			/// \sa pCriticalSection, pResult, SHLVWBACKGROUNDTHUMBNAILINFO
+			CAtlList<LPSHLVWBACKGROUNDTHUMBNAILINFO>* pBackgroundThumbnailsQueue;
+		#endif
+		/// \brief <em>Holds the thumbnail information until it is inserted into the \c pBackgroundThumbnailsQueue queue</em>
+		///
+		/// \sa pBackgroundThumbnailsQueue, SHLVWBACKGROUNDTHUMBNAILINFO
+		LPSHLVWBACKGROUNDTHUMBNAILINFO pResult;
+		/// \brief <em>The critical section used to synchronize access to \c pBackgroundThumbnailsQueue</em>
+		///
+		/// \sa pBackgroundThumbnailsQueue
+		LPCRITICAL_SECTION pCriticalSection;
+		/// \brief <em>The \c IShellItem object for which to retrieve the thumbnail</em>
+		///
+		/// \sa pIDL,
+		///     <a href="https://msdn.microsoft.com/en-us/library/bb761144.aspx">IShellItem</a>
+		IShellItem* pShellItem;
+		/// \brief <em>The \c IShellItemImageFactory object used to retrieve the thumbnail</em>
+		///
+		/// \sa pShellItem,
+		///     <a href="https://msdn.microsoft.com/en-us/library/bb761084.aspx">IShellItemImageFactory</a>
+		IShellItemImageFactory* pImageFactory;
+		/// \brief <em>Temporarily holds the path to the item's executable</em>
+		LPWSTR pExecutableString;
+		/// \brief <em>If set to \c TRUE, we're running with version 6.0 or newer of comctl32.dll</em>
+		UINT isComctl32600OrNewer : 1;
+
+		/// \brief <em>Specifies how much work is done</em>
+		THUMBNAILTASKSTATUS status : 3;
+	} properties;
 };

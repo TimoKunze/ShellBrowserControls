@@ -4674,8 +4674,8 @@ LRESULT ShellListView::OnTriggerItemEnumComplete(UINT /*message*/, WPARAM /*wPar
 							#else
 								POSITION p = properties.items.GetStartPosition();
 								while(p) {
-									CAtlMap<LONG, LPSHELLLISTVIEWITEMDATA>::CPair* pPair = properties.items.GetAt(p);
-									itemCache[pPair->m_key] = pPair->m_value->pIDL;
+									CAtlMap<LONG, LPSHELLLISTVIEWITEMDATA>::CPair* pPair2 = properties.items.GetAt(p);
+									itemCache[pPair2->m_key] = pPair2->m_value->pIDL;
 									properties.items.GetNext(p);
 								}
 							#endif
@@ -4720,9 +4720,9 @@ LRESULT ShellListView::OnTriggerItemEnumComplete(UINT /*message*/, WPARAM /*wPar
 						#else
 							POSITION p = itemCache.GetStartPosition();
 							while(p) {
-								CAtlMap<LONG, PCIDLIST_ABSOLUTE>::CPair* pPair = itemCache.GetAt(p);
-								if(ILIsEqual(pPair->m_value, pIDLAbsolute)) {
-									existingItemID = pPair->m_key;
+								CAtlMap<LONG, PCIDLIST_ABSOLUTE>::CPair* pPair2 = itemCache.GetAt(p);
+								if(ILIsEqual(pPair2->m_value, pIDLAbsolute)) {
+									existingItemID = pPair2->m_key;
 									itemCache.RemoveAtPos(p);
 									break;
 								}
@@ -5081,10 +5081,10 @@ LRESULT ShellListView::OnTriggerColumnEnumComplete(UINT /*message*/, WPARAM /*wP
 								if(pColumns) {
 									if(attachedControl.SendMessage(LVM_GETCOLUMNORDERARRAY, columns, reinterpret_cast<LPARAM>(pColumns))) {
 										for(UINT i = 0; i < columns; ++i) {
-											int realColumnIndex = ColumnIndexToRealIndex(pColumns[i]);
-											if(realColumnIndex >= 0) {
+											int realColumnIndex2 = ColumnIndexToRealIndex(pColumns[i]);
+											if(realColumnIndex2 >= 0) {
 												PROPERTYKEY propertyKey = {0};
-												GetColumnPropertyKey(realColumnIndex, &propertyKey);
+												GetColumnPropertyKey(realColumnIndex2, &propertyKey);
 												BOOL found = FALSE;
 												UINT j = 0;
 												for(j = 0; j < properties.columnsStatus.numberOfVisibleColumnsOfPreviousNamespace; ++j) {
@@ -5193,14 +5193,14 @@ LRESULT ShellListView::OnTriggerSetElevationShield(UINT /*message*/, WPARAM wPar
 		properties.thumbnailsStatus.pThumbnailImageList->QueryInterface(IID_IImageListPrivate, reinterpret_cast<LPVOID*>(&pImgLstPriv));
 		ATLASSUME(pImgLstPriv);
 
-		UINT flags = 0;
-		ATLVERIFY(SUCCEEDED(pImgLstPriv->GetIconInfo(itemID, SIIF_FLAGS, NULL, NULL, NULL, &flags)));
+		UINT iconFlags = 0;
+		ATLVERIFY(SUCCEEDED(pImgLstPriv->GetIconInfo(itemID, SIIF_FLAGS, NULL, NULL, NULL, &iconFlags)));
 		if(lParam) {
-			flags |= AII_DISPLAYELEVATIONOVERLAY;
+			iconFlags |= AII_DISPLAYELEVATIONOVERLAY;
 		} else {
-			flags &= ~AII_DISPLAYELEVATIONOVERLAY;
+			iconFlags &= ~AII_DISPLAYELEVATIONOVERLAY;
 		}
-		ATLVERIFY(SUCCEEDED(pImgLstPriv->SetIconInfo(itemID, SIIF_FLAGS, NULL, 0, 0, NULL, flags)));
+		ATLVERIFY(SUCCEEDED(pImgLstPriv->SetIconInfo(itemID, SIIF_FLAGS, NULL, 0, 0, NULL, iconFlags)));
 		redraw = TRUE;
 	}
 	if(properties.pUnifiedImageList) {
@@ -5208,14 +5208,14 @@ LRESULT ShellListView::OnTriggerSetElevationShield(UINT /*message*/, WPARAM wPar
 		properties.pUnifiedImageList->QueryInterface(IID_IImageListPrivate, reinterpret_cast<LPVOID*>(&pImgLstPriv));
 		ATLASSUME(pImgLstPriv);
 
-		UINT flags = 0;
-		ATLVERIFY(SUCCEEDED(pImgLstPriv->GetIconInfo(itemID, SIIF_FLAGS, NULL, NULL, NULL, &flags)));
+		UINT iconFlags = 0;
+		ATLVERIFY(SUCCEEDED(pImgLstPriv->GetIconInfo(itemID, SIIF_FLAGS, NULL, NULL, NULL, &iconFlags)));
 		if(lParam) {
-			flags |= AII_DISPLAYELEVATIONOVERLAY;
+			iconFlags |= AII_DISPLAYELEVATIONOVERLAY;
 		} else {
-			flags &= ~AII_DISPLAYELEVATIONOVERLAY;
+			iconFlags &= ~AII_DISPLAYELEVATIONOVERLAY;
 		}
-		ATLVERIFY(SUCCEEDED(pImgLstPriv->SetIconInfo(itemID, SIIF_FLAGS, NULL, 0, 0, NULL, flags)));
+		ATLVERIFY(SUCCEEDED(pImgLstPriv->SetIconInfo(itemID, SIIF_FLAGS, NULL, 0, 0, NULL, iconFlags)));
 		redraw = TRUE;
 	}
 	if(redraw) {
@@ -5304,9 +5304,9 @@ LRESULT ShellListView::OnTriggerUpdateIcon(UINT /*message*/, WPARAM wParam, LPAR
 			ATLVERIFY(SUCCEEDED(pImgLstPriv->SetIconInfo(itemID, SIIF_SYSTEMICON, NULL, static_cast<int>(lParam), 0, NULL, 0)));
 
 			if(!RunTimeHelper::IsCommCtrl6()) {
-				UINT flags = 0;
-				ATLVERIFY(SUCCEEDED(pImgLstPriv->GetIconInfo(itemID, SIIF_FLAGS, NULL, NULL, NULL, &flags)));
-				ATLVERIFY(SUCCEEDED(pImgLstPriv->SetIconInfo(itemID, SIIF_FLAGS, NULL, 0, 0, NULL, flags | AII_USELEGACYDISPLAYCODE)));
+				UINT iconFlags = 0;
+				ATLVERIFY(SUCCEEDED(pImgLstPriv->GetIconInfo(itemID, SIIF_FLAGS, NULL, NULL, NULL, &iconFlags)));
+				ATLVERIFY(SUCCEEDED(pImgLstPriv->SetIconInfo(itemID, SIIF_FLAGS, NULL, 0, 0, NULL, iconFlags | AII_USELEGACYDISPLAYCODE)));
 			}
 			if(properties.displayElevationShieldOverlays) {
 				PCIDLIST_ABSOLUTE pIDL = ItemIDToPIDL(itemID);
@@ -7079,7 +7079,7 @@ HRESULT ShellListView::OnInternalGetSubItemControl(UINT /*message*/, WPARAM /*wP
 								}
 							} else {
 								// we don't have an entry for this sub-item, so we do not yet have started a background task to retrieve its value
-								LPSHELLLISTVIEWSUBITEMDATA pSubItem = new SHELLLISTVIEWSUBITEMDATA();
+								pSubItem = new SHELLLISTVIEWSUBITEMDATA();
 								pItemDetails->subItems[pSubItemControlDetails->columnID] = pSubItem;
 
 								BOOL isUnreachableNetDrive = FALSE;
@@ -7304,7 +7304,7 @@ LRESULT ShellListView::OnGetDispInfoNotification(int /*controlID*/, LPNMHDR pNot
 						#endif
 						if(!(isSlowColumn && isSlowItem && isUnreachableNetDrive)) {
 							CComPtr<IRunnableTask> pTask;
-							HRESULT hr = ShLvwSlowColumnTask::CreateInstance(attachedControl, GethWndShellUIParentWindow(), &properties.slowColumnResults, &properties.slowColumnResultsCritSection, pItemDetails->pIDL, itemID, columnID, realColumnIndex, properties.columnsStatus.pIDLNamespace, &pTask);
+							hr = ShLvwSlowColumnTask::CreateInstance(attachedControl, GethWndShellUIParentWindow(), &properties.slowColumnResults, &properties.slowColumnResultsCritSection, pItemDetails->pIDL, itemID, columnID, realColumnIndex, properties.columnsStatus.pIDLNamespace, &pTask);
 							if(SUCCEEDED(hr)) {
 								hr = EnqueueTask(pTask, TASKID_ShLvwSlowColumn, 0, TASK_PRIORITY_LV_BACKGROUNDENUMCOLUMNS - (isSlowItem ? 2 : 0));
 								ATLASSERT(SUCCEEDED(hr));
@@ -7361,7 +7361,7 @@ LRESULT ShellListView::OnGetDispInfoNotification(int /*controlID*/, LPNMHDR pNot
 							#ifdef ACTIVATE_SUBITEMCONTROL_SUPPORT
 								if(pSubItem) {
 									CComPtr<IRunnableTask> pTask;
-									HRESULT hr = ShLvwSubItemControlTask::CreateInstance(attachedControl, GethWndShellUIParentWindow(), &properties.subItemControlResults, &properties.subItemControlResultsCritSection, pItemDetails->pIDL, itemID, columnID, realColumnIndex, properties.columnsStatus.pIDLNamespace, &pTask);
+									hr = ShLvwSubItemControlTask::CreateInstance(attachedControl, GethWndShellUIParentWindow(), &properties.subItemControlResults, &properties.subItemControlResultsCritSection, pItemDetails->pIDL, itemID, columnID, realColumnIndex, properties.columnsStatus.pIDLNamespace, &pTask);
 									if(SUCCEEDED(hr)) {
 										hr = EnqueueTask(pTask, TASKID_ShLvwSubItemControl, 0, TASK_PRIORITY_LV_SUBITEMCONTROLS - (isSlowItem ? 2 : 0));
 										ATLASSERT(SUCCEEDED(hr));
@@ -7442,7 +7442,6 @@ LRESULT ShellListView::OnGetDispInfoNotification(int /*controlID*/, LPNMHDR pNot
 				// start a background task that sets puColumns to the correct shell columns
 				// use the TileViewItemLines property as maximum (cache it somewhere)
 				CComPtr<IRunnableTask> pTask;
-				HRESULT hr;
 				if(RunTimeHelper::IsVista()) {
 					if(cachedSettings.viewMode == 5/*vExtendedTiles*/) {
 						hr = ShLvwTileViewTask::CreateInstance(attachedControl, GethWndShellUIParentWindow(), &properties.backgroundTileViewResults, &properties.backgroundTileViewResultsCritSection, properties.columnsStatus.hColumnsReadyEvent, pItemDetails->pIDL, itemID, properties.columnsStatus.pIDLNamespace, properties.columnsStatus.maxTileViewColumnCount, PKEY_PropList_ExtendedTileInfo, &pTask);
@@ -7821,11 +7820,11 @@ void ShellListView::SetSystemImageLists(void)
 				properties.pUnifiedImageList = NULL;
 			}
 
-			UINT flags = (properties.displayElevationShieldOverlays ? ILOF_DISPLAYELEVATIONSHIELDS : 0);
+			UINT imageListFlags = (properties.displayElevationShieldOverlays ? ILOF_DISPLAYELEVATIONSHIELDS : 0);
 			if((attachedControl.SendMessage(LVM_GETEXTENDEDLISTVIEWSTYLE, 0, 0) & LVS_EX_BORDERSELECT) || !RunTimeHelper::IsCommCtrl6()) {
-				flags |= ILOF_IGNOREEXTRAALPHA;
+				imageListFlags |= ILOF_IGNOREEXTRAALPHA;
 			}
-			pImgLstPriv->SetOptions(0, flags);
+			pImgLstPriv->SetOptions(0, imageListFlags);
 
 			if(APIWrapper::IsSupported_SHGetImageList()) {
 				HIMAGELIST hLargerImageList = NULL;
@@ -7914,11 +7913,11 @@ void ShellListView::SetSystemImageLists(void)
 					properties.thumbnailsStatus.pThumbnailImageList = NULL;
 				}
 
-				UINT flags = (properties.displayElevationShieldOverlays ? ILOF_DISPLAYELEVATIONSHIELDS : 0);
+				UINT imageListFlags = (properties.displayElevationShieldOverlays ? ILOF_DISPLAYELEVATIONSHIELDS : 0);
 				if(!RunTimeHelper::IsCommCtrl6()) {
-					flags |= ILOF_IGNOREEXTRAALPHA;
+					imageListFlags |= ILOF_IGNOREEXTRAALPHA;
 				}
-				pImgLstPriv->SetOptions(0, flags);
+				pImgLstPriv->SetOptions(0, imageListFlags);
 				pImgLstPriv->SetImageList(AIL_NONSHELLITEMS, properties.hImageList[0], NULL);
 				ATLVERIFY(SUCCEEDED(properties.pAttachedInternalMessageListener->ProcessMessage(EXLVM_GETVIEWMODE, 0, reinterpret_cast<LPARAM>(&cachedSettings.viewMode))));
 				SetupUnifiedImageListForCurrentView();
@@ -9540,10 +9539,10 @@ HRESULT ShellListView::EnsureShellColumnsAreLoaded(ThreadingMode threadingMode)
 				if(pColumns) {
 					if(attachedControl.SendMessage(LVM_GETCOLUMNORDERARRAY, columns, reinterpret_cast<LPARAM>(pColumns))) {
 						for(UINT i = 0; i < columns; ++i) {
-							int realColumnIndex = ColumnIndexToRealIndex(pColumns[i]);
-							if(realColumnIndex >= 0) {
+							int realColumnIndex2 = ColumnIndexToRealIndex(pColumns[i]);
+							if(realColumnIndex2 >= 0) {
 								PROPERTYKEY propertyKey = {0};
-								GetColumnPropertyKey(realColumnIndex, &propertyKey);
+								GetColumnPropertyKey(realColumnIndex2, &propertyKey);
 								BOOL found = FALSE;
 								UINT j = 0;
 								for(j = 0; j < properties.columnsStatus.numberOfVisibleColumnsOfPreviousNamespace; ++j) {
@@ -9673,25 +9672,25 @@ void ShellListView::BufferShellColumnRealIndex(int realColumnIndex)
 	#endif
 }
 
-LONG ShellListView::ChangeColumnVisibility(int realColumnIndex, BOOL makeVisible, DWORD flags)
+LONG ShellListView::ChangeColumnVisibility(int realColumnIndex, BOOL makeVisible, DWORD changeColumnVisibilityflags)
 {
 	if(realColumnIndex >= 0 && static_cast<UINT>(realColumnIndex) < properties.columnsStatus.numberOfAllColumns) {
 		LPSHELLLISTVIEWCOLUMNDATA pColumn = properties.columnsStatus.pAllColumns;
 		pColumn += realColumnIndex;
-		if((flags & (CCVF_ISEXPLICITCHANGE | CCVF_ISEXPLICITCHANGEIFDIFFERENT)) == CCVF_ISEXPLICITCHANGE) {
+		if((changeColumnVisibilityflags & (CCVF_ISEXPLICITCHANGE | CCVF_ISEXPLICITCHANGEIFDIFFERENT)) == CCVF_ISEXPLICITCHANGE) {
 			pColumn->visibilityHasBeenChangedExplicitly = TRUE;
 		}
 		if(makeVisible) {
 			if(pColumn->columnID == -1) {
 				// insert the column
-				if((flags & CCVF_ISEXPLICITCHANGEIFDIFFERENT) == CCVF_ISEXPLICITCHANGEIFDIFFERENT) {
+				if((changeColumnVisibilityflags & CCVF_ISEXPLICITCHANGEIFDIFFERENT) == CCVF_ISEXPLICITCHANGEIFDIFFERENT) {
 					pColumn->visibilityHasBeenChangedExplicitly = TRUE;
 				}
 				VARIANT_BOOL cancel = VARIANT_FALSE;
 				if(!(properties.disabledEvents & deColumnVisibilityEvents)) {
-					CComPtr<IShListViewColumn> pColumn;
-					ClassFactory::InitShellListColumn(realColumnIndex, this, IID_IShListViewColumn, reinterpret_cast<LPUNKNOWN*>(&pColumn));
-					Raise_ChangingColumnVisibility(pColumn, BOOL2VARIANTBOOL(makeVisible), &cancel);
+					CComPtr<IShListViewColumn> pColumnObj;
+					ClassFactory::InitShellListColumn(realColumnIndex, this, IID_IShListViewColumn, reinterpret_cast<LPUNKNOWN*>(&pColumnObj));
+					Raise_ChangingColumnVisibility(pColumnObj, BOOL2VARIANTBOOL(makeVisible), &cancel);
 				}
 				if(cancel == VARIANT_FALSE) {
 					properties.columnDataForFastInsertion.insertAt = (IsInDetailsView() ? pColumn->lastIndex_DetailsView : pColumn->lastIndex_TilesView);
@@ -9721,11 +9720,11 @@ LONG ShellListView::ChangeColumnVisibility(int realColumnIndex, BOOL makeVisible
 		} else {
 			if(pColumn->columnID != -1) {
 				// remove the column
-				if((flags & CCVF_ISEXPLICITCHANGEIFDIFFERENT) == CCVF_ISEXPLICITCHANGEIFDIFFERENT) {
+				if((changeColumnVisibilityflags & CCVF_ISEXPLICITCHANGEIFDIFFERENT) == CCVF_ISEXPLICITCHANGEIFDIFFERENT) {
 					pColumn->visibilityHasBeenChangedExplicitly = TRUE;
 				}
 				LPSHELLLISTVIEWCOLUMNDATA pColumnBackup = NULL;
-				if((flags & CCVF_FORUNLOADSHELLCOLUMNS) && properties.columnsStatus.pAllColumnsOfPreviousNamespace) {
+				if((changeColumnVisibilityflags & CCVF_FORUNLOADSHELLCOLUMNS) && properties.columnsStatus.pAllColumnsOfPreviousNamespace) {
 					pColumnBackup = properties.columnsStatus.pAllColumnsOfPreviousNamespace;
 					pColumnBackup += realColumnIndex;
 					pColumnBackup->visibilityHasBeenChangedExplicitly = pColumn->visibilityHasBeenChangedExplicitly;
@@ -9748,9 +9747,9 @@ LONG ShellListView::ChangeColumnVisibility(int realColumnIndex, BOOL makeVisible
 				}
 				VARIANT_BOOL cancel = VARIANT_FALSE;
 				if(!(properties.disabledEvents & deColumnVisibilityEvents)) {
-					CComPtr<IShListViewColumn> pColumn;
-					ClassFactory::InitShellListColumn(realColumnIndex, this, IID_IShListViewColumn, reinterpret_cast<LPUNKNOWN*>(&pColumn));
-					Raise_ChangingColumnVisibility(pColumn, BOOL2VARIANTBOOL(makeVisible), &cancel);
+					CComPtr<IShListViewColumn> pColumnObj;
+					ClassFactory::InitShellListColumn(realColumnIndex, this, IID_IShListViewColumn, reinterpret_cast<LPUNKNOWN*>(&pColumnObj));
+					Raise_ChangingColumnVisibility(pColumnObj, BOOL2VARIANTBOOL(makeVisible), &cancel);
 				}
 				int columnIndex = ColumnIDToIndex(pColumn->columnID);
 				if(columnIndex >= 0) {
@@ -10077,9 +10076,9 @@ HRESULT ShellListView::CreateShellContextMenu(PCIDLIST_ABSOLUTE pIDLNamespace, H
 
 	contextMenuData.bufferedCtrlDown = FALSE;
 	contextMenuData.bufferedShiftDown = FALSE;
-	UINT flags = CMF_NORMAL;
+	UINT contextMenuFlags = CMF_NORMAL;
 	if(GetKeyState(VK_SHIFT) & 0x8000) {
-		flags |= CMF_EXTENDEDVERBS;
+		contextMenuFlags |= CMF_EXTENDEDVERBS;
 		contextMenuData.bufferedShiftDown = TRUE;
 	}
 	if(GetKeyState(VK_CONTROL) & 0x8000) {
@@ -10106,16 +10105,16 @@ HRESULT ShellListView::CreateShellContextMenu(PCIDLIST_ABSOLUTE pIDLNamespace, H
 		ATLASSUME(pNamespace);
 		pNamespace->QueryInterface<IDispatch>(&contextMenuData.pContextMenuItems);
 
-		// allow customization of 'flags'
-		ShellContextMenuStyleConstants contextMenuStyle = static_cast<ShellContextMenuStyleConstants>(flags);
+		// allow customization of 'contextMenuFlags'
+		ShellContextMenuStyleConstants contextMenuStyle = static_cast<ShellContextMenuStyleConstants>(contextMenuFlags);
 		VARIANT_BOOL cancel = VARIANT_FALSE;
 		Raise_CreatingShellContextMenu(contextMenuData.pContextMenuItems, &contextMenuStyle, &cancel);
-		flags = static_cast<UINT>(contextMenuStyle);
+		contextMenuFlags = static_cast<UINT>(contextMenuStyle);
 
 		if((cancel == VARIANT_FALSE) && contextMenuData.currentShellContextMenu.CreatePopupMenu()) {
 			// fill the menu
 			if(contextMenuData.pIContextMenu) {
-				hr = contextMenuData.pIContextMenu->QueryContextMenu(contextMenuData.currentShellContextMenu, 0, MIN_CONTEXTMENUEXTENSION_CMDID, MAX_CONTEXTMENUEXTENSION_CMDID, flags);
+				hr = contextMenuData.pIContextMenu->QueryContextMenu(contextMenuData.currentShellContextMenu, 0, MIN_CONTEXTMENUEXTENSION_CMDID, MAX_CONTEXTMENUEXTENSION_CMDID, contextMenuFlags);
 				ATLASSERT(SUCCEEDED(hr));
 			}
 			if(SUCCEEDED(hr)) {
@@ -10158,9 +10157,9 @@ HRESULT ShellListView::CreateShellContextMenu(PLONG pItems, UINT itemCount, UINT
 	HRESULT hr;
 	contextMenuData.bufferedCtrlDown = FALSE;
 	contextMenuData.bufferedShiftDown = FALSE;
-	UINT flags = predefinedFlags;
+	UINT contextMenuFlags = predefinedFlags;
 	if(GetKeyState(VK_SHIFT) & 0x8000) {
-		flags |= CMF_EXTENDEDVERBS;
+		contextMenuFlags |= CMF_EXTENDEDVERBS;
 		contextMenuData.bufferedShiftDown = TRUE;
 	}
 	if(GetKeyState(VK_CONTROL) & 0x8000) {
@@ -10187,7 +10186,7 @@ HRESULT ShellListView::CreateShellContextMenu(PLONG pItems, UINT itemCount, UINT
 					hr = pParentISF->GetAttributesOf(pIDLCount, pRelativePIDLs, &attributes);
 					if(SUCCEEDED(hr)) {
 						if(attributes & SFGAO_CANRENAME) {
-							flags |= CMF_CANRENAME;
+							contextMenuFlags |= CMF_CANRENAME;
 						}
 					}
 				}
@@ -10212,7 +10211,7 @@ HRESULT ShellListView::CreateShellContextMenu(PLONG pItems, UINT itemCount, UINT
 		SFGAOF attributes = SFGAO_CANRENAME;
 		if(SUCCEEDED(contextMenuData.pMultiNamespaceParentISF->GetAttributesOf(pIDLCount, reinterpret_cast<PCUITEMID_CHILD_ARRAY>(ppIDLs), &attributes))) {
 			if(attributes & SFGAO_CANRENAME) {
-				flags |= CMF_CANRENAME;
+				contextMenuFlags |= CMF_CANRENAME;
 			}
 		}
 		ATLVERIFY(SUCCEEDED(contextMenuData.pMultiNamespaceParentISF->GetUIObjectOf(GethWndShellUIParentWindow(), pIDLCount, reinterpret_cast<PCUITEMID_CHILD_ARRAY>(ppIDLs), IID_IDataObject, 0, reinterpret_cast<LPVOID*>(&contextMenuData.pMultiNamespaceDataObject))));
@@ -10229,7 +10228,7 @@ HRESULT ShellListView::CreateShellContextMenu(PLONG pItems, UINT itemCount, UINT
 		//ATLASSUME(contextMenuData.pIContextMenu);
 
 		if(RunTimeHelper::IsVista()) {
-			flags |= CMF_ITEMMENU;
+			contextMenuFlags |= CMF_ITEMMENU;
 		}
 
 		ATLASSUME(properties.pAttachedInternalMessageListener);
@@ -10242,16 +10241,16 @@ HRESULT ShellListView::CreateShellContextMenu(PLONG pItems, UINT itemCount, UINT
 			contextMenuData.pContextMenuItems = containerData.pContainer;
 		}
 
-		// allow customization of 'flags'
-		ShellContextMenuStyleConstants contextMenuStyle = static_cast<ShellContextMenuStyleConstants>(flags);
+		// allow customization of 'contextMenuFlags'
+		ShellContextMenuStyleConstants contextMenuStyle = static_cast<ShellContextMenuStyleConstants>(contextMenuFlags);
 		VARIANT_BOOL cancel = VARIANT_FALSE;
 		Raise_CreatingShellContextMenu(contextMenuData.pContextMenuItems, &contextMenuStyle, &cancel);
-		flags = static_cast<UINT>(contextMenuStyle);
+		contextMenuFlags = static_cast<UINT>(contextMenuStyle);
 
 		if((cancel == VARIANT_FALSE) && contextMenuData.currentShellContextMenu.CreatePopupMenu()) {
 			// fill the menu
 			if(contextMenuData.pIContextMenu) {
-				hr = contextMenuData.pIContextMenu->QueryContextMenu(contextMenuData.currentShellContextMenu, 0, MIN_CONTEXTMENUEXTENSION_CMDID, MAX_CONTEXTMENUEXTENSION_CMDID, flags);
+				hr = contextMenuData.pIContextMenu->QueryContextMenu(contextMenuData.currentShellContextMenu, 0, MIN_CONTEXTMENUEXTENSION_CMDID, MAX_CONTEXTMENUEXTENSION_CMDID, contextMenuFlags);
 				ATLASSERT(SUCCEEDED(hr));
 			}
 			if(SUCCEEDED(hr)) {

@@ -7,24 +7,24 @@
 ShLvwInfoTipTask::ShLvwInfoTipTask(void)
     : RunnableTask(FALSE)
 {
-	pIDL = NULL;
-	pInfoTipQueue = NULL;
-	pResult = NULL;
-	pCriticalSection = NULL;
+	properties.pIDL = NULL;
+	properties.pInfoTipQueue = NULL;
+	properties.pResult = NULL;
+	properties.pCriticalSection = NULL;
 }
 
 void ShLvwInfoTipTask::FinalRelease()
 {
-	if(pIDL) {
-		ILFree(pIDL);
-		pIDL = NULL;
+	if(properties.pIDL) {
+		ILFree(properties.pIDL);
+		properties.pIDL = NULL;
 	}
-	if(pResult) {
-		if(pResult->pInfoTipText) {
-			CoTaskMemFree(pResult->pInfoTipText);
+	if(properties.pResult) {
+		if(properties.pResult->pInfoTipText) {
+			CoTaskMemFree(properties.pResult->pInfoTipText);
 		}
-		delete pResult;
-		pResult = NULL;
+		delete properties.pResult;
+		properties.pResult = NULL;
 	}
 }
 
@@ -35,22 +35,22 @@ void ShLvwInfoTipTask::FinalRelease()
 	HRESULT ShLvwInfoTipTask::Attach(HWND hWndToNotify, HWND hWndShellUIParentWindow, CAtlList<LPSHLVWBACKGROUNDINFOTIPINFO>* pInfoTipQueue, LPCRITICAL_SECTION pCriticalSection, PCIDLIST_ABSOLUTE pIDL, LONG itemID, InfoTipFlagsConstants infoTipFlags, LPWSTR pTextToPrepend, UINT textToPrependSize)
 #endif
 {
-	this->hWndToNotify = hWndToNotify;
-	this->hWndShellUIParentWindow = hWndShellUIParentWindow;
-	this->pInfoTipQueue = pInfoTipQueue;
-	this->pCriticalSection = pCriticalSection;
-	this->pIDL = ILCloneFull(pIDL);
-	this->infoTipFlags = infoTipFlags;
+	this->properties.hWndToNotify = hWndToNotify;
+	this->properties.hWndShellUIParentWindow = hWndShellUIParentWindow;
+	this->properties.pInfoTipQueue = pInfoTipQueue;
+	this->properties.pCriticalSection = pCriticalSection;
+	this->properties.pIDL = ILCloneFull(pIDL);
+	this->properties.infoTipFlags = infoTipFlags;
 
-	pResult = new SHLVWBACKGROUNDINFOTIPINFO;
-	if(pResult) {
-		ZeroMemory(pResult, sizeof(SHLVWBACKGROUNDINFOTIPINFO));
-		pResult->itemID = itemID;
+	properties.pResult = new SHLVWBACKGROUNDINFOTIPINFO;
+	if(properties.pResult) {
+		ZeroMemory(properties.pResult, sizeof(SHLVWBACKGROUNDINFOTIPINFO));
+		properties.pResult->itemID = itemID;
 		if(textToPrependSize > 0) {
-			pResult->pInfoTipText = static_cast<LPWSTR>(CoTaskMemAlloc((textToPrependSize + 1) * sizeof(WCHAR)));
-			if(pResult->pInfoTipText) {
-				pResult->infoTipTextSize = textToPrependSize;
-				lstrcpynW(pResult->pInfoTipText, pTextToPrepend, textToPrependSize + 1);
+			properties.pResult->pInfoTipText = static_cast<LPWSTR>(CoTaskMemAlloc((textToPrependSize + 1) * sizeof(WCHAR)));
+			if(properties.pResult->pInfoTipText) {
+				properties.pResult->infoTipTextSize = textToPrependSize;
+				lstrcpynW(properties.pResult->pInfoTipText, pTextToPrepend, textToPrependSize + 1);
 			}
 		}
 	} else {
@@ -91,25 +91,25 @@ void ShLvwInfoTipTask::FinalRelease()
 
 STDMETHODIMP ShLvwInfoTipTask::DoRun(void)
 {
-	ATLASSERT_POINTER(pResult, SHLVWBACKGROUNDINFOTIPINFO);
+	ATLASSERT_POINTER(properties.pResult, SHLVWBACKGROUNDINFOTIPINFO);
 
 	LPWSTR pInfoTipText = NULL;
-	HRESULT hr = GetInfoTip(hWndShellUIParentWindow, pIDL, infoTipFlags, &pInfoTipText);
+	HRESULT hr = GetInfoTip(properties.hWndShellUIParentWindow, properties.pIDL, properties.infoTipFlags, &pInfoTipText);
 	if(SUCCEEDED(hr)) {
 		UINT infoTipTextSize = lstrlenW(pInfoTipText);
-		if(pResult->pInfoTipText) {
+		if(properties.pResult->pInfoTipText) {
 			// append pInfoTipText to pResult->pInfoTipText
 			if(infoTipTextSize > 0) {
 				// append a line break and pInfoTipText
-				LPWSTR pCombinedInfoTip = static_cast<LPWSTR>(CoTaskMemAlloc((pResult->infoTipTextSize + 2 + infoTipTextSize + 1) * sizeof(WCHAR)));
+				LPWSTR pCombinedInfoTip = static_cast<LPWSTR>(CoTaskMemAlloc((properties.pResult->infoTipTextSize + 2 + infoTipTextSize + 1) * sizeof(WCHAR)));
 				if(pCombinedInfoTip) {
-					lstrcpynW(pCombinedInfoTip, pResult->pInfoTipText, pResult->infoTipTextSize + 1);
-					lstrcpynW(pCombinedInfoTip + pResult->infoTipTextSize, L"\r\n", 3);
-					lstrcpynW(pCombinedInfoTip + pResult->infoTipTextSize + 2, pInfoTipText, infoTipTextSize + 1);
+					lstrcpynW(pCombinedInfoTip, properties.pResult->pInfoTipText, properties.pResult->infoTipTextSize + 1);
+					lstrcpynW(pCombinedInfoTip + properties.pResult->infoTipTextSize, L"\r\n", 3);
+					lstrcpynW(pCombinedInfoTip + properties.pResult->infoTipTextSize + 2, pInfoTipText, infoTipTextSize + 1);
 					pInfoTipText = NULL;
-					CoTaskMemFree(pResult->pInfoTipText);
-					pResult->pInfoTipText = pCombinedInfoTip;
-					pResult->infoTipTextSize += 2 + infoTipTextSize;
+					CoTaskMemFree(properties.pResult->pInfoTipText);
+					properties.pResult->pInfoTipText = pCombinedInfoTip;
+					properties.pResult->infoTipTextSize += 2 + infoTipTextSize;
 				}
 			} else {
 				// actually there's nothing to append
@@ -120,21 +120,21 @@ STDMETHODIMP ShLvwInfoTipTask::DoRun(void)
 			}
 		} else {
 			// nothing to prepend
-			pResult->pInfoTipText = pInfoTipText;
-			pResult->infoTipTextSize = infoTipTextSize;
+			properties.pResult->pInfoTipText = pInfoTipText;
+			properties.pResult->infoTipTextSize = infoTipTextSize;
 		}
 
-		EnterCriticalSection(pCriticalSection);
+		EnterCriticalSection(properties.pCriticalSection);
 		#ifdef USE_STL
-			pInfoTipQueue->push(pResult);
+			properties.pInfoTipQueue->push(pResult);
 		#else
-			pInfoTipQueue->AddTail(pResult);
+			properties.pInfoTipQueue->AddTail(properties.pResult);
 		#endif
-		pResult = NULL;
-		LeaveCriticalSection(pCriticalSection);
+		properties.pResult = NULL;
+		LeaveCriticalSection(properties.pCriticalSection);
 
-		if(IsWindow(hWndToNotify)) {
-			PostMessage(hWndToNotify, WM_TRIGGER_SETINFOTIP, 0, 0);
+		if(IsWindow(properties.hWndToNotify)) {
+			PostMessage(properties.hWndToNotify, WM_TRIGGER_SETINFOTIP, 0, 0);
 		}
 	} else if(pInfoTipText) {
 		CoTaskMemFree(pInfoTipText);

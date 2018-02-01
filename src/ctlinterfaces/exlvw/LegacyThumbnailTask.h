@@ -219,97 +219,6 @@ public:
 	STDMETHODIMP DoRun(void);
 
 protected:
-	/// \brief <em>Specifies the window that is used as parent window for any UI that the shell may display</em>
-	HWND hWndShellUIParentWindow;
-	/// \brief <em>Specifies the window that the result is posted to</em>
-	///
-	/// Specifies the window to which to send the retrieved thumbnail. This window must handle the
-	/// \c WM_TRIGGER_UPDATETHUMBNAIL message.
-	///
-	/// \sa WM_TRIGGER_UPDATETHUMBNAIL
-	HWND hWndToNotify;
-	/// \brief <em>Holds the fully qualified pIDL of the item for which to retrieve the thumbnail</em>
-	///
-	/// \sa pParentISF, pRelativePIDL
-	PIDLIST_ABSOLUTE pIDL;
-	/// \brief <em>The \c IShellFolder object of the parent item of the item for which to retrieve the thumbnail</em>
-	///
-	/// \sa pIDL, pRelativePIDL,
-	///     <a href="https://msdn.microsoft.com/en-us/library/bb775075.aspx">IShellFolder</a>
-	LPSHELLFOLDER pParentISF;
-	/// \brief <em>Holds the relative pIDL of the item for which to retrieve the thumbnail</em>
-	///
-	/// \sa pIDL, pParentISF
-	PCUITEMID_CHILD pRelativePIDL;
-	/// \brief <em>If \c TRUE, the thumbnail disk cache is used; otherwise not</em>
-	BOOL useThumbnailDiskCache;
-	/// \brief <em>The \c IShellImageStore object used to access the disk cache</em>
-	///
-	/// \sa IShellImageStore
-	LPSHELLIMAGESTORE pThumbnailDiskCache;
-	/// \brief <em>Specifies for which items the \c AII_NOFILETYPEOVERLAY flag shall be set</em>
-	///
-	/// \if UNICODE
-	///   \sa AII_NOFILETYPEOVERLAY, ShBrowserCtlsLibU::ShLvwDisplayFileTypeOverlaysConstants
-	/// \else
-	///   \sa AII_NOFILETYPEOVERLAY, ShBrowserCtlsLibA::ShLvwDisplayFileTypeOverlaysConstants
-	/// \endif
-	ShLvwDisplayFileTypeOverlaysConstants displayFileTypeOverlays;
-	#ifdef USE_STL
-		/// \brief <em>Buffers the thumbnail information retrieved by the background thread until the image list is updated</em>
-		///
-		/// \sa pBackgroundThumbnailsCritSection, pResult, SHLVWBACKGROUNDTHUMBNAILINFO
-		std::queue<LPSHLVWBACKGROUNDTHUMBNAILINFO>* pBackgroundThumbnailsQueue;
-		/// \brief <em>Buffers the created task until it is sent to the scheduler</em>
-		///
-		/// \sa pTasksToEnqueueCritSection, pTaskToEnqueue, SHCTLSBACKGROUNDTASKINFO
-		std::queue<LPSHCTLSBACKGROUNDTASKINFO>* pTasksToEnqueue;
-	#else
-		/// \brief <em>Buffers the thumbnail information retrieved by the background thread until the image list is updated</em>
-		///
-		/// \sa pBackgroundThumbnailsCritSection, pResult, SHLVWBACKGROUNDTHUMBNAILINFO
-		CAtlList<LPSHLVWBACKGROUNDTHUMBNAILINFO>* pBackgroundThumbnailsQueue;
-		/// \brief <em>Buffers the created task until it is sent to the scheduler</em>
-		///
-		/// \sa pTasksToEnqueueCritSection, pTaskToEnqueue, SHCTLSBACKGROUNDTASKINFO
-		CAtlList<LPSHCTLSBACKGROUNDTASKINFO>* pTasksToEnqueue;
-	#endif
-	/// \brief <em>Holds the thumbnail information until it is inserted into the \c pBackgroundThumbnailsQueue queue</em>
-	///
-	/// \sa pBackgroundThumbnailsQueue, SHLVWBACKGROUNDTHUMBNAILINFO
-	LPSHLVWBACKGROUNDTHUMBNAILINFO pResult;
-	/// \brief <em>Holds the created task until it is inserted into the \c pTasksToEnqueue queue</em>
-	///
-	/// \sa pTasksToEnqueue, SHCTLSBACKGROUNDTASKINFO
-	LPSHCTLSBACKGROUNDTASKINFO pTaskToEnqueue;
-	/// \brief <em>The critical section used to synchronize access to \c pBackgroundThumbnailsQueue</em>
-	///
-	/// \sa pBackgroundThumbnailsQueue
-	LPCRITICAL_SECTION pBackgroundThumbnailsCritSection;
-	/// \brief <em>The critical section used to synchronize access to \c pTasksToEnqueue</em>
-	///
-	/// \sa pTasksToEnqueue
-	LPCRITICAL_SECTION pTasksToEnqueueCritSection;
-	/// \brief <em>The \c IExtractImage object used to retrieve the thumbnail</em>
-	///
-	/// \sa pIDL, pExtractImage2,
-	///     <a href="https://msdn.microsoft.com/en-us/library/bb761848.aspx">IExtractImage</a>
-	LPEXTRACTIMAGE pExtractImage;
-	/// \brief <em>The \c IExtractImage2 object used to retrieve the thumbnail</em>
-	///
-	/// \sa pIDL, pExtractImage,
-	///     <a href="https://msdn.microsoft.com/en-us/library/bb761842.aspx">IExtractImage2</a>
-	LPEXTRACTIMAGE2 pExtractImage2;
-	/// \brief <em>Holds the thumbnail's date stamp</em>
-	///
-	/// \sa pExtractImage2,
-	///     <a href="https://msdn.microsoft.com/en-us/library/ms724284.aspx">FILETIME</a>
-	FILETIME dateStamp;
-	/// \brief <em>Temporarily holds the path to the item's executable</em>
-	LPWSTR pExecutableString;
-	/// \brief <em>If \c TRUE, the item, for which to retrieve the thumbnail, is a file</em>
-	BOOL itemIsFile;
-
 	typedef DWORD LEGACYTHUMBNAILTASKSTATUS;
 	/// \brief <em>Possible value for the \c status member, meaning that nothing has been done yet</em>
 	#define LTTS_NOTHINGDONE							0x0
@@ -321,6 +230,102 @@ protected:
 	#define LTTS_RETRIEVINGDATESTAMP			0x3
 	/// \brief <em>Possible value for the \c status member, meaning that all work has been done</em>
 	#define LTTS_DONE											0x4
-	/// \brief <em>Specifies how much work is done</em>
-	LEGACYTHUMBNAILTASKSTATUS status : 3;
+
+	/// \brief <em>Holds the object's properties</em>
+	struct Properties
+	{
+		/// \brief <em>Specifies the window that is used as parent window for any UI that the shell may display</em>
+		HWND hWndShellUIParentWindow;
+		/// \brief <em>Specifies the window that the result is posted to</em>
+		///
+		/// Specifies the window to which to send the retrieved thumbnail. This window must handle the
+		/// \c WM_TRIGGER_UPDATETHUMBNAIL message.
+		///
+		/// \sa WM_TRIGGER_UPDATETHUMBNAIL
+		HWND hWndToNotify;
+		/// \brief <em>Holds the fully qualified pIDL of the item for which to retrieve the thumbnail</em>
+		///
+		/// \sa pParentISF, pRelativePIDL
+		PIDLIST_ABSOLUTE pIDL;
+		/// \brief <em>The \c IShellFolder object of the parent item of the item for which to retrieve the thumbnail</em>
+		///
+		/// \sa pIDL, pRelativePIDL,
+		///     <a href="https://msdn.microsoft.com/en-us/library/bb775075.aspx">IShellFolder</a>
+		LPSHELLFOLDER pParentISF;
+		/// \brief <em>Holds the relative pIDL of the item for which to retrieve the thumbnail</em>
+		///
+		/// \sa pIDL, pParentISF
+		PCUITEMID_CHILD pRelativePIDL;
+		/// \brief <em>If \c TRUE, the thumbnail disk cache is used; otherwise not</em>
+		BOOL useThumbnailDiskCache;
+		/// \brief <em>The \c IShellImageStore object used to access the disk cache</em>
+		///
+		/// \sa IShellImageStore
+		LPSHELLIMAGESTORE pThumbnailDiskCache;
+		/// \brief <em>Specifies for which items the \c AII_NOFILETYPEOVERLAY flag shall be set</em>
+		///
+		/// \if UNICODE
+		///   \sa AII_NOFILETYPEOVERLAY, ShBrowserCtlsLibU::ShLvwDisplayFileTypeOverlaysConstants
+		/// \else
+		///   \sa AII_NOFILETYPEOVERLAY, ShBrowserCtlsLibA::ShLvwDisplayFileTypeOverlaysConstants
+		/// \endif
+		ShLvwDisplayFileTypeOverlaysConstants displayFileTypeOverlays;
+		#ifdef USE_STL
+			/// \brief <em>Buffers the thumbnail information retrieved by the background thread until the image list is updated</em>
+			///
+			/// \sa pBackgroundThumbnailsCritSection, pResult, SHLVWBACKGROUNDTHUMBNAILINFO
+			std::queue<LPSHLVWBACKGROUNDTHUMBNAILINFO>* pBackgroundThumbnailsQueue;
+			/// \brief <em>Buffers the created task until it is sent to the scheduler</em>
+			///
+			/// \sa pTasksToEnqueueCritSection, pTaskToEnqueue, SHCTLSBACKGROUNDTASKINFO
+			std::queue<LPSHCTLSBACKGROUNDTASKINFO>* pTasksToEnqueue;
+		#else
+			/// \brief <em>Buffers the thumbnail information retrieved by the background thread until the image list is updated</em>
+			///
+			/// \sa pBackgroundThumbnailsCritSection, pResult, SHLVWBACKGROUNDTHUMBNAILINFO
+			CAtlList<LPSHLVWBACKGROUNDTHUMBNAILINFO>* pBackgroundThumbnailsQueue;
+			/// \brief <em>Buffers the created task until it is sent to the scheduler</em>
+			///
+			/// \sa pTasksToEnqueueCritSection, pTaskToEnqueue, SHCTLSBACKGROUNDTASKINFO
+			CAtlList<LPSHCTLSBACKGROUNDTASKINFO>* pTasksToEnqueue;
+		#endif
+		/// \brief <em>Holds the thumbnail information until it is inserted into the \c pBackgroundThumbnailsQueue queue</em>
+		///
+		/// \sa pBackgroundThumbnailsQueue, SHLVWBACKGROUNDTHUMBNAILINFO
+		LPSHLVWBACKGROUNDTHUMBNAILINFO pResult;
+		/// \brief <em>Holds the created task until it is inserted into the \c pTasksToEnqueue queue</em>
+		///
+		/// \sa pTasksToEnqueue, SHCTLSBACKGROUNDTASKINFO
+		LPSHCTLSBACKGROUNDTASKINFO pTaskToEnqueue;
+		/// \brief <em>The critical section used to synchronize access to \c pBackgroundThumbnailsQueue</em>
+		///
+		/// \sa pBackgroundThumbnailsQueue
+		LPCRITICAL_SECTION pBackgroundThumbnailsCritSection;
+		/// \brief <em>The critical section used to synchronize access to \c pTasksToEnqueue</em>
+		///
+		/// \sa pTasksToEnqueue
+		LPCRITICAL_SECTION pTasksToEnqueueCritSection;
+		/// \brief <em>The \c IExtractImage object used to retrieve the thumbnail</em>
+		///
+		/// \sa pIDL, pExtractImage2,
+		///     <a href="https://msdn.microsoft.com/en-us/library/bb761848.aspx">IExtractImage</a>
+		LPEXTRACTIMAGE pExtractImage;
+		/// \brief <em>The \c IExtractImage2 object used to retrieve the thumbnail</em>
+		///
+		/// \sa pIDL, pExtractImage,
+		///     <a href="https://msdn.microsoft.com/en-us/library/bb761842.aspx">IExtractImage2</a>
+		LPEXTRACTIMAGE2 pExtractImage2;
+		/// \brief <em>Holds the thumbnail's date stamp</em>
+		///
+		/// \sa pExtractImage2,
+		///     <a href="https://msdn.microsoft.com/en-us/library/ms724284.aspx">FILETIME</a>
+		FILETIME dateStamp;
+		/// \brief <em>Temporarily holds the path to the item's executable</em>
+		LPWSTR pExecutableString;
+		/// \brief <em>If \c TRUE, the item, for which to retrieve the thumbnail, is a file</em>
+		BOOL itemIsFile;
+
+		/// \brief <em>Specifies how much work is done</em>
+		LEGACYTHUMBNAILTASKSTATUS status : 3;
+	} properties;
 };

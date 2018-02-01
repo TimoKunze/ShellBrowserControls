@@ -172,42 +172,46 @@ public:
 	STDMETHODIMP DoRun(void);
 
 protected:
-	/// \brief <em>Specifies the window that the result is posted to</em>
-	///
-	/// Specifies the window to which to send the retrieved info tip. This window must handle the
-	/// \c WM_TRIGGER_SETINFOTIP message.
-	///
-	/// \sa WM_TRIGGER_SETINFOTIP
-	HWND hWndToNotify;
-	/// \brief <em>Specifies the window that is used as parent window for any UI that the shell may display</em>
-	HWND hWndShellUIParentWindow;
-	/// \brief <em>Holds the fully qualified pIDL of the item for which to retrieve the info tip</em>
-	PIDLIST_ABSOLUTE pIDL;
-	/// \brief <em>Specifies the kind of info tip text to retrieve</em>
-	///
-	/// \if UNICODE
-	///   \sa ShBrowserCtlsLibU::InfoTipFlagsConstants
-	/// \else
-	///   \sa ShBrowserCtlsLibA::InfoTipFlagsConstants
-	/// \endif
-	InfoTipFlagsConstants infoTipFlags;
-	#ifdef USE_STL
-		/// \brief <em>Buffers the text retrieved by the background thread until it is used by the list view</em>
+	/// \brief <em>Holds the object's properties</em>
+	struct Properties
+	{
+		/// \brief <em>Specifies the window that the result is posted to</em>
 		///
-		/// \sa pCriticalSection, pResult, SHLVWBACKGROUNDINFOTIPINFO
-		std::queue<LPSHLVWBACKGROUNDINFOTIPINFO>* pInfoTipQueue;
-	#else
-		/// \brief <em>Buffers the text retrieved by the background thread until it is used by the list view</em>
+		/// Specifies the window to which to send the retrieved info tip. This window must handle the
+		/// \c WM_TRIGGER_SETINFOTIP message.
 		///
-		/// \sa pCriticalSection, pResult, SHLVWBACKGROUNDINFOTIPINFO
-		CAtlList<LPSHLVWBACKGROUNDINFOTIPINFO>* pInfoTipQueue;
-	#endif
-	/// \brief <em>Holds the retrieved text until it is inserted into the \c pInfoTipQueue queue</em>
-	///
-	/// \sa pInfoTipQueue, SHLVWBACKGROUNDINFOTIPINFO
-	LPSHLVWBACKGROUNDINFOTIPINFO pResult;
-	/// \brief <em>The critical section used to synchronize access to \c pInfoTipQueue</em>
-	///
-	/// \sa pInfoTipQueue
-	LPCRITICAL_SECTION pCriticalSection;
+		/// \sa WM_TRIGGER_SETINFOTIP
+		HWND hWndToNotify;
+		/// \brief <em>Specifies the window that is used as parent window for any UI that the shell may display</em>
+		HWND hWndShellUIParentWindow;
+		/// \brief <em>Holds the fully qualified pIDL of the item for which to retrieve the info tip</em>
+		PIDLIST_ABSOLUTE pIDL;
+		/// \brief <em>Specifies the kind of info tip text to retrieve</em>
+		///
+		/// \if UNICODE
+		///   \sa ShBrowserCtlsLibU::InfoTipFlagsConstants
+		/// \else
+		///   \sa ShBrowserCtlsLibA::InfoTipFlagsConstants
+		/// \endif
+		InfoTipFlagsConstants infoTipFlags;
+		#ifdef USE_STL
+			/// \brief <em>Buffers the text retrieved by the background thread until it is used by the list view</em>
+			///
+			/// \sa pCriticalSection, pResult, SHLVWBACKGROUNDINFOTIPINFO
+			std::queue<LPSHLVWBACKGROUNDINFOTIPINFO>* pInfoTipQueue;
+		#else
+			/// \brief <em>Buffers the text retrieved by the background thread until it is used by the list view</em>
+			///
+			/// \sa pCriticalSection, pResult, SHLVWBACKGROUNDINFOTIPINFO
+			CAtlList<LPSHLVWBACKGROUNDINFOTIPINFO>* pInfoTipQueue;
+		#endif
+		/// \brief <em>Holds the retrieved text until it is inserted into the \c pInfoTipQueue queue</em>
+		///
+		/// \sa pInfoTipQueue, SHLVWBACKGROUNDINFOTIPINFO
+		LPSHLVWBACKGROUNDINFOTIPINFO pResult;
+		/// \brief <em>The critical section used to synchronize access to \c pInfoTipQueue</em>
+		///
+		/// \sa pInfoTipQueue
+		LPCRITICAL_SECTION pCriticalSection;
+	} properties;
 };

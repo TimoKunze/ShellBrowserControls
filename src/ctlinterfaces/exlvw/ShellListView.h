@@ -3388,14 +3388,15 @@ protected:
 	/// \param[in] realColumnIndex The column's zero-based index within the
 	///            \c ShellColumnsStatus::pAllColumns array.
 	/// \param[in] makeVisible If \c TRUE, the column shall be inserted; otherwise it shall be removed.
-	/// \param[in] flags A bit-field of \c CCVF_* flags that influence the method's behavior.
+	/// \param[in] changeColumnVisibilityflags A bit-field of \c CCVF_* flags that influence the method's
+	///            behavior.
 	///
 	/// \return The new column's unique ID.
 	///
 	/// \sa OnTriggerColumnEnumComplete, ChangedColumnVisibility, ShellColumnsStatus::pAllColumns,
 	///     UnloadShellColumns, CCVF_ISEXPLICITCHANGE, CCVF_ISEXPLICITCHANGEIFDIFFERENT,
 	///     CCVF_FORUNLOADSHELLCOLUMNS
-	LONG ChangeColumnVisibility(int realColumnIndex, BOOL makeVisible, DWORD flags);
+	LONG ChangeColumnVisibility(int realColumnIndex, BOOL makeVisible, DWORD changeColumnVisibilityflags);
 	/// \brief <em>Adds the specified listview column to the collection of visible listview columns or removes it from there</em>
 	///
 	/// \param[in] realColumnIndex The column's zero-based index within the

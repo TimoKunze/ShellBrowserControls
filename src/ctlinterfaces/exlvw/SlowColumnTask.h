@@ -152,46 +152,50 @@ public:
 	STDMETHODIMP DoRun(void);
 
 protected:
-	/// \brief <em>Specifies the window that the result is posted to</em>
-	///
-	/// Specifies the window to which to send the retrieved text. This window must handle the
-	/// \c WM_TRIGGER_UPDATETEXT message.
-	///
-	/// \sa WM_TRIGGER_UPDATETEXT
-	HWND hWndToNotify;
-	/// \brief <em>Specifies the window that is used as parent window for any UI that the shell may display</em>
-	HWND hWndShellUIParentWindow;
-	/// \brief <em>Holds the fully qualified pIDL of the item for which to retrieve the text</em>
-	PIDLIST_ABSOLUTE pIDL;
-	/// \brief <em>The fully qualified pIDL of the namespace whose columns are used</em>
-	PIDLIST_ABSOLUTE pIDLNamespace;
-	/// \brief <em>The \c IShellFolder implementation of the namespace whose columns are used</em>
-	///
-	/// \sa <a href="https://msdn.microsoft.com/en-us/library/bb775075.aspx">IShellFolder</a>
-	IShellFolder* pParentISF;
-	/// \brief <em>The \c IShellFolder2 implementation of the namespace whose columns are used</em>
-	///
-	/// \sa <a href="https://msdn.microsoft.com/en-us/library/bb775055.aspx">IShellFolder2</a>
-	IShellFolder2* pParentISF2;
-	/// \brief <em>Specifies the shell index of the column for which to retrieve the text</em>
-	int realColumnIndex;
-	#ifdef USE_STL
-		/// \brief <em>Buffers the text retrieved by the background thread until it is inserted into the list view</em>
+	/// \brief <em>Holds the object's properties</em>
+	struct Properties
+	{
+		/// \brief <em>Specifies the window that the result is posted to</em>
 		///
-		/// \sa pCriticalSection, pResult, SHLVWBACKGROUNDCOLUMNINFO
-		std::queue<LPSHLVWBACKGROUNDCOLUMNINFO>* pSlowColumnQueue;
-	#else
-		/// \brief <em>Buffers the text retrieved by the background thread until it is inserted into the list view</em>
+		/// Specifies the window to which to send the retrieved text. This window must handle the
+		/// \c WM_TRIGGER_UPDATETEXT message.
 		///
-		/// \sa pCriticalSection, pResult, SHLVWBACKGROUNDCOLUMNINFO
-		CAtlList<LPSHLVWBACKGROUNDCOLUMNINFO>* pSlowColumnQueue;
-	#endif
-	/// \brief <em>Holds the retrieved text until it is inserted into the \c pSlowColumnQueue queue</em>
-	///
-	/// \sa pSlowColumnQueue, SHLVWBACKGROUNDCOLUMNINFO
-	LPSHLVWBACKGROUNDCOLUMNINFO pResult;
-	/// \brief <em>The critical section used to synchronize access to \c pSlowColumnQueue</em>
-	///
-	/// \sa pSlowColumnQueue
-	LPCRITICAL_SECTION pCriticalSection;
+		/// \sa WM_TRIGGER_UPDATETEXT
+		HWND hWndToNotify;
+		/// \brief <em>Specifies the window that is used as parent window for any UI that the shell may display</em>
+		HWND hWndShellUIParentWindow;
+		/// \brief <em>Holds the fully qualified pIDL of the item for which to retrieve the text</em>
+		PIDLIST_ABSOLUTE pIDL;
+		/// \brief <em>The fully qualified pIDL of the namespace whose columns are used</em>
+		PIDLIST_ABSOLUTE pIDLNamespace;
+		/// \brief <em>The \c IShellFolder implementation of the namespace whose columns are used</em>
+		///
+		/// \sa <a href="https://msdn.microsoft.com/en-us/library/bb775075.aspx">IShellFolder</a>
+		IShellFolder* pParentISF;
+		/// \brief <em>The \c IShellFolder2 implementation of the namespace whose columns are used</em>
+		///
+		/// \sa <a href="https://msdn.microsoft.com/en-us/library/bb775055.aspx">IShellFolder2</a>
+		IShellFolder2* pParentISF2;
+		/// \brief <em>Specifies the shell index of the column for which to retrieve the text</em>
+		int realColumnIndex;
+		#ifdef USE_STL
+			/// \brief <em>Buffers the text retrieved by the background thread until it is inserted into the list view</em>
+			///
+			/// \sa pCriticalSection, pResult, SHLVWBACKGROUNDCOLUMNINFO
+			std::queue<LPSHLVWBACKGROUNDCOLUMNINFO>* pSlowColumnQueue;
+		#else
+			/// \brief <em>Buffers the text retrieved by the background thread until it is inserted into the list view</em>
+			///
+			/// \sa pCriticalSection, pResult, SHLVWBACKGROUNDCOLUMNINFO
+			CAtlList<LPSHLVWBACKGROUNDCOLUMNINFO>* pSlowColumnQueue;
+		#endif
+		/// \brief <em>Holds the retrieved text until it is inserted into the \c pSlowColumnQueue queue</em>
+		///
+		/// \sa pSlowColumnQueue, SHLVWBACKGROUNDCOLUMNINFO
+		LPSHLVWBACKGROUNDCOLUMNINFO pResult;
+		/// \brief <em>The critical section used to synchronize access to \c pSlowColumnQueue</em>
+		///
+		/// \sa pSlowColumnQueue
+		LPCRITICAL_SECTION pCriticalSection;
+	} properties;
 };

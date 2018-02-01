@@ -110,12 +110,12 @@ HRESULT ShellTreeView::FinalConstruct()
 	CComObject<NamespaceEnumSettings>* pDefaultNamespaceEnumSettingsObj = NULL;
 	CComObject<NamespaceEnumSettings>::CreateInstance(&pDefaultNamespaceEnumSettingsObj);
 	pDefaultNamespaceEnumSettingsObj->AddRef();
-	DWORD flags = snseIncludeFolders | snseMayIncludeHiddenItems;
+	DWORD enumFlags = snseIncludeFolders | snseMayIncludeHiddenItems;
 	if(RunTimeHelper::IsWin7()) {
 		// TODO: Maybe this is available on Vista, too?
-		flags |= snseEnumForNavigationPane;
+		enumFlags |= snseEnumForNavigationPane;
 	}
-	pDefaultNamespaceEnumSettingsObj->put_EnumerationFlags(static_cast<ShNamespaceEnumerationConstants>(flags));
+	pDefaultNamespaceEnumSettingsObj->put_EnumerationFlags(static_cast<ShNamespaceEnumerationConstants>(enumFlags));
 	pDefaultNamespaceEnumSettingsObj->put_ExcludedFileItemFileAttributes(static_cast<ItemFileAttributesConstants>(0));
 	pDefaultNamespaceEnumSettingsObj->put_ExcludedFileItemShellAttributes(static_cast<ItemShellAttributesConstants>(0));
 	pDefaultNamespaceEnumSettingsObj->put_ExcludedFolderItemFileAttributes(static_cast<ItemFileAttributesConstants>(0));
@@ -2602,8 +2602,8 @@ STDMETHODIMP ShellTreeView::EnsureItemIsLoaded(VARIANT pIDLOrParsingName, IShTre
 					exitLoop = TRUE;
 				}
 				parsingName = parsingName.Left(pos);
-				CT2CW converter(parsingName);
-				pParsingName = converter;
+				CT2CW converter2(parsingName);
+				pParsingName = converter2;
 				hItem = ParsingNameToItemHandle(pParsingName);
 				if(hItem) {
 					hLastExistingItem = hItem;
@@ -3668,9 +3668,9 @@ LRESULT ShellTreeView::OnTriggerItemEnumComplete(UINT /*message*/, WPARAM /*wPar
 						#else
 							POSITION p = immediateSubItems.GetStartPosition();
 							while(p) {
-								CAtlMap<HTREEITEM, PCIDLIST_ABSOLUTE>::CPair* pPair = immediateSubItems.GetAt(p);
-								if(ILIsEqual(pPair->m_value, pItem->pIDL)) {
-									hExistingItem = pPair->m_key;
+								CAtlMap<HTREEITEM, PCIDLIST_ABSOLUTE>::CPair* pPair2 = immediateSubItems.GetAt(p);
+								if(ILIsEqual(pPair2->m_value, pItem->pIDL)) {
+									hExistingItem = pPair2->m_key;
 									immediateSubItems.RemoveAtPos(p);
 									break;
 								}
@@ -3820,14 +3820,14 @@ LRESULT ShellTreeView::OnTriggerSetElevationShield(UINT /*message*/, WPARAM wPar
 		properties.pUnifiedImageList->QueryInterface(IID_IImageListPrivate, reinterpret_cast<LPVOID*>(&pImgLstPriv));
 		ATLASSUME(pImgLstPriv);
 
-		UINT flags = 0;
-		ATLVERIFY(SUCCEEDED(pImgLstPriv->GetIconInfo(itemID, SIIF_FLAGS, NULL, NULL, NULL, &flags)));
+		UINT iconFlags = 0;
+		ATLVERIFY(SUCCEEDED(pImgLstPriv->GetIconInfo(itemID, SIIF_FLAGS, NULL, NULL, NULL, &iconFlags)));
 		if(lParam) {
-			flags |= AII_DISPLAYELEVATIONOVERLAY;
+			iconFlags |= AII_DISPLAYELEVATIONOVERLAY;
 		} else {
-			flags &= ~AII_DISPLAYELEVATIONOVERLAY;
+			iconFlags &= ~AII_DISPLAYELEVATIONOVERLAY;
 		}
-		ATLVERIFY(SUCCEEDED(pImgLstPriv->SetIconInfo(itemID, SIIF_FLAGS, NULL, 0, 0, NULL, flags)));
+		ATLVERIFY(SUCCEEDED(pImgLstPriv->SetIconInfo(itemID, SIIF_FLAGS, NULL, 0, 0, NULL, iconFlags)));
 		redraw = TRUE;
 	}
 	if(redraw) {
@@ -3856,9 +3856,9 @@ LRESULT ShellTreeView::OnTriggerUpdateIcon(UINT /*message*/, WPARAM wParam, LPAR
 			ATLVERIFY(SUCCEEDED(pImgLstPriv->SetIconInfo(itemID, SIIF_SYSTEMICON, NULL, static_cast<int>(lParam), 0, NULL, 0)));
 
 			if(!RunTimeHelper::IsCommCtrl6()) {
-				UINT flags = 0;
-				ATLVERIFY(SUCCEEDED(pImgLstPriv->GetIconInfo(itemID, SIIF_FLAGS, NULL, NULL, NULL, &flags)));
-				ATLVERIFY(SUCCEEDED(pImgLstPriv->SetIconInfo(itemID, SIIF_FLAGS, NULL, 0, 0, NULL, flags | AII_USELEGACYDISPLAYCODE)));
+				UINT iconFlags = 0;
+				ATLVERIFY(SUCCEEDED(pImgLstPriv->GetIconInfo(itemID, SIIF_FLAGS, NULL, NULL, NULL, &iconFlags)));
+				ATLVERIFY(SUCCEEDED(pImgLstPriv->SetIconInfo(itemID, SIIF_FLAGS, NULL, 0, 0, NULL, iconFlags | AII_USELEGACYDISPLAYCODE)));
 			}
 			if(properties.displayElevationShieldOverlays) {
 				PCIDLIST_ABSOLUTE pIDL = ItemHandleToPIDL(reinterpret_cast<HTREEITEM>(wParam));
@@ -4866,16 +4866,16 @@ LRESULT ShellTreeView::OnItemExpandedNotification(int /*controlID*/, LPNMHDR pNo
 		ATLASSUME(pImgLstPriv);
 
 		if((pDetails->itemNew.mask & TVIF_HANDLE) && pDetails->itemNew.hItem && !IsShellItem(pDetails->itemNew.hItem)) {
-			UINT flags = 0;
+			UINT iconFlags = 0;
 			LONG itemID = ItemHandleToID(pDetails->itemNew.hItem);
 			if(itemID != -1) {
-				ATLVERIFY(SUCCEEDED(pImgLstPriv->GetIconInfo(itemID, SIIF_FLAGS, NULL, NULL, NULL, &flags)));
+				ATLVERIFY(SUCCEEDED(pImgLstPriv->GetIconInfo(itemID, SIIF_FLAGS, NULL, NULL, NULL, &iconFlags)));
 				if(pDetails->action & TVE_COLLAPSE) {
-					flags &= ~AII_USEEXPANDEDICON;
+					iconFlags &= ~AII_USEEXPANDEDICON;
 				} else if(pDetails->action & TVE_EXPAND) {
-					flags |= AII_USEEXPANDEDICON;
+					iconFlags |= AII_USEEXPANDEDICON;
 				}
-				ATLVERIFY(SUCCEEDED(pImgLstPriv->SetIconInfo(itemID, SIIF_FLAGS, NULL, 0, 0, NULL, flags)));
+				ATLVERIFY(SUCCEEDED(pImgLstPriv->SetIconInfo(itemID, SIIF_FLAGS, NULL, 0, 0, NULL, iconFlags)));
 
 				if((pDetails->itemOld.mask & TVIF_HANDLE) && pDetails->itemOld.hItem) {
 					RECT rc = {0};
@@ -4907,12 +4907,12 @@ LRESULT ShellTreeView::OnCaretChangedNotification(int /*controlID*/, LPNMHDR pNo
 		ATLASSUME(pImgLstPriv);
 
 		if(pDetails->itemOld.hItem && !IsShellItem(pDetails->itemOld.hItem)) {
-			UINT flags = 0;
+			UINT iconFlags = 0;
 			LONG itemID = ItemHandleToID(pDetails->itemOld.hItem);
 			if(itemID != -1) {
-				ATLVERIFY(SUCCEEDED(pImgLstPriv->GetIconInfo(itemID, SIIF_FLAGS, NULL, NULL, NULL, &flags)));
-				flags &= ~AII_USESELECTEDICON;
-				ATLVERIFY(SUCCEEDED(pImgLstPriv->SetIconInfo(itemID, SIIF_FLAGS, NULL, 0, 0, NULL, flags)));
+				ATLVERIFY(SUCCEEDED(pImgLstPriv->GetIconInfo(itemID, SIIF_FLAGS, NULL, NULL, NULL, &iconFlags)));
+				iconFlags &= ~AII_USESELECTEDICON;
+				ATLVERIFY(SUCCEEDED(pImgLstPriv->SetIconInfo(itemID, SIIF_FLAGS, NULL, 0, 0, NULL, iconFlags)));
 
 				RECT rc = {0};
 				*reinterpret_cast<HTREEITEM*>(&rc) = pDetails->itemOld.hItem;
@@ -4922,12 +4922,12 @@ LRESULT ShellTreeView::OnCaretChangedNotification(int /*controlID*/, LPNMHDR pNo
 			}
 		}
 		if(pDetails->itemNew.hItem && !IsShellItem(pDetails->itemNew.hItem)) {
-			UINT flags = 0;
+			UINT iconFlags = 0;
 			LONG itemID = ItemHandleToID(pDetails->itemNew.hItem);
 			if(itemID != -1) {
-				ATLVERIFY(SUCCEEDED(pImgLstPriv->GetIconInfo(itemID, SIIF_FLAGS, NULL, NULL, NULL, &flags)));
-				flags |= AII_USESELECTEDICON;
-				ATLVERIFY(SUCCEEDED(pImgLstPriv->SetIconInfo(itemID, SIIF_FLAGS, NULL, 0, 0, NULL, flags)));
+				ATLVERIFY(SUCCEEDED(pImgLstPriv->GetIconInfo(itemID, SIIF_FLAGS, NULL, NULL, NULL, &iconFlags)));
+				iconFlags |= AII_USESELECTEDICON;
+				ATLVERIFY(SUCCEEDED(pImgLstPriv->SetIconInfo(itemID, SIIF_FLAGS, NULL, 0, 0, NULL, iconFlags)));
 
 				RECT rc = {0};
 				*reinterpret_cast<HTREEITEM*>(&rc) = pDetails->itemNew.hItem;
@@ -5438,11 +5438,11 @@ void ShellTreeView::SetSystemImageLists(void)
 			properties.pUnifiedImageList->QueryInterface(IID_IImageListPrivate, reinterpret_cast<LPVOID*>(&pImgLstPriv));
 			ATLASSUME(pImgLstPriv);
 
-			UINT flags = (properties.displayElevationShieldOverlays ? ILOF_DISPLAYELEVATIONSHIELDS : 0);
+			UINT imageListFlags = (properties.displayElevationShieldOverlays ? ILOF_DISPLAYELEVATIONSHIELDS : 0);
 			if(!RunTimeHelper::IsCommCtrl6()) {
-				flags |= ILOF_IGNOREEXTRAALPHA;
+				imageListFlags |= ILOF_IGNOREEXTRAALPHA;
 			}
-			pImgLstPriv->SetOptions(0, flags);
+			pImgLstPriv->SetOptions(0, imageListFlags);
 			pImgLstPriv->SetImageList(AIL_SHELLITEMS, hSmallImageList, NULL);
 			pImgLstPriv->SetImageList(AIL_NONSHELLITEMS, properties.hImageList[0], NULL);
 			HIMAGELIST hImageList = IImageListToHIMAGELIST(properties.pUnifiedImageList);
@@ -6522,9 +6522,9 @@ HRESULT ShellTreeView::CreateShellContextMenu(PCIDLIST_ABSOLUTE pIDLNamespace, H
 
 	contextMenuData.bufferedCtrlDown = FALSE;
 	contextMenuData.bufferedShiftDown = FALSE;
-	UINT flags = CMF_NORMAL;
+	UINT contextMenuFlags = CMF_NORMAL;
 	if(GetKeyState(VK_SHIFT) & 0x8000) {
-		flags |= CMF_EXTENDEDVERBS;
+		contextMenuFlags |= CMF_EXTENDEDVERBS;
 		contextMenuData.bufferedShiftDown = TRUE;
 	}
 	if(GetKeyState(VK_CONTROL) & 0x8000) {
@@ -6549,16 +6549,16 @@ HRESULT ShellTreeView::CreateShellContextMenu(PCIDLIST_ABSOLUTE pIDLNamespace, H
 		ATLASSUME(pNamespace);
 		pNamespace->QueryInterface<IDispatch>(&contextMenuData.pContextMenuItems);
 
-		// allow customization of 'flags'
-		ShellContextMenuStyleConstants contextMenuStyle = static_cast<ShellContextMenuStyleConstants>(flags);
+		// allow customization of 'contextMenuFlags'
+		ShellContextMenuStyleConstants contextMenuStyle = static_cast<ShellContextMenuStyleConstants>(contextMenuFlags);
 		VARIANT_BOOL cancel = VARIANT_FALSE;
 		Raise_CreatingShellContextMenu(contextMenuData.pContextMenuItems, &contextMenuStyle, &cancel);
-		flags = static_cast<UINT>(contextMenuStyle);
+		contextMenuFlags = static_cast<UINT>(contextMenuStyle);
 
 		if((cancel == VARIANT_FALSE) && contextMenuData.currentShellContextMenu.CreatePopupMenu()) {
 			// fill the menu
 			if(contextMenuData.pIContextMenu) {
-				hr = contextMenuData.pIContextMenu->QueryContextMenu(contextMenuData.currentShellContextMenu, 0, MIN_CONTEXTMENUEXTENSION_CMDID, MAX_CONTEXTMENUEXTENSION_CMDID, flags);
+				hr = contextMenuData.pIContextMenu->QueryContextMenu(contextMenuData.currentShellContextMenu, 0, MIN_CONTEXTMENUEXTENSION_CMDID, MAX_CONTEXTMENUEXTENSION_CMDID, contextMenuFlags);
 				ATLASSERT(SUCCEEDED(hr));
 			}
 			if(SUCCEEDED(hr)) {
@@ -6601,9 +6601,9 @@ HRESULT ShellTreeView::CreateShellContextMenu(HTREEITEM* pItems, UINT itemCount,
 	HRESULT hr;
 	contextMenuData.bufferedCtrlDown = FALSE;
 	contextMenuData.bufferedShiftDown = FALSE;
-	UINT flags = predefinedFlags;
+	UINT contextMenuFlags = predefinedFlags;
 	if(GetKeyState(VK_SHIFT) & 0x8000) {
-		flags |= CMF_EXTENDEDVERBS;
+		contextMenuFlags |= CMF_EXTENDEDVERBS;
 		contextMenuData.bufferedShiftDown = TRUE;
 	}
 	if(GetKeyState(VK_CONTROL) & 0x8000) {
@@ -6630,7 +6630,7 @@ HRESULT ShellTreeView::CreateShellContextMenu(HTREEITEM* pItems, UINT itemCount,
 					hr = pParentISF->GetAttributesOf(pIDLCount, pRelativePIDLs, &attributes);
 					if(SUCCEEDED(hr)) {
 						if(attributes & SFGAO_CANRENAME) {
-							flags |= CMF_CANRENAME;
+							contextMenuFlags |= CMF_CANRENAME;
 						}
 					}
 				}
@@ -6655,7 +6655,7 @@ HRESULT ShellTreeView::CreateShellContextMenu(HTREEITEM* pItems, UINT itemCount,
 		SFGAOF attributes = SFGAO_CANRENAME;
 		if(SUCCEEDED(contextMenuData.pMultiNamespaceParentISF->GetAttributesOf(pIDLCount, reinterpret_cast<PCUITEMID_CHILD_ARRAY>(ppIDLs), &attributes))) {
 			if(attributes & SFGAO_CANRENAME) {
-				flags |= CMF_CANRENAME;
+				contextMenuFlags |= CMF_CANRENAME;
 			}
 		}
 		ATLVERIFY(SUCCEEDED(contextMenuData.pMultiNamespaceParentISF->GetUIObjectOf(GethWndShellUIParentWindow(), pIDLCount, reinterpret_cast<PCUITEMID_CHILD_ARRAY>(ppIDLs), IID_IDataObject, 0, reinterpret_cast<LPVOID*>(&contextMenuData.pMultiNamespaceDataObject))));
@@ -6672,7 +6672,7 @@ HRESULT ShellTreeView::CreateShellContextMenu(HTREEITEM* pItems, UINT itemCount,
 		//ATLASSUME(contextMenuData.pIContextMenu);
 
 		if(RunTimeHelper::IsVista()) {
-			flags |= CMF_ITEMMENU;
+			contextMenuFlags |= CMF_ITEMMENU;
 		}
 
 		ATLASSUME(properties.pAttachedInternalMessageListener);
@@ -6685,16 +6685,16 @@ HRESULT ShellTreeView::CreateShellContextMenu(HTREEITEM* pItems, UINT itemCount,
 			contextMenuData.pContextMenuItems = containerData.pContainer;
 		}
 
-		// allow customization of 'flags'
-		ShellContextMenuStyleConstants contextMenuStyle = static_cast<ShellContextMenuStyleConstants>(flags);
+		// allow customization of 'contextMenuFlags'
+		ShellContextMenuStyleConstants contextMenuStyle = static_cast<ShellContextMenuStyleConstants>(contextMenuFlags);
 		VARIANT_BOOL cancel = VARIANT_FALSE;
 		Raise_CreatingShellContextMenu(contextMenuData.pContextMenuItems, &contextMenuStyle, &cancel);
-		flags = static_cast<UINT>(contextMenuStyle);
+		contextMenuFlags = static_cast<UINT>(contextMenuStyle);
 
 		if((cancel == VARIANT_FALSE) && contextMenuData.currentShellContextMenu.CreatePopupMenu()) {
 			// fill the menu
 			if(contextMenuData.pIContextMenu) {
-				hr = contextMenuData.pIContextMenu->QueryContextMenu(contextMenuData.currentShellContextMenu, 0, MIN_CONTEXTMENUEXTENSION_CMDID, MAX_CONTEXTMENUEXTENSION_CMDID, flags);
+				hr = contextMenuData.pIContextMenu->QueryContextMenu(contextMenuData.currentShellContextMenu, 0, MIN_CONTEXTMENUEXTENSION_CMDID, MAX_CONTEXTMENUEXTENSION_CMDID, contextMenuFlags);
 				ATLASSERT(SUCCEEDED(hr));
 			}
 			if(SUCCEEDED(hr)) {

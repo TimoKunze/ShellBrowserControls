@@ -7,42 +7,42 @@
 ShLvwSlowColumnTask::ShLvwSlowColumnTask(void)
     : RunnableTask(TRUE)
 {
-	pIDL = NULL;
-	pIDLNamespace = NULL;
-	pParentISF = NULL;
-	pParentISF2 = NULL;
-	pSlowColumnQueue = NULL;
-	pResult = NULL;
-	pCriticalSection = NULL;
+	properties.pIDL = NULL;
+	properties.pIDLNamespace = NULL;
+	properties.pParentISF = NULL;
+	properties.pParentISF2 = NULL;
+	properties.pSlowColumnQueue = NULL;
+	properties.pResult = NULL;
+	properties.pCriticalSection = NULL;
 }
 
 void ShLvwSlowColumnTask::FinalRelease()
 {
-	if(pParentISF) {
-		pParentISF->Release();
-		pParentISF = NULL;
+	if(properties.pParentISF) {
+		properties.pParentISF->Release();
+		properties.pParentISF = NULL;
 	}
-	if(pParentISF2) {
-		pParentISF2->Release();
-		pParentISF2 = NULL;
+	if(properties.pParentISF2) {
+		properties.pParentISF2->Release();
+		properties.pParentISF2 = NULL;
 	}
-	if(pIDL) {
-		ILFree(pIDL);
-		pIDL = NULL;
+	if(properties.pIDL) {
+		ILFree(properties.pIDL);
+		properties.pIDL = NULL;
 	}
-	if(pIDLNamespace) {
-		ILFree(pIDLNamespace);
-		pIDLNamespace = NULL;
+	if(properties.pIDLNamespace) {
+		ILFree(properties.pIDLNamespace);
+		properties.pIDLNamespace = NULL;
 	}
-	if(pResult) {
+	if(properties.pResult) {
 		#ifdef ACTIVATE_SUBITEMCONTROL_SUPPORT
-			if(pResult->pPropertyValue) {
-				PropVariantClear(pResult->pPropertyValue);
-				delete pResult->pPropertyValue;
+			if(properties.pResult->pPropertyValue) {
+				PropVariantClear(properties.pResult->pPropertyValue);
+				delete properties.pResult->pPropertyValue;
 			}
 		#endif
-		delete pResult;
-		pResult = NULL;
+		delete properties.pResult;
+		properties.pResult = NULL;
 	}
 }
 
@@ -53,19 +53,19 @@ void ShLvwSlowColumnTask::FinalRelease()
 	HRESULT ShLvwSlowColumnTask::Attach(HWND hWndToNotify, HWND hWndShellUIParentWindow, CAtlList<LPSHLVWBACKGROUNDCOLUMNINFO>* pSlowColumnQueue, LPCRITICAL_SECTION pCriticalSection, PCIDLIST_ABSOLUTE pIDL, LONG itemID, LONG columnID, int realColumnIndex, PCIDLIST_ABSOLUTE pIDLNamespace)
 #endif
 {
-	this->hWndToNotify = hWndToNotify;
-	this->hWndShellUIParentWindow = hWndShellUIParentWindow;
-	this->pSlowColumnQueue = pSlowColumnQueue;
-	this->pCriticalSection = pCriticalSection;
-	this->pIDL = ILCloneFull(pIDL);
-	this->realColumnIndex = realColumnIndex;
-	this->pIDLNamespace = ILCloneFull(pIDLNamespace);
+	this->properties.hWndToNotify = hWndToNotify;
+	this->properties.hWndShellUIParentWindow = hWndShellUIParentWindow;
+	this->properties.pSlowColumnQueue = pSlowColumnQueue;
+	this->properties.pCriticalSection = pCriticalSection;
+	this->properties.pIDL = ILCloneFull(pIDL);
+	this->properties.realColumnIndex = realColumnIndex;
+	this->properties.pIDLNamespace = ILCloneFull(pIDLNamespace);
 
-	pResult = new SHLVWBACKGROUNDCOLUMNINFO;
-	if(pResult) {
-		ZeroMemory(pResult, sizeof(SHLVWBACKGROUNDCOLUMNINFO));
-		pResult->itemID = itemID;
-		pResult->columnID = columnID;
+	properties.pResult = new SHLVWBACKGROUNDCOLUMNINFO;
+	if(properties.pResult) {
+		ZeroMemory(properties.pResult, sizeof(SHLVWBACKGROUNDCOLUMNINFO));
+		properties.pResult->itemID = itemID;
+		properties.pResult->columnID = columnID;
 	} else {
 		return E_OUTOFMEMORY;
 	}
@@ -104,7 +104,7 @@ void ShLvwSlowColumnTask::FinalRelease()
 
 STDMETHODIMP ShLvwSlowColumnTask::DoInternalResume(void)
 {
-	ATLASSERT_POINTER(pResult, SHLVWBACKGROUNDCOLUMNINFO);
+	ATLASSERT_POINTER(properties.pResult, SHLVWBACKGROUNDCOLUMNINFO);
 
 	HRESULT hr = E_FAIL;
 
@@ -117,11 +117,11 @@ STDMETHODIMP ShLvwSlowColumnTask::DoInternalResume(void)
 	LPPROPVARIANT pPv = new PROPVARIANT;
 	PropVariantInit(pPv);
 	CComPtr<IShellItem2> pShellItem;
-	if(pParentISF2) {
-		hasPropertyKey = SUCCEEDED(pParentISF2->MapColumnToSCID(realColumnIndex, &propertyKey));
+	if(properties.pParentISF2) {
+		hasPropertyKey = SUCCEEDED(properties.pParentISF2->MapColumnToSCID(properties.realColumnIndex, &propertyKey));
 	}
 	if(hasPropertyKey && APIWrapper::IsSupported_SHCreateItemFromIDList()) {
-		ATLVERIFY(SUCCEEDED(APIWrapper::SHCreateItemFromIDList(pIDL, IID_PPV_ARGS(&pShellItem), &hr)));
+		ATLVERIFY(SUCCEEDED(APIWrapper::SHCreateItemFromIDList(properties.pIDL, IID_PPV_ARGS(&pShellItem), &hr)));
 	}
 	if(pShellItem) {
 		CComPtr<IPropertyStore> pPropertyStore;
@@ -131,7 +131,7 @@ STDMETHODIMP ShLvwSlowColumnTask::DoInternalResume(void)
 			hasValue = SUCCEEDED(hr);
 			#ifdef ACTIVATE_SUBITEMCONTROL_SUPPORT
 				if(hasValue) {
-					pResult->pPropertyValue = pPv;
+					properties.pResult->pPropertyValue = pPv;
 				}
 			#endif
 		}
@@ -142,12 +142,12 @@ STDMETHODIMP ShLvwSlowColumnTask::DoInternalResume(void)
 		if(hasPropertyKey) {
 			VARIANT v;
 			VariantInit(&v);
-			hr = pParentISF2->GetDetailsEx(ILFindLastID(pIDL), &propertyKey, &v);
+			hr = properties.pParentISF2->GetDetailsEx(ILFindLastID(properties.pIDL), &propertyKey, &v);
 			if(SUCCEEDED(hr)) {
 				hasValue = SUCCEEDED(APIWrapper::VariantToPropVariant(&v, pPv, &hr));
 				#ifdef ACTIVATE_SUBITEMCONTROL_SUPPORT
 					if(hasValue) {
-						pResult->pPropertyValue = pPv;
+						properties.pResult->pPropertyValue = pPv;
 					}
 				#endif
 			}
@@ -156,20 +156,20 @@ STDMETHODIMP ShLvwSlowColumnTask::DoInternalResume(void)
 	}
 
 	if(hasValue) {
-		APIWrapper::PSFormatForDisplay(propertyKey, *pPv, PDFF_DEFAULT, pResult->pText, MAX_LVITEMTEXTLENGTH, NULL);
+		APIWrapper::PSFormatForDisplay(propertyKey, *pPv, PDFF_DEFAULT, properties.pResult->pText, MAX_LVITEMTEXTLENGTH, NULL);
 		hr = S_OK;
-	} else if(pParentISF2) {
+	} else if(properties.pParentISF2) {
 		// still no success, so try IShellFolder2::GetDetailsOf
 		SHELLDETAILS column = {0};
-		hr = pParentISF2->GetDetailsOf(ILFindLastID(pIDL), realColumnIndex, &column);
+		hr = properties.pParentISF2->GetDetailsOf(ILFindLastID(properties.pIDL), properties.realColumnIndex, &column);
 		if(SUCCEEDED(hr)) {
-			ATLVERIFY(SUCCEEDED(StrRetToBufW(&column.str, ILFindLastID(pIDL), pResult->pText, MAX_LVITEMTEXTLENGTH)));
+			ATLVERIFY(SUCCEEDED(StrRetToBufW(&column.str, ILFindLastID(properties.pIDL), properties.pResult->pText, MAX_LVITEMTEXTLENGTH)));
 		}
 	} else {
 		hr = E_FAIL;
 	}
 	#ifdef ACTIVATE_SUBITEMCONTROL_SUPPORT
-		if(pResult->pPropertyValue != pPv && pPv) {
+		if(properties.pResult->pPropertyValue != pPv && pPv) {
 	#else
 		if(pPv) {
 	#endif
@@ -177,15 +177,15 @@ STDMETHODIMP ShLvwSlowColumnTask::DoInternalResume(void)
 		pPv = NULL;
 	}
 
-	if(FAILED(hr) && pParentISF) {
+	if(FAILED(hr) && properties.pParentISF) {
 		// still no success, so try IShellDetails::GetDetailsOf
 		CComPtr<IShellDetails> pParentISD;
-		hr = pParentISF->CreateViewObject(hWndShellUIParentWindow, IID_PPV_ARGS(&pParentISD));
+		hr = properties.pParentISF->CreateViewObject(properties.hWndShellUIParentWindow, IID_PPV_ARGS(&pParentISD));
 		if(pParentISD) {
 			SHELLDETAILS column = {0};
-			hr = pParentISD->GetDetailsOf(ILFindLastID(pIDL), realColumnIndex, &column);
+			hr = pParentISD->GetDetailsOf(ILFindLastID(properties.pIDL), properties.realColumnIndex, &column);
 			if(SUCCEEDED(hr)) {
-				ATLVERIFY(SUCCEEDED(StrRetToBufW(&column.str, ILFindLastID(pIDL), pResult->pText, MAX_LVITEMTEXTLENGTH)));
+				ATLVERIFY(SUCCEEDED(StrRetToBufW(&column.str, ILFindLastID(properties.pIDL), properties.pResult->pText, MAX_LVITEMTEXTLENGTH)));
 			}
 		} else {
 			// give up
@@ -194,17 +194,17 @@ STDMETHODIMP ShLvwSlowColumnTask::DoInternalResume(void)
 	}
 
 	if(SUCCEEDED(hr)) {
-		EnterCriticalSection(pCriticalSection);
+		EnterCriticalSection(properties.pCriticalSection);
 		#ifdef USE_STL
-			pSlowColumnQueue->push(pResult);
+			properties.pSlowColumnQueue->push(pResult);
 		#else
-			pSlowColumnQueue->AddTail(pResult);
+			properties.pSlowColumnQueue->AddTail(properties.pResult);
 		#endif
-		pResult = NULL;
-		LeaveCriticalSection(pCriticalSection);
+		properties.pResult = NULL;
+		LeaveCriticalSection(properties.pCriticalSection);
 
-		if(IsWindow(hWndToNotify)) {
-			PostMessage(hWndToNotify, WM_TRIGGER_UPDATETEXT, 0, 0);
+		if(IsWindow(properties.hWndToNotify)) {
+			PostMessage(properties.hWndToNotify, WM_TRIGGER_UPDATETEXT, 0, 0);
 		}
 	}
 	return NOERROR;
@@ -212,13 +212,13 @@ STDMETHODIMP ShLvwSlowColumnTask::DoInternalResume(void)
 
 STDMETHODIMP ShLvwSlowColumnTask::DoRun(void)
 {
-	if(pIDLNamespace) {
-		BindToPIDL(pIDLNamespace, IID_PPV_ARGS(&pParentISF));
+	if(properties.pIDLNamespace) {
+		BindToPIDL(properties.pIDLNamespace, IID_PPV_ARGS(&properties.pParentISF));
 	}
-	if(!pParentISF) {
+	if(!properties.pParentISF) {
 		return E_FAIL;
 	}
-	pParentISF->QueryInterface(IID_PPV_ARGS(&pParentISF2));
+	properties.pParentISF->QueryInterface(IID_PPV_ARGS(&properties.pParentISF2));
 
 	return E_PENDING;
 }

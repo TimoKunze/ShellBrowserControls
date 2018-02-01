@@ -171,80 +171,85 @@ public:
 	STDMETHODIMP DoRun(void);
 
 protected:
-	/// \brief <em>Specifies which property list to load</em>
-	PROPERTYKEY propertyListToLoad;
-	/// \brief <em>The event used to signal that the control has finished loading the shell columns</em>
-	HANDLE hColumnsReadyEvent;
-	/// \brief <em>Specifies the window that is used as parent window for any UI that the shell may display</em>
-	HWND hWndShellUIParentWindow;
-	/// \brief <em>Specifies the window that the result is posted to</em>
-	///
-	/// Specifies the window to which to send the results. This window must handle the
-	/// \c WM_TRIGGER_UPDATETILEVIEWCOLUMNS message.
-	///
-	/// \sa WM_TRIGGER_UPDATETILEVIEWCOLUMNS
-	HWND hWndToNotify;
-	/// \brief <em>Holds the fully qualified pIDL of the item for which to retrieve the sub-items</em>
-	PIDLIST_ABSOLUTE pIDL;
-	/// \brief <em>The fully qualified pIDL of the \c IShellFolder object to be used</em>
-	///
-	/// \sa <a href="https://msdn.microsoft.com/en-us/library/bb775075.aspx">IShellFolder</a>
-	PIDLIST_ABSOLUTE pIDLParentNamespace;
-	/// \brief <em>Specifies the maximum number of sub-items to retrieve</em>
-	UINT maxColumnCount;
-	/// \brief <em>The \c IShellFolder2 object to be used</em>
-	///
-	/// \sa <a href="https://msdn.microsoft.com/en-us/library/bb775055.aspx">IShellFolder2</a>
-	IShellFolder2* pParentISF2;
-	/// \brief <em>The \c IPropertyDescriptionList object to be used</em>
-	///
-	/// \sa <a href="https://msdn.microsoft.com/en-us/library/bb761511.aspx">IPropertyDescriptionList</a>
-	IPropertyDescriptionList* pPropertyDescriptionList;
-	/// \brief <em>Temporarily holds the property keys of the columns to display</em>
-	///
-	/// \sa numberOfPropertyKeys
-	PROPERTYKEY* pPropertyKeys;
-	/// \brief <em>Specifies the number of elements stored in \c pPropertyKeys</em>
-	///
-	/// \sa pPropertyKeys, nextPropertyKeyToFetch
-	UINT numberOfPropertyKeys;
-	/// \brief <em>Temporarily holds the index of the next property key to fetch</em>
-	///
-	/// \sa numberOfPropertyKeys, pPropertyKeys
-	UINT nextPropertyKeyToFetch;
-	/// \brief <em>Specifies the shell index of the column at which to continue the column enumeration used to get the column indexes</em>
-	int currentRealColumnIndex;
-	#ifdef USE_STL
-		/// \brief <em>Buffers the tile view information retrieved by the background thread until the list view is updated</em>
-		///
-		/// \sa pCriticalSection, pResult, SHLVWBACKGROUNDTILEVIEWINFO
-		std::queue<LPSHLVWBACKGROUNDTILEVIEWINFO>* pBackgroundTileViewQueue;
-	#else
-		/// \brief <em>Buffers the tile view information retrieved by the background thread until the list view is updated</em>
-		///
-		/// \sa pCriticalSection, pResult, SHLVWBACKGROUNDTILEVIEWINFO
-		CAtlList<LPSHLVWBACKGROUNDTILEVIEWINFO>* pBackgroundTileViewQueue;
-	#endif
-	/// \brief <em>Holds the tile view information until it is inserted into the \c pBackgroundTileViewQueue queue</em>
-	///
-	/// \sa pBackgroundTileViewQueue, SHLVWBACKGROUNDTILEVIEWINFO
-	LPSHLVWBACKGROUNDTILEVIEWINFO pResult;
-	/// \brief <em>The critical section used to synchronize access to \c pBackgroundTileViewQueue</em>
-	///
-	/// \sa pBackgroundTileViewQueue
-	LPCRITICAL_SECTION pCriticalSection;
-
 	typedef DWORD TILEVIEWTASKSTATUS;
 	/// \brief <em>Possible value for the \c status member, meaning that nothing has been done yet</em>
 	#define TVTS_NOTHINGDONE						0x0
 	/// \brief <em>Possible value for the \c status member, meaning that the list of property keys is being built</em>
 	///
-	/// \sa pPropertyKeys
+	/// \sa Properties::pPropertyKeys
 	#define TVTS_COLLECTINGPROPERTYKEYS	0x1
 	/// \brief <em>Possible value for the \c status member, meaning that the column indexes of the properties to display are being retrieved</em>
 	#define TVTS_FINDINGCOLUMNS					0x2
 	/// \brief <em>Possible value for the \c status member, meaning that all work has been done</em>
 	#define TVTS_DONE										0x3
-	/// \brief <em>Specifies how much work is done</em>
-	TILEVIEWTASKSTATUS status : 2;
+
+	/// \brief <em>Holds the object's properties</em>
+	struct Properties
+	{
+		/// \brief <em>Specifies which property list to load</em>
+		PROPERTYKEY propertyListToLoad;
+		/// \brief <em>The event used to signal that the control has finished loading the shell columns</em>
+		HANDLE hColumnsReadyEvent;
+		/// \brief <em>Specifies the window that is used as parent window for any UI that the shell may display</em>
+		HWND hWndShellUIParentWindow;
+		/// \brief <em>Specifies the window that the result is posted to</em>
+		///
+		/// Specifies the window to which to send the results. This window must handle the
+		/// \c WM_TRIGGER_UPDATETILEVIEWCOLUMNS message.
+		///
+		/// \sa WM_TRIGGER_UPDATETILEVIEWCOLUMNS
+		HWND hWndToNotify;
+		/// \brief <em>Holds the fully qualified pIDL of the item for which to retrieve the sub-items</em>
+		PIDLIST_ABSOLUTE pIDL;
+		/// \brief <em>The fully qualified pIDL of the \c IShellFolder object to be used</em>
+		///
+		/// \sa <a href="https://msdn.microsoft.com/en-us/library/bb775075.aspx">IShellFolder</a>
+		PIDLIST_ABSOLUTE pIDLParentNamespace;
+		/// \brief <em>Specifies the maximum number of sub-items to retrieve</em>
+		UINT maxColumnCount;
+		/// \brief <em>The \c IShellFolder2 object to be used</em>
+		///
+		/// \sa <a href="https://msdn.microsoft.com/en-us/library/bb775055.aspx">IShellFolder2</a>
+		IShellFolder2* pParentISF2;
+		/// \brief <em>The \c IPropertyDescriptionList object to be used</em>
+		///
+		/// \sa <a href="https://msdn.microsoft.com/en-us/library/bb761511.aspx">IPropertyDescriptionList</a>
+		IPropertyDescriptionList* pPropertyDescriptionList;
+		/// \brief <em>Temporarily holds the property keys of the columns to display</em>
+		///
+		/// \sa numberOfPropertyKeys
+		PROPERTYKEY* pPropertyKeys;
+		/// \brief <em>Specifies the number of elements stored in \c pPropertyKeys</em>
+		///
+		/// \sa pPropertyKeys, nextPropertyKeyToFetch
+		UINT numberOfPropertyKeys;
+		/// \brief <em>Temporarily holds the index of the next property key to fetch</em>
+		///
+		/// \sa numberOfPropertyKeys, pPropertyKeys
+		UINT nextPropertyKeyToFetch;
+		/// \brief <em>Specifies the shell index of the column at which to continue the column enumeration used to get the column indexes</em>
+		int currentRealColumnIndex;
+		#ifdef USE_STL
+			/// \brief <em>Buffers the tile view information retrieved by the background thread until the list view is updated</em>
+			///
+			/// \sa pCriticalSection, pResult, SHLVWBACKGROUNDTILEVIEWINFO
+			std::queue<LPSHLVWBACKGROUNDTILEVIEWINFO>* pBackgroundTileViewQueue;
+		#else
+			/// \brief <em>Buffers the tile view information retrieved by the background thread until the list view is updated</em>
+			///
+			/// \sa pCriticalSection, pResult, SHLVWBACKGROUNDTILEVIEWINFO
+			CAtlList<LPSHLVWBACKGROUNDTILEVIEWINFO>* pBackgroundTileViewQueue;
+		#endif
+		/// \brief <em>Holds the tile view information until it is inserted into the \c pBackgroundTileViewQueue queue</em>
+		///
+		/// \sa pBackgroundTileViewQueue, SHLVWBACKGROUNDTILEVIEWINFO
+		LPSHLVWBACKGROUNDTILEVIEWINFO pResult;
+		/// \brief <em>The critical section used to synchronize access to \c pBackgroundTileViewQueue</em>
+		///
+		/// \sa pBackgroundTileViewQueue
+		LPCRITICAL_SECTION pCriticalSection;
+
+		/// \brief <em>Specifies how much work is done</em>
+		TILEVIEWTASKSTATUS status : 2;
+	} properties;
 };
