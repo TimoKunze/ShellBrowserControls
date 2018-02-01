@@ -3648,17 +3648,17 @@ LRESULT ShellTreeView::OnTriggerItemEnumComplete(UINT /*message*/, WPARAM /*wPar
 								int begin = (this_thread + 0) * size / num_threads;
 								int end = (this_thread + 1) * size / num_threads;
 
-								for(int i = begin; i < end; ++i) {
+								for(int j = begin; j < end; ++j) {
 									#pragma omp flush(done)
 									if(done) {
 										break;
 									}
-									if(ILIsEqual(immediateSubItems[i].second, pItem->pIDL)) {
+									if(ILIsEqual(immediateSubItems[j].second, pItem->pIDL)) {
 										done = TRUE;
 										#pragma omp flush(done)
-										hExistingItem = immediateSubItems[i].first;
+										hExistingItem = immediateSubItems[j].first;
 										foundEntry = immediateSubItems.cbegin();
-										std::advance(foundEntry, i);
+										std::advance(foundEntry, j);
 									}
 								}
 							}

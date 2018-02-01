@@ -162,18 +162,22 @@ protected:
 	///
 	/// \return \c TRUE on success; otherwise \c FALSE.
 	///
-	/// \sa hAdornmentIcon
+	/// \sa Properties::hAdornmentIcon
 	BOOL FindContentAreaMargins(__inout LPRECT pMargins);
 
 private:
-	/// \brief <em>The overall size in pixels that the images may have</em>
-	SIZE targetIconSize;
-	/// \brief <em>The size in pixels of the adornment icon being used</em>
-	int loadedIconSize;
-	/// \brief <em>The adornment icon being used</em>
-	HICON hAdornmentIcon;
-	/// \brief <em>The content margins in pixels</em>
-	RECT contentMargins;
-	/// \brief <em>The optional additional content margins in pixels</em>
-	RECT extraMargins;
+	/// \brief <em>Holds the object's properties</em>
+	struct Properties
+	{
+		/// \brief <em>The overall size in pixels that the images may have</em>
+		SIZE targetIconSize;
+		/// \brief <em>The size in pixels of the adornment icon being used</em>
+		int loadedIconSize;
+		/// \brief <em>The adornment icon being used</em>
+		HICON hAdornmentIcon;
+		/// \brief <em>The content margins in pixels</em>
+		RECT contentMargins;
+		/// \brief <em>The optional additional content margins in pixels</em>
+		RECT extraMargins;
+	} properties;
 };

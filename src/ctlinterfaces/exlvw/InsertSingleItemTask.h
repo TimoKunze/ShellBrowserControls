@@ -226,61 +226,65 @@ public:
 	STDMETHODIMP DoRun(void);
 
 protected:
-	/// \brief <em>The unique ID of this task</em>
-	///
-	/// \sa GetTaskID, GetNewTaskID
-	ULONGLONG taskID;
-	/// \brief <em>The object whose sub-items are enumerated by the task</em>
-	///
-	/// \sa GetTarget, SetTarget
-	LPDISPATCH pNamespaceObject;
+	/// \brief <em>Holds the object's properties</em>
+	struct Properties
+	{
+		/// \brief <em>The unique ID of this task</em>
+		///
+		/// \sa GetTaskID, GetNewTaskID
+		ULONGLONG taskID;
+		/// \brief <em>The object whose sub-items are enumerated by the task</em>
+		///
+		/// \sa GetTarget, SetTarget
+		LPDISPATCH pNamespaceObject;
 
-	/// \brief <em>Specifies the window that the results are posted to</em>
-	///
-	/// Specifies the window to which to send the retrieved item. This window must handle the
-	/// \c WM_TRIGGER_ITEMENUMCOMPLETE message.
-	///
-	/// \sa WM_TRIGGER_ITEMENUMCOMPLETE
-	HWND hWndToNotify;
-	/// \brief <em>Holds the fully qualified pIDL of the shell item that is the parent item of the new item</em>
-	PIDLIST_ABSOLUTE pIDLParent;
-	/// \brief <em>Holds the fully qualified pIDL of the shell item to insert</em>
-	PIDLIST_ABSOLUTE pIDLToAdd;
-	/// \brief <em>Specifies whether \c pIDLToAdd is a simple pIDL and therefore mustn't be freed even in case no item is inserted</em>
-	UINT isSimplePIDL : 1;
-	/// \brief <em>Specifies whether the handler of the \c WM_TRIGGER_ITEMENUMCOMPLETE message should enter label-edit mode after inserting the item</em>
-	///
-	/// Specifies whether the handler of the \c WM_TRIGGER_ITEMENUMCOMPLETE message should enter label-edit
-	/// mode after inserting the item. This is used with namespace shell context menus.\n
-	/// If \c TRUE, the handler should enter label-edit mode; otherwise not.
-	///
-	/// \sa WM_TRIGGER_ITEMENUMCOMPLETE
-	UINT autoLabelEdit : 1;
-	/// \brief <em>Holds the \c INamespaceEnumSettings object holding the settings used for item filtering</em>
-	///
-	/// \sa INamespaceEnumSettings
-	INamespaceEnumSettings* pEnumSettings;
-	#ifdef USE_STL
-		/// \brief <em>Buffers the item enumerated by the background thread until it is inserted into the list view</em>
+		/// \brief <em>Specifies the window that the results are posted to</em>
 		///
-		/// \sa pCriticalSection, pEnumResult, SHLVWBACKGROUNDITEMENUMINFO
-		std::queue<LPSHLVWBACKGROUNDITEMENUMINFO>* pEnumratedItemsQueue;
-	#else
-		/// \brief <em>Buffers the item enumerated by the background thread until it is inserted into the list view</em>
+		/// Specifies the window to which to send the retrieved item. This window must handle the
+		/// \c WM_TRIGGER_ITEMENUMCOMPLETE message.
 		///
-		/// \sa pCriticalSection, pEnumResult, SHLVWBACKGROUNDITEMENUMINFO
-		CAtlList<LPSHLVWBACKGROUNDITEMENUMINFO>* pEnumratedItemsQueue;
-	#endif
-	/// \brief <em>Holds the enumerated items until they are inserted into the \c pEnumratedItemsQueue queue</em>
-	///
-	/// \sa pEnumratedItemsQueue, SHLVWBACKGROUNDITEMENUMINFO
-	LPSHLVWBACKGROUNDITEMENUMINFO pEnumResult;
-	/// \brief <em>The critical section used to synchronize access to \c pEnumratedItemsQueue</em>
-	///
-	/// \sa pEnumratedItemsQueue
-	LPCRITICAL_SECTION pCriticalSection;
-	/// \brief <em>Holds cached enumeration settings</em>
-	///
-	/// \sa CachedEnumSettings
-	CachedEnumSettings enumSettings;
+		/// \sa WM_TRIGGER_ITEMENUMCOMPLETE
+		HWND hWndToNotify;
+		/// \brief <em>Holds the fully qualified pIDL of the shell item that is the parent item of the new item</em>
+		PIDLIST_ABSOLUTE pIDLParent;
+		/// \brief <em>Holds the fully qualified pIDL of the shell item to insert</em>
+		PIDLIST_ABSOLUTE pIDLToAdd;
+		/// \brief <em>Specifies whether \c pIDLToAdd is a simple pIDL and therefore mustn't be freed even in case no item is inserted</em>
+		UINT isSimplePIDL : 1;
+		/// \brief <em>Specifies whether the handler of the \c WM_TRIGGER_ITEMENUMCOMPLETE message should enter label-edit mode after inserting the item</em>
+		///
+		/// Specifies whether the handler of the \c WM_TRIGGER_ITEMENUMCOMPLETE message should enter label-edit
+		/// mode after inserting the item. This is used with namespace shell context menus.\n
+		/// If \c TRUE, the handler should enter label-edit mode; otherwise not.
+		///
+		/// \sa WM_TRIGGER_ITEMENUMCOMPLETE
+		UINT autoLabelEdit : 1;
+		/// \brief <em>Holds the \c INamespaceEnumSettings object holding the settings used for item filtering</em>
+		///
+		/// \sa INamespaceEnumSettings
+		INamespaceEnumSettings* pEnumSettings;
+		#ifdef USE_STL
+			/// \brief <em>Buffers the item enumerated by the background thread until it is inserted into the list view</em>
+			///
+			/// \sa pCriticalSection, pEnumResult, SHLVWBACKGROUNDITEMENUMINFO
+			std::queue<LPSHLVWBACKGROUNDITEMENUMINFO>* pEnumratedItemsQueue;
+		#else
+			/// \brief <em>Buffers the item enumerated by the background thread until it is inserted into the list view</em>
+			///
+			/// \sa pCriticalSection, pEnumResult, SHLVWBACKGROUNDITEMENUMINFO
+			CAtlList<LPSHLVWBACKGROUNDITEMENUMINFO>* pEnumratedItemsQueue;
+		#endif
+		/// \brief <em>Holds the enumerated items until they are inserted into the \c pEnumratedItemsQueue queue</em>
+		///
+		/// \sa pEnumratedItemsQueue, SHLVWBACKGROUNDITEMENUMINFO
+		LPSHLVWBACKGROUNDITEMENUMINFO pEnumResult;
+		/// \brief <em>The critical section used to synchronize access to \c pEnumratedItemsQueue</em>
+		///
+		/// \sa pEnumratedItemsQueue
+		LPCRITICAL_SECTION pCriticalSection;
+		/// \brief <em>Holds cached enumeration settings</em>
+		///
+		/// \sa CachedEnumSettings
+		CachedEnumSettings enumSettings;
+	} properties;
 };

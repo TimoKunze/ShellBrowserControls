@@ -5,7 +5,9 @@
 
 #pragma once
 
-#define NTDDI_VERSION NTDDI_WIN7
+#define NTDDI_VERSION NTDDI_WIN10
+
+#include <winsdkver.h>
 
 #ifdef _DEBUG
 	#define _ATL_DEBUG_INTERFACES

@@ -153,46 +153,50 @@ public:
 	STDMETHODIMP DoRun(void);
 
 protected:
-	/// \brief <em>Specifies the window that the result is posted to</em>
-	///
-	/// Specifies the window to which to send the retrieved property value. This window must handle the
-	/// \c WM_TRIGGER_UPDATESUBITEMCONTROL message.
-	///
-	/// \sa WM_TRIGGER_UPDATESUBITEMCONTROL
-	HWND hWndToNotify;
-	/// \brief <em>Specifies the window that is used as parent window for any UI that the shell may display</em>
-	HWND hWndShellUIParentWindow;
-	/// \brief <em>Holds the fully qualified pIDL of the item for which to retrieve the property value</em>
-	PIDLIST_ABSOLUTE pIDL;
-	/// \brief <em>The fully qualified pIDL of the namespace whose columns are used</em>
-	PIDLIST_ABSOLUTE pIDLNamespace;
-	/// \brief <em>The \c IShellFolder implementation of the namespace whose columns are used</em>
-	///
-	/// \sa <a href="https://msdn.microsoft.com/en-us/library/bb775075.aspx">IShellFolder</a>
-	IShellFolder* pParentISF;
-	/// \brief <em>The \c IShellFolder2 implementation of the namespace whose columns are used</em>
-	///
-	/// \sa <a href="https://msdn.microsoft.com/en-us/library/bb775055.aspx">IShellFolder2</a>
-	IShellFolder2* pParentISF2;
-	/// \brief <em>Specifies the shell index of the column for which to retrieve the property value</em>
-	int realColumnIndex;
-	#ifdef USE_STL
-		/// \brief <em>Buffers the property value retrieved by the background thread until it is inserted into the list view</em>
+	/// \brief <em>Holds the object's properties</em>
+	struct Properties
+	{
+		/// \brief <em>Specifies the window that the result is posted to</em>
 		///
-		/// \sa pCriticalSection, pResult, SHLVWBACKGROUNDCOLUMNINFO
-		std::queue<LPSHLVWBACKGROUNDCOLUMNINFO>* pSubItemControlQueue;
-	#else
-		/// \brief <em>Buffers the property value retrieved by the background thread until it is inserted into the list view</em>
+		/// Specifies the window to which to send the retrieved property value. This window must handle the
+		/// \c WM_TRIGGER_UPDATESUBITEMCONTROL message.
 		///
-		/// \sa pCriticalSection, pResult, SHLVWBACKGROUNDCOLUMNINFO
-		CAtlList<LPSHLVWBACKGROUNDCOLUMNINFO>* pSubItemControlQueue;
-	#endif
-	/// \brief <em>Holds the retrieved property value until it is inserted into the \c pSubItemControlQueue queue</em>
-	///
-	/// \sa pSubItemControlQueue, SHLVWBACKGROUNDCOLUMNINFO
-	LPSHLVWBACKGROUNDCOLUMNINFO pResult;
-	/// \brief <em>The critical section used to synchronize access to \c pSubItemControlQueue</em>
-	///
-	/// \sa pSubItemControlQueue
-	LPCRITICAL_SECTION pCriticalSection;
+		/// \sa WM_TRIGGER_UPDATESUBITEMCONTROL
+		HWND hWndToNotify;
+		/// \brief <em>Specifies the window that is used as parent window for any UI that the shell may display</em>
+		HWND hWndShellUIParentWindow;
+		/// \brief <em>Holds the fully qualified pIDL of the item for which to retrieve the property value</em>
+		PIDLIST_ABSOLUTE pIDL;
+		/// \brief <em>The fully qualified pIDL of the namespace whose columns are used</em>
+		PIDLIST_ABSOLUTE pIDLNamespace;
+		/// \brief <em>The \c IShellFolder implementation of the namespace whose columns are used</em>
+		///
+		/// \sa <a href="https://msdn.microsoft.com/en-us/library/bb775075.aspx">IShellFolder</a>
+		IShellFolder* pParentISF;
+		/// \brief <em>The \c IShellFolder2 implementation of the namespace whose columns are used</em>
+		///
+		/// \sa <a href="https://msdn.microsoft.com/en-us/library/bb775055.aspx">IShellFolder2</a>
+		IShellFolder2* pParentISF2;
+		/// \brief <em>Specifies the shell index of the column for which to retrieve the property value</em>
+		int realColumnIndex;
+		#ifdef USE_STL
+			/// \brief <em>Buffers the property value retrieved by the background thread until it is inserted into the list view</em>
+			///
+			/// \sa pCriticalSection, pResult, SHLVWBACKGROUNDCOLUMNINFO
+			std::queue<LPSHLVWBACKGROUNDCOLUMNINFO>* pSubItemControlQueue;
+		#else
+			/// \brief <em>Buffers the property value retrieved by the background thread until it is inserted into the list view</em>
+			///
+			/// \sa pCriticalSection, pResult, SHLVWBACKGROUNDCOLUMNINFO
+			CAtlList<LPSHLVWBACKGROUNDCOLUMNINFO>* pSubItemControlQueue;
+		#endif
+		/// \brief <em>Holds the retrieved property value until it is inserted into the \c pSubItemControlQueue queue</em>
+		///
+		/// \sa pSubItemControlQueue, SHLVWBACKGROUNDCOLUMNINFO
+		LPSHLVWBACKGROUNDCOLUMNINFO pResult;
+		/// \brief <em>The critical section used to synchronize access to \c pSubItemControlQueue</em>
+		///
+		/// \sa pSubItemControlQueue
+		LPCRITICAL_SECTION pCriticalSection;
+	} properties;
 };

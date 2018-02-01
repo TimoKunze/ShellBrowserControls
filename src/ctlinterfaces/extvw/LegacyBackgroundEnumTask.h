@@ -240,69 +240,73 @@ public:
 	STDMETHODIMP DoRun(void);
 
 protected:
-	/// \brief <em>The unique ID of this task</em>
-	///
-	/// \sa GetTaskID, GetNewTaskID
-	ULONGLONG taskID;
-	/// \brief <em>The object whose sub-items are enumerated by the task</em>
-	///
-	/// \sa GetTarget, SetTarget
-	LPDISPATCH pNamespaceObject;
+	/// \brief <em>Holds the object's properties</em>
+	struct Properties
+	{
+		/// \brief <em>The unique ID of this task</em>
+		///
+		/// \sa GetTaskID, GetNewTaskID
+		ULONGLONG taskID;
+		/// \brief <em>The object whose sub-items are enumerated by the task</em>
+		///
+		/// \sa GetTarget, SetTarget
+		LPDISPATCH pNamespaceObject;
 
-	/// \brief <em>Specifies the window that the results are posted to</em>
-	///
-	/// Specifies the window to which to send the retrieved items. This window must handle the
-	/// \c WM_TRIGGER_ITEMENUMCOMPLETE message.
-	///
-	/// \sa WM_TRIGGER_ITEMENUMCOMPLETE
-	HWND hWndToNotify;
-	/// \brief <em>Specifies the window that is used as parent window for any UI that the shell may display</em>
-	HWND hWndShellUIParentWindow;
-	/// \brief <em>Holds the fully qualified pIDL of the shell item for which to enumerate the sub-items</em>
-	PIDLIST_ABSOLUTE pIDLParent;
-	/// \brief <em>Holds the marshaled \c IShellFolder implementation of the item for which to enumerate the sub-items</em>
-	///
-	/// \sa pParentISF,
-	///     <a href="https://msdn.microsoft.com/en-us/library/bb775075.aspx">IShellFolder</a>
-	LPSTREAM pMarshaledParentISF;
-	/// \brief <em>Holds the \c IShellFolder implementation of the item for which to enumerate the sub-items</em>
-	///
-	/// \sa pMarshaledParentISF,
-	///     <a href="https://msdn.microsoft.com/en-us/library/bb775075.aspx">IShellFolder</a>
-	LPSHELLFOLDER pParentISF;
-	/// \brief <em>If set to \c TRUE, the namespace whose sub-items to enumerate, is considered a slow item</em>
-	///
-	/// For slow namespaces the enumerated items are double-checked for duplicates.
-	UINT isSlowNamespace : 1;
-	/// \brief <em>Holds the \c IEnumIDList implementation of the item enumerator to use</em>
-	///
-	/// \sa <a href="https://msdn.microsoft.com/en-us/library/bb761982.aspx">IEnumIDList</a>
-	LPENUMIDLIST pEnumerator;
-	/// \brief <em>Holds the \c INamespaceEnumSettings object holding the settings used for item filtering</em>
-	///
-	/// \sa INamespaceEnumSettings
-	INamespaceEnumSettings* pEnumSettings;
-	#ifdef USE_STL
-		/// \brief <em>Buffers the items enumerated by the background thread until they are inserted into the tree view</em>
+		/// \brief <em>Specifies the window that the results are posted to</em>
 		///
-		/// \sa pCriticalSection, pEnumResult, SHTVWBACKGROUNDITEMENUMINFO
-		std::queue<LPSHTVWBACKGROUNDITEMENUMINFO>* pEnumratedItemsQueue;
-	#else
-		/// \brief <em>Buffers the items enumerated by the background thread until they are inserted into the tree view</em>
+		/// Specifies the window to which to send the retrieved items. This window must handle the
+		/// \c WM_TRIGGER_ITEMENUMCOMPLETE message.
 		///
-		/// \sa pCriticalSection, pEnumResult, SHTVWBACKGROUNDITEMENUMINFO
-		CAtlList<LPSHTVWBACKGROUNDITEMENUMINFO>* pEnumratedItemsQueue;
-	#endif
-	/// \brief <em>Holds the enumerated items until they are inserted into the \c pEnumratedItemsQueue queue</em>
-	///
-	/// \sa pEnumratedItemsQueue, SHTVWBACKGROUNDITEMENUMINFO
-	LPSHTVWBACKGROUNDITEMENUMINFO pEnumResult;
-	/// \brief <em>The critical section used to synchronize access to \c pEnumratedItemsQueue</em>
-	///
-	/// \sa pEnumratedItemsQueue
-	LPCRITICAL_SECTION pCriticalSection;
-	/// \brief <em>Holds cached enumeration settings</em>
-	///
-	/// \sa CachedEnumSettings
-	CachedEnumSettings enumSettings;
+		/// \sa WM_TRIGGER_ITEMENUMCOMPLETE
+		HWND hWndToNotify;
+		/// \brief <em>Specifies the window that is used as parent window for any UI that the shell may display</em>
+		HWND hWndShellUIParentWindow;
+		/// \brief <em>Holds the fully qualified pIDL of the shell item for which to enumerate the sub-items</em>
+		PIDLIST_ABSOLUTE pIDLParent;
+		/// \brief <em>Holds the marshaled \c IShellFolder implementation of the item for which to enumerate the sub-items</em>
+		///
+		/// \sa pParentISF,
+		///     <a href="https://msdn.microsoft.com/en-us/library/bb775075.aspx">IShellFolder</a>
+		LPSTREAM pMarshaledParentISF;
+		/// \brief <em>Holds the \c IShellFolder implementation of the item for which to enumerate the sub-items</em>
+		///
+		/// \sa pMarshaledParentISF,
+		///     <a href="https://msdn.microsoft.com/en-us/library/bb775075.aspx">IShellFolder</a>
+		LPSHELLFOLDER pParentISF;
+		/// \brief <em>If set to \c TRUE, the namespace whose sub-items to enumerate, is considered a slow item</em>
+		///
+		/// For slow namespaces the enumerated items are double-checked for duplicates.
+		UINT isSlowNamespace : 1;
+		/// \brief <em>Holds the \c IEnumIDList implementation of the item enumerator to use</em>
+		///
+		/// \sa <a href="https://msdn.microsoft.com/en-us/library/bb761982.aspx">IEnumIDList</a>
+		LPENUMIDLIST pEnumerator;
+		/// \brief <em>Holds the \c INamespaceEnumSettings object holding the settings used for item filtering</em>
+		///
+		/// \sa INamespaceEnumSettings
+		INamespaceEnumSettings* pEnumSettings;
+		#ifdef USE_STL
+			/// \brief <em>Buffers the items enumerated by the background thread until they are inserted into the tree view</em>
+			///
+			/// \sa pCriticalSection, pEnumResult, SHTVWBACKGROUNDITEMENUMINFO
+			std::queue<LPSHTVWBACKGROUNDITEMENUMINFO>* pEnumratedItemsQueue;
+		#else
+			/// \brief <em>Buffers the items enumerated by the background thread until they are inserted into the tree view</em>
+			///
+			/// \sa pCriticalSection, pEnumResult, SHTVWBACKGROUNDITEMENUMINFO
+			CAtlList<LPSHTVWBACKGROUNDITEMENUMINFO>* pEnumratedItemsQueue;
+		#endif
+		/// \brief <em>Holds the enumerated items until they are inserted into the \c pEnumratedItemsQueue queue</em>
+		///
+		/// \sa pEnumratedItemsQueue, SHTVWBACKGROUNDITEMENUMINFO
+		LPSHTVWBACKGROUNDITEMENUMINFO pEnumResult;
+		/// \brief <em>The critical section used to synchronize access to \c pEnumratedItemsQueue</em>
+		///
+		/// \sa pEnumratedItemsQueue
+		LPCRITICAL_SECTION pCriticalSection;
+		/// \brief <em>Holds cached enumeration settings</em>
+		///
+		/// \sa CachedEnumSettings
+		CachedEnumSettings enumSettings;
+	} properties;
 };

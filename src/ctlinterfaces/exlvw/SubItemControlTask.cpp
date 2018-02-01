@@ -7,40 +7,40 @@
 ShLvwSubItemControlTask::ShLvwSubItemControlTask(void)
     : RunnableTask(TRUE)
 {
-	pIDL = NULL;
-	pIDLNamespace = NULL;
-	pParentISF = NULL;
-	pParentISF2 = NULL;
-	pSubItemControlQueue = NULL;
-	pResult = NULL;
-	pCriticalSection = NULL;
+	properties.pIDL = NULL;
+	properties.pIDLNamespace = NULL;
+	properties.pParentISF = NULL;
+	properties.pParentISF2 = NULL;
+	properties.pSubItemControlQueue = NULL;
+	properties.pResult = NULL;
+	properties.pCriticalSection = NULL;
 }
 
 void ShLvwSubItemControlTask::FinalRelease()
 {
-	if(pParentISF) {
-		pParentISF->Release();
-		pParentISF = NULL;
+	if(properties.pParentISF) {
+		properties.pParentISF->Release();
+		properties.pParentISF = NULL;
 	}
-	if(pParentISF2) {
-		pParentISF2->Release();
-		pParentISF2 = NULL;
+	if(properties.pParentISF2) {
+		properties.pParentISF2->Release();
+		properties.pParentISF2 = NULL;
 	}
-	if(pIDL) {
-		ILFree(pIDL);
-		pIDL = NULL;
+	if(properties.pIDL) {
+		ILFree(properties.pIDL);
+		properties.pIDL = NULL;
 	}
-	if(pIDLNamespace) {
-		ILFree(pIDLNamespace);
-		pIDLNamespace = NULL;
+	if(properties.pIDLNamespace) {
+		ILFree(properties.pIDLNamespace);
+		properties.pIDLNamespace = NULL;
 	}
-	if(pResult) {
-		if(pResult->pPropertyValue) {
-			PropVariantClear(pResult->pPropertyValue);
-			delete pResult->pPropertyValue;
+	if(properties.pResult) {
+		if(properties.pResult->pPropertyValue) {
+			PropVariantClear(properties.pResult->pPropertyValue);
+			delete properties.pResult->pPropertyValue;
 		}
-		delete pResult;
-		pResult = NULL;
+		delete properties.pResult;
+		properties.pResult = NULL;
 	}
 }
 
@@ -51,19 +51,19 @@ void ShLvwSubItemControlTask::FinalRelease()
 	HRESULT ShLvwSubItemControlTask::Attach(HWND hWndToNotify, HWND hWndShellUIParentWindow, CAtlList<LPSHLVWBACKGROUNDCOLUMNINFO>* pSubItemControlQueue, LPCRITICAL_SECTION pCriticalSection, PCIDLIST_ABSOLUTE pIDL, LONG itemID, LONG columnID, int realColumnIndex, PCIDLIST_ABSOLUTE pIDLNamespace)
 #endif
 {
-	this->hWndToNotify = hWndToNotify;
-	this->hWndShellUIParentWindow = hWndShellUIParentWindow;
-	this->pSubItemControlQueue = pSubItemControlQueue;
-	this->pCriticalSection = pCriticalSection;
-	this->pIDL = ILCloneFull(pIDL);
-	this->realColumnIndex = realColumnIndex;
-	this->pIDLNamespace = ILCloneFull(pIDLNamespace);
+	this->properties.hWndToNotify = hWndToNotify;
+	this->properties.hWndShellUIParentWindow = hWndShellUIParentWindow;
+	this->properties.pSubItemControlQueue = pSubItemControlQueue;
+	this->properties.pCriticalSection = pCriticalSection;
+	this->properties.pIDL = ILCloneFull(pIDL);
+	this->properties.realColumnIndex = realColumnIndex;
+	this->properties.pIDLNamespace = ILCloneFull(pIDLNamespace);
 
-	pResult = new SHLVWBACKGROUNDCOLUMNINFO;
-	if(pResult) {
-		ZeroMemory(pResult, sizeof(SHLVWBACKGROUNDCOLUMNINFO));
-		pResult->itemID = itemID;
-		pResult->columnID = columnID;
+	properties.pResult = new SHLVWBACKGROUNDCOLUMNINFO;
+	if(properties.pResult) {
+		ZeroMemory(properties.pResult, sizeof(SHLVWBACKGROUNDCOLUMNINFO));
+		properties.pResult->itemID = itemID;
+		properties.pResult->columnID = columnID;
 	} else {
 		return E_OUTOFMEMORY;
 	}
@@ -102,7 +102,7 @@ void ShLvwSubItemControlTask::FinalRelease()
 
 STDMETHODIMP ShLvwSubItemControlTask::DoInternalResume(void)
 {
-	ATLASSERT_POINTER(pResult, SHLVWBACKGROUNDCOLUMNINFO);
+	ATLASSERT_POINTER(properties.pResult, SHLVWBACKGROUNDCOLUMNINFO);
 
 	HRESULT hr = E_FAIL;
 
@@ -115,11 +115,11 @@ STDMETHODIMP ShLvwSubItemControlTask::DoInternalResume(void)
 	LPPROPVARIANT pPv = new PROPVARIANT;
 	PropVariantInit(pPv);
 	CComPtr<IShellItem2> pShellItem;
-	if(pParentISF2) {
-		hasPropertyKey = SUCCEEDED(pParentISF2->MapColumnToSCID(realColumnIndex, &propertyKey));
+	if(properties.pParentISF2) {
+		hasPropertyKey = SUCCEEDED(properties.pParentISF2->MapColumnToSCID(properties.realColumnIndex, &propertyKey));
 	}
 	if(hasPropertyKey && APIWrapper::IsSupported_SHCreateItemFromIDList()) {
-		ATLVERIFY(SUCCEEDED(APIWrapper::SHCreateItemFromIDList(pIDL, IID_PPV_ARGS(&pShellItem), &hr)));
+		ATLVERIFY(SUCCEEDED(APIWrapper::SHCreateItemFromIDList(properties.pIDL, IID_PPV_ARGS(&pShellItem), &hr)));
 	}
 	if(pShellItem) {
 		CComPtr<IPropertyStore> pPropertyStore;
@@ -128,7 +128,7 @@ STDMETHODIMP ShLvwSubItemControlTask::DoInternalResume(void)
 			hr = pPropertyStore->GetValue(propertyKey, pPv);
 			hasValue = SUCCEEDED(hr);
 			if(hasValue) {
-				pResult->pPropertyValue = pPv;
+				properties.pResult->pPropertyValue = pPv;
 			}
 		}
 	}
@@ -138,11 +138,11 @@ STDMETHODIMP ShLvwSubItemControlTask::DoInternalResume(void)
 		if(hasPropertyKey) {
 			VARIANT v;
 			VariantInit(&v);
-			hr = pParentISF2->GetDetailsEx(ILFindLastID(pIDL), &propertyKey, &v);
+			hr = properties.pParentISF2->GetDetailsEx(ILFindLastID(properties.pIDL), &propertyKey, &v);
 			if(SUCCEEDED(hr)) {
 				hasValue = SUCCEEDED(APIWrapper::VariantToPropVariant(&v, pPv, &hr));
 				if(hasValue) {
-					pResult->pPropertyValue = pPv;
+					properties.pResult->pPropertyValue = pPv;
 				}
 			}
 			VariantClear(&v);
@@ -154,23 +154,23 @@ STDMETHODIMP ShLvwSubItemControlTask::DoInternalResume(void)
 	} else {
 		hr = E_FAIL;
 	}
-	if(pResult->pPropertyValue != pPv && pPv) {
+	if(properties.pResult->pPropertyValue != pPv && pPv) {
 		delete pPv;
 		pPv = NULL;
 	}
 
 	if(SUCCEEDED(hr)) {
-		EnterCriticalSection(pCriticalSection);
+		EnterCriticalSection(properties.pCriticalSection);
 		#ifdef USE_STL
-			pSubItemControlQueue->push(pResult);
+			properties.pSubItemControlQueue->push(properties.pResult);
 		#else
-			pSubItemControlQueue->AddTail(pResult);
+			properties.pSubItemControlQueue->AddTail(properties.pResult);
 		#endif
-		pResult = NULL;
-		LeaveCriticalSection(pCriticalSection);
+		properties.pResult = NULL;
+		LeaveCriticalSection(properties.pCriticalSection);
 
-		if(IsWindow(hWndToNotify)) {
-			PostMessage(hWndToNotify, WM_TRIGGER_UPDATESUBITEMCONTROL, 0, 0);
+		if(IsWindow(properties.hWndToNotify)) {
+			PostMessage(properties.hWndToNotify, WM_TRIGGER_UPDATESUBITEMCONTROL, 0, 0);
 		}
 	}
 	return NOERROR;
@@ -178,13 +178,13 @@ STDMETHODIMP ShLvwSubItemControlTask::DoInternalResume(void)
 
 STDMETHODIMP ShLvwSubItemControlTask::DoRun(void)
 {
-	if(pIDLNamespace) {
-		BindToPIDL(pIDLNamespace, IID_PPV_ARGS(&pParentISF));
+	if(properties.pIDLNamespace) {
+		BindToPIDL(properties.pIDLNamespace, IID_PPV_ARGS(&properties.pParentISF));
 	}
-	if(!pParentISF) {
+	if(!properties.pParentISF) {
 		return E_FAIL;
 	}
-	pParentISF->QueryInterface(IID_PPV_ARGS(&pParentISF2));
+	properties.pParentISF->QueryInterface(IID_PPV_ARGS(&properties.pParentISF2));
 
 	return E_PENDING;
 }

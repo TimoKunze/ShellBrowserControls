@@ -7,37 +7,37 @@
 ShLvwInsertSingleItemTask::ShLvwInsertSingleItemTask(void)
     : RunnableTask(FALSE)
 {
-	pNamespaceObject = NULL;
-	pEnumratedItemsQueue = NULL;
-	pEnumResult = NULL;
-	pCriticalSection = NULL;
-	taskID = GetNewTaskID();
+	properties.pNamespaceObject = NULL;
+	properties.pEnumratedItemsQueue = NULL;
+	properties.pEnumResult = NULL;
+	properties.pCriticalSection = NULL;
+	properties.taskID = GetNewTaskID();
 }
 
 void ShLvwInsertSingleItemTask::FinalRelease()
 {
-	if(pEnumSettings) {
-		pEnumSettings->Release();
-		pEnumSettings = NULL;
+	if(properties.pEnumSettings) {
+		properties.pEnumSettings->Release();
+		properties.pEnumSettings = NULL;
 	}
-	if(pNamespaceObject) {
-		pNamespaceObject->Release();
-		pNamespaceObject = NULL;
+	if(properties.pNamespaceObject) {
+		properties.pNamespaceObject->Release();
+		properties.pNamespaceObject = NULL;
 	}
-	if(pIDLToAdd) {
-		ILFree(pIDLToAdd);
-		pIDLToAdd = NULL;
+	if(properties.pIDLToAdd) {
+		ILFree(properties.pIDLToAdd);
+		properties.pIDLToAdd = NULL;
 	}
-	if(pIDLParent) {
-		ILFree(pIDLParent);
-		pIDLParent = NULL;
+	if(properties.pIDLParent) {
+		ILFree(properties.pIDLParent);
+		properties.pIDLParent = NULL;
 	}
-	if(pEnumResult) {
-		if(pEnumResult->hPIDLBuffer) {
-			DPA_DestroyCallback(pEnumResult->hPIDLBuffer, FreeDPAPIDLElement, NULL);
+	if(properties.pEnumResult) {
+		if(properties.pEnumResult->hPIDLBuffer) {
+			DPA_DestroyCallback(properties.pEnumResult->hPIDLBuffer, FreeDPAPIDLElement, NULL);
 		}
-		delete pEnumResult;
-		pEnumResult = NULL;
+		delete properties.pEnumResult;
+		properties.pEnumResult = NULL;
 	}
 }
 
@@ -50,7 +50,7 @@ STDMETHODIMP ShLvwInsertSingleItemTask::GetTaskID(PULONGLONG pTaskID)
 	if(!pTaskID) {
 		return E_POINTER;
 	}
-	*pTaskID = taskID;
+	*pTaskID = properties.taskID;
 	return S_OK;
 }
 
@@ -61,12 +61,12 @@ STDMETHODIMP ShLvwInsertSingleItemTask::GetTarget(REFIID requiredInterface, LPVO
 		return E_POINTER;
 	}
 
-	if(!pNamespaceObject) {
+	if(!properties.pNamespaceObject) {
 		*ppInterfaceImpl = NULL;
 		return E_NOINTERFACE;
 	}
 
-	return pNamespaceObject->QueryInterface(requiredInterface, ppInterfaceImpl);
+	return properties.pNamespaceObject->QueryInterface(requiredInterface, ppInterfaceImpl);
 }
 
 STDMETHODIMP ShLvwInsertSingleItemTask::SetTarget(LPDISPATCH pNamespaceObject)
@@ -75,13 +75,13 @@ STDMETHODIMP ShLvwInsertSingleItemTask::SetTarget(LPDISPATCH pNamespaceObject)
 		return E_INVALIDARG;
 	}
 
-	if(this->pNamespaceObject) {
-		this->pNamespaceObject->Release();
-		this->pNamespaceObject = NULL;
+	if(this->properties.pNamespaceObject) {
+		this->properties.pNamespaceObject->Release();
+		this->properties.pNamespaceObject = NULL;
 	}
 
 	if(pNamespaceObject) {
-		return pNamespaceObject->QueryInterface(IID_PPV_ARGS(&this->pNamespaceObject));
+		return pNamespaceObject->QueryInterface(IID_PPV_ARGS(&this->properties.pNamespaceObject));
 	}
 	return S_OK;
 }
@@ -95,29 +95,29 @@ STDMETHODIMP ShLvwInsertSingleItemTask::SetTarget(LPDISPATCH pNamespaceObject)
 	HRESULT ShLvwInsertSingleItemTask::Attach(HWND hWndToNotify, CAtlList<LPSHLVWBACKGROUNDITEMENUMINFO>* pEnumratedItemsQueue, LPCRITICAL_SECTION pCriticalSection, LONG insertAt, PCIDLIST_ABSOLUTE pIDLToAdd, BOOL isSimplePIDL, PCIDLIST_ABSOLUTE pIDLParent, INamespaceEnumSettings* pEnumSettings, PCIDLIST_ABSOLUTE namespacePIDLToSet, BOOL checkForDuplicates, BOOL autoLabelEdit)
 #endif
 {
-	this->hWndToNotify = hWndToNotify;
-	this->pEnumratedItemsQueue = pEnumratedItemsQueue;
-	this->pCriticalSection = pCriticalSection;
-	this->pIDLToAdd = ILCloneFull(pIDLToAdd);
-	this->isSimplePIDL = isSimplePIDL;
-	this->pIDLParent = ILCloneFull(pIDLParent);
-	this->pEnumSettings = pEnumSettings;
-	this->pEnumSettings->AddRef();
-	this->autoLabelEdit = autoLabelEdit;
+	this->properties.hWndToNotify = hWndToNotify;
+	this->properties.pEnumratedItemsQueue = pEnumratedItemsQueue;
+	this->properties.pCriticalSection = pCriticalSection;
+	this->properties.pIDLToAdd = ILCloneFull(pIDLToAdd);
+	this->properties.isSimplePIDL = isSimplePIDL;
+	this->properties.pIDLParent = ILCloneFull(pIDLParent);
+	this->properties.pEnumSettings = pEnumSettings;
+	this->properties.pEnumSettings->AddRef();
+	this->properties.autoLabelEdit = autoLabelEdit;
 
-	pEnumResult = new SHLVWBACKGROUNDITEMENUMINFO;
-	if(pEnumResult) {
-		ZeroMemory(pEnumResult, sizeof(SHLVWBACKGROUNDITEMENUMINFO));
-		pEnumResult->taskID = taskID;
-		pEnumResult->insertAt = insertAt;
-		pEnumResult->checkForDuplicates = checkForDuplicates;
-		pEnumResult->namespacePIDLToSet = namespacePIDLToSet;
-		pEnumResult->hPIDLBuffer = DPA_Create(1);
+	properties.pEnumResult = new SHLVWBACKGROUNDITEMENUMINFO;
+	if(properties.pEnumResult) {
+		ZeroMemory(properties.pEnumResult, sizeof(SHLVWBACKGROUNDITEMENUMINFO));
+		properties.pEnumResult->taskID = properties.taskID;
+		properties.pEnumResult->insertAt = insertAt;
+		properties.pEnumResult->checkForDuplicates = checkForDuplicates;
+		properties.pEnumResult->namespacePIDLToSet = namespacePIDLToSet;
+		properties.pEnumResult->hPIDLBuffer = DPA_Create(1);
 	} else {
 		return E_OUTOFMEMORY;
 	}
 
-	enumSettings = CacheEnumSettings(pEnumSettings);
+	properties.enumSettings = CacheEnumSettings(pEnumSettings);
 	return S_OK;
 }
 
@@ -155,13 +155,13 @@ STDMETHODIMP ShLvwInsertSingleItemTask::SetTarget(LPDISPATCH pNamespaceObject)
 
 STDMETHODIMP ShLvwInsertSingleItemTask::DoRun(void)
 {
-	ATLASSERT_POINTER(pEnumResult, SHLVWBACKGROUNDITEMENUMINFO);
-	ATLASSUME(pEnumResult->hPIDLBuffer);
+	ATLASSERT_POINTER(properties.pEnumResult, SHLVWBACKGROUNDITEMENUMINFO);
+	ATLASSUME(properties.pEnumResult->hPIDLBuffer);
 
 	HRESULT hr = NOERROR;
 	CComPtr<IShellFolder> pParentISF = NULL;
 	PUITEMID_CHILD pIDLToAddRelative = NULL;
-	HRESULT hr2 = SHBindToParent(pIDLToAdd, IID_PPV_ARGS(&pParentISF), const_cast<PCUITEMID_CHILD*>(&pIDLToAddRelative));
+	HRESULT hr2 = SHBindToParent(properties.pIDLToAdd, IID_PPV_ARGS(&pParentISF), const_cast<PCUITEMID_CHILD*>(&pIDLToAddRelative));
 	ATLASSERT(SUCCEEDED(hr2));
 	if(FAILED(hr2)) {
 		goto Done;
@@ -171,7 +171,7 @@ STDMETHODIMP ShLvwInsertSingleItemTask::DoRun(void)
 	ATLASSERT_POINTER(pIDLToAddRelative, ITEMID_CHILD);
 
 	PIDLIST_ABSOLUTE pIDLSubItem = NULL;
-	if(isSimplePIDL) {
+	if(properties.isSimplePIDL) {
 		// we need a real pIDL
 		PUITEMID_CHILD pIDL = NULL;
 		if(SUCCEEDED(SHGetRealIDL(pParentISF, pIDLToAddRelative, &pIDL))) {
@@ -179,56 +179,56 @@ STDMETHODIMP ShLvwInsertSingleItemTask::DoRun(void)
 			ATLASSERT(pIDL != pIDLToAddRelative);
 			pIDLToAddRelative = pIDL;
 
-			PCIDLIST_ABSOLUTE pIDLClone = ILCloneFull(pIDLParent);
+			PCIDLIST_ABSOLUTE pIDLClone = ILCloneFull(properties.pIDLParent);
 			ATLASSERT_POINTER(pIDLClone, ITEMIDLIST_ABSOLUTE);
 			pIDLSubItem = reinterpret_cast<PIDLIST_ABSOLUTE>(ILAppendID(const_cast<PIDLIST_ABSOLUTE>(pIDLClone), reinterpret_cast<LPCSHITEMID>(pIDLToAddRelative), TRUE));
 		} else {
 			// well, it already was a real pIDL...
-			pIDLSubItem = pIDLToAdd;
-			pIDLToAdd = NULL;
-			isSimplePIDL = FALSE;
+			pIDLSubItem = properties.pIDLToAdd;
+			properties.pIDLToAdd = NULL;
+			properties.isSimplePIDL = FALSE;
 		}
 	} else {
-		pIDLSubItem = pIDLToAdd;
-		pIDLToAdd = NULL;
+		pIDLSubItem = properties.pIDLToAdd;
+		properties.pIDLToAdd = NULL;
 	}
 	ATLASSERT_POINTER(pIDLSubItem, ITEMIDLIST_ABSOLUTE);
 
-	if(!ShouldShowItem(pParentISF, pIDLToAddRelative, &enumSettings)) {
-		if(isSimplePIDL) {
+	if(!ShouldShowItem(pParentISF, pIDLToAddRelative, &properties.enumSettings)) {
+		if(properties.isSimplePIDL) {
 			ILFree(pIDLToAddRelative);
 			pIDLToAddRelative = NULL;
 		}
 		ILFree(pIDLSubItem);
 		goto Done;
 	}
-	if(isSimplePIDL) {
+	if(properties.isSimplePIDL) {
 		ILFree(pIDLToAddRelative);
 		pIDLToAddRelative = NULL;
 	}
 
-	if(DPA_AppendPtr(pEnumResult->hPIDLBuffer, pIDLSubItem) == -1) {
+	if(DPA_AppendPtr(properties.pEnumResult->hPIDLBuffer, pIDLSubItem) == -1) {
 		ILFree(pIDLSubItem);
 		hr = E_OUTOFMEMORY;
 		goto Done;
 	}
 
-	if(autoLabelEdit) {
-		pEnumResult->pIDLToLabelEdit = pIDLSubItem;
+	if(properties.autoLabelEdit) {
+		properties.pEnumResult->pIDLToLabelEdit = pIDLSubItem;
 	}
 
 Done:
-	EnterCriticalSection(pCriticalSection);
+	EnterCriticalSection(properties.pCriticalSection);
 	#ifdef USE_STL
-		pEnumratedItemsQueue->push(pEnumResult);
+		properties.pEnumratedItemsQueue->push(properties.pEnumResult);
 	#else
-		pEnumratedItemsQueue->AddTail(pEnumResult);
+		properties.pEnumratedItemsQueue->AddTail(properties.pEnumResult);
 	#endif
-	pEnumResult = NULL;
-	LeaveCriticalSection(pCriticalSection);
+	properties.pEnumResult = NULL;
+	LeaveCriticalSection(properties.pCriticalSection);
 
-	if(IsWindow(hWndToNotify)) {
-		PostMessage(hWndToNotify, WM_TRIGGER_ITEMENUMCOMPLETE, 0, 0);
+	if(IsWindow(properties.hWndToNotify)) {
+		PostMessage(properties.hWndToNotify, WM_TRIGGER_ITEMENUMCOMPLETE, 0, 0);
 	}
 	return hr;
 }

@@ -7,45 +7,45 @@
 ShTvwBackgroundItemEnumTask::ShTvwBackgroundItemEnumTask(void)
     : RunnableTask(TRUE)
 {
-	pNamespaceObject = NULL;
-	pEnumratedItemsQueue = NULL;
-	pEnumResult = NULL;
-	pCriticalSection = NULL;
-	taskID = GetNewTaskID();
+	properties.pNamespaceObject = NULL;
+	properties.pEnumratedItemsQueue = NULL;
+	properties.pEnumResult = NULL;
+	properties.pCriticalSection = NULL;
+	properties.taskID = GetNewTaskID();
 }
 
 void ShTvwBackgroundItemEnumTask::FinalRelease()
 {
-	if(pMarshaledParentISI) {
-		pMarshaledParentISI->Release();
-		pMarshaledParentISI = NULL;
+	if(properties.pMarshaledParentISI) {
+		properties.pMarshaledParentISI->Release();
+		properties.pMarshaledParentISI = NULL;
 	}
-	if(pParentISI) {
-		pParentISI->Release();
-		pParentISI = NULL;
+	if(properties.pParentISI) {
+		properties.pParentISI->Release();
+		properties.pParentISI = NULL;
 	}
-	if(pEnumerator) {
-		pEnumerator->Release();
-		pEnumerator = NULL;
+	if(properties.pEnumerator) {
+		properties.pEnumerator->Release();
+		properties.pEnumerator = NULL;
 	}
-	if(pEnumSettings) {
-		pEnumSettings->Release();
-		pEnumSettings = NULL;
+	if(properties.pEnumSettings) {
+		properties.pEnumSettings->Release();
+		properties.pEnumSettings = NULL;
 	}
-	if(pNamespaceObject) {
-		pNamespaceObject->Release();
-		pNamespaceObject = NULL;
+	if(properties.pNamespaceObject) {
+		properties.pNamespaceObject->Release();
+		properties.pNamespaceObject = NULL;
 	}
-	if(pIDLParent) {
-		ILFree(pIDLParent);
-		pIDLParent = NULL;
+	if(properties.pIDLParent) {
+		ILFree(properties.pIDLParent);
+		properties.pIDLParent = NULL;
 	}
-	if(pEnumResult) {
-		if(pEnumResult->hPIDLBuffer) {
-			DPA_DestroyCallback(pEnumResult->hPIDLBuffer, FreeDPAEnumeratedItemElement, NULL);
+	if(properties.pEnumResult) {
+		if(properties.pEnumResult->hPIDLBuffer) {
+			DPA_DestroyCallback(properties.pEnumResult->hPIDLBuffer, FreeDPAEnumeratedItemElement, NULL);
 		}
-		delete pEnumResult;
-		pEnumResult = NULL;
+		delete properties.pEnumResult;
+		properties.pEnumResult = NULL;
 	}
 }
 
@@ -58,7 +58,7 @@ STDMETHODIMP ShTvwBackgroundItemEnumTask::GetTaskID(PULONGLONG pTaskID)
 	if(!pTaskID) {
 		return E_POINTER;
 	}
-	*pTaskID = taskID;
+	*pTaskID = properties.taskID;
 	return S_OK;
 }
 
@@ -69,12 +69,12 @@ STDMETHODIMP ShTvwBackgroundItemEnumTask::GetTarget(REFIID requiredInterface, LP
 		return E_POINTER;
 	}
 
-	if(!pNamespaceObject) {
+	if(!properties.pNamespaceObject) {
 		*ppInterfaceImpl = NULL;
 		return E_NOINTERFACE;
 	}
 
-	return pNamespaceObject->QueryInterface(requiredInterface, ppInterfaceImpl);
+	return properties.pNamespaceObject->QueryInterface(requiredInterface, ppInterfaceImpl);
 }
 
 STDMETHODIMP ShTvwBackgroundItemEnumTask::SetTarget(LPDISPATCH pNamespaceObject)
@@ -83,13 +83,13 @@ STDMETHODIMP ShTvwBackgroundItemEnumTask::SetTarget(LPDISPATCH pNamespaceObject)
 		return E_INVALIDARG;
 	}
 
-	if(this->pNamespaceObject) {
-		this->pNamespaceObject->Release();
-		this->pNamespaceObject = NULL;
+	if(this->properties.pNamespaceObject) {
+		this->properties.pNamespaceObject->Release();
+		this->properties.pNamespaceObject = NULL;
 	}
 
 	if(pNamespaceObject) {
-		return pNamespaceObject->QueryInterface(IID_PPV_ARGS(&this->pNamespaceObject));
+		return pNamespaceObject->QueryInterface(IID_PPV_ARGS(&this->properties.pNamespaceObject));
 	}
 	return S_OK;
 }
@@ -103,37 +103,37 @@ STDMETHODIMP ShTvwBackgroundItemEnumTask::SetTarget(LPDISPATCH pNamespaceObject)
 	HRESULT ShTvwBackgroundItemEnumTask::Attach(HWND hWndToNotify, CAtlList<LPSHTVWBACKGROUNDITEMENUMINFO>* pEnumratedItemsQueue, LPCRITICAL_SECTION pCriticalSection, HWND hWndShellUIParentWindow, HTREEITEM hParentItem, HTREEITEM hInsertAfter, PCIDLIST_ABSOLUTE pIDLParent, LPSTREAM pMarshaledParentISI, IEnumShellItems* pEnumerator, INamespaceEnumSettings* pEnumSettings, PCIDLIST_ABSOLUTE namespacePIDLToSet, BOOL checkForDuplicates)
 #endif
 {
-	this->hWndToNotify = hWndToNotify;
-	this->pEnumratedItemsQueue = pEnumratedItemsQueue;
-	this->pCriticalSection = pCriticalSection;
-	this->hWndShellUIParentWindow = hWndShellUIParentWindow;
-	this->pIDLParent = ILCloneFull(pIDLParent);
-	this->pMarshaledParentISI = pMarshaledParentISI;
-	if(this->pMarshaledParentISI) {
-		this->pMarshaledParentISI->AddRef();
+	this->properties.hWndToNotify = hWndToNotify;
+	this->properties.pEnumratedItemsQueue = pEnumratedItemsQueue;
+	this->properties.pCriticalSection = pCriticalSection;
+	this->properties.hWndShellUIParentWindow = hWndShellUIParentWindow;
+	this->properties.pIDLParent = ILCloneFull(pIDLParent);
+	this->properties.pMarshaledParentISI = pMarshaledParentISI;
+	if(this->properties.pMarshaledParentISI) {
+		this->properties.pMarshaledParentISI->AddRef();
 	}
-	this->pEnumerator = pEnumerator;
-	if(this->pEnumerator) {
-		this->pEnumerator->AddRef();
+	this->properties.pEnumerator = pEnumerator;
+	if(this->properties.pEnumerator) {
+		this->properties.pEnumerator->AddRef();
 	}
-	this->pEnumSettings = pEnumSettings;
-	this->pEnumSettings->AddRef();
+	this->properties.pEnumSettings = pEnumSettings;
+	this->properties.pEnumSettings->AddRef();
 
-	pParentISI = NULL;
-	pEnumResult = new SHTVWBACKGROUNDITEMENUMINFO;
-	if(pEnumResult) {
-		ZeroMemory(pEnumResult, sizeof(SHTVWBACKGROUNDITEMENUMINFO));
-		pEnumResult->taskID = taskID;
-		pEnumResult->hParentItem = hParentItem;
-		pEnumResult->hInsertAfter = (hInsertAfter ? hInsertAfter : TVI_LAST);
-		pEnumResult->checkForDuplicates = checkForDuplicates;
-		pEnumResult->namespacePIDLToSet = namespacePIDLToSet;
-		pEnumResult->hPIDLBuffer = DPA_Create(16);
+	properties.pParentISI = NULL;
+	properties.pEnumResult = new SHTVWBACKGROUNDITEMENUMINFO;
+	if(properties.pEnumResult) {
+		ZeroMemory(properties.pEnumResult, sizeof(SHTVWBACKGROUNDITEMENUMINFO));
+		properties.pEnumResult->taskID = properties.taskID;
+		properties.pEnumResult->hParentItem = hParentItem;
+		properties.pEnumResult->hInsertAfter = (hInsertAfter ? hInsertAfter : TVI_LAST);
+		properties.pEnumResult->checkForDuplicates = checkForDuplicates;
+		properties.pEnumResult->namespacePIDLToSet = namespacePIDLToSet;
+		properties.pEnumResult->hPIDLBuffer = DPA_Create(16);
 	} else {
 		return E_OUTOFMEMORY;
 	}
 
-	enumSettings = CacheEnumSettings(pEnumSettings);
+	properties.enumSettings = CacheEnumSettings(pEnumSettings);
 	return S_OK;
 }
 
@@ -171,17 +171,17 @@ STDMETHODIMP ShTvwBackgroundItemEnumTask::SetTarget(LPDISPATCH pNamespaceObject)
 
 STDMETHODIMP ShTvwBackgroundItemEnumTask::DoInternalResume(void)
 {
-	ATLASSERT_POINTER(pEnumResult, SHTVWBACKGROUNDITEMENUMINFO);
-	ATLASSUME(pEnumResult->hPIDLBuffer);
+	ATLASSERT_POINTER(properties.pEnumResult, SHTVWBACKGROUNDITEMENUMINFO);
+	ATLASSUME(properties.pEnumResult->hPIDLBuffer);
 
 	HRESULT hr = NOERROR;
-	if(!pEnumerator) {
+	if(!properties.pEnumerator) {
 		CComPtr<IBindCtx> pBindContext;
 		// Note that STR_ENUM_ITEMS_FLAGS is ignored on Windows Vista and 7! That's why we use this code path only on Windows 8 and newer.
-		if(SUCCEEDED(CreateDwordBindCtx(STR_ENUM_ITEMS_FLAGS, enumSettings.enumerationFlags, &pBindContext))) {
-			pParentISI->BindToHandler(pBindContext, BHID_EnumItems, IID_PPV_ARGS(&pEnumerator));
+		if(SUCCEEDED(CreateDwordBindCtx(STR_ENUM_ITEMS_FLAGS, properties.enumSettings.enumerationFlags, &pBindContext))) {
+			properties.pParentISI->BindToHandler(pBindContext, BHID_EnumItems, IID_PPV_ARGS(&properties.pEnumerator));
 		}
-		if(!pEnumerator) {
+		if(!properties.pEnumerator) {
 			goto Done;
 		}
 
@@ -191,10 +191,10 @@ STDMETHODIMP ShTvwBackgroundItemEnumTask::DoInternalResume(void)
 	}
 
 	IShellItem* pChildItem = NULL;
-	while(pEnumerator->Next(1, &pChildItem, NULL) == S_OK) {
-		if(isSlowNamespace) {
+	while(properties.pEnumerator->Next(1, &pChildItem, NULL) == S_OK) {
+		if(properties.isSlowNamespace) {
 			for(int i = 0; TRUE; ++i) {
-				LPENUMERATEDITEM pItem = reinterpret_cast<LPENUMERATEDITEM>(DPA_GetPtr(pEnumResult->hPIDLBuffer, i));
+				LPENUMERATEDITEM pItem = reinterpret_cast<LPENUMERATEDITEM>(DPA_GetPtr(properties.pEnumResult->hPIDLBuffer, i));
 				if(!pItem) {
 					break;
 				}
@@ -214,7 +214,7 @@ STDMETHODIMP ShTvwBackgroundItemEnumTask::DoInternalResume(void)
 			continue;
 		}
 
-		if(!ShouldShowItem(pChildItem, &enumSettings)) {
+		if(!ShouldShowItem(pChildItem, &properties.enumSettings)) {
 			pChildItem->Release();
 			pChildItem = NULL;
 			if(WaitForSingleObject(hDoneEvent, 0) == WAIT_OBJECT_0) {
@@ -232,13 +232,13 @@ STDMETHODIMP ShTvwBackgroundItemEnumTask::DoInternalResume(void)
 			break;	//goto Done;
 		}
 		ATLASSERT_POINTER(pIDLSubItem, ITEMIDLIST_ABSOLUTE);
-		HasSubItems hasSubItems = HasAtLeastOneSubItem(pChildItem, &enumSettings, TRUE);
+		HasSubItems hasSubItems = HasAtLeastOneSubItem(pChildItem, &properties.enumSettings, TRUE);
 
 		pChildItem->Release();
 		pChildItem = NULL;
 
 		LPENUMERATEDITEM pItem = new ENUMERATEDITEM(pIDLSubItem, hasSubItems);
-		if(!pItem || (DPA_AppendPtr(pEnumResult->hPIDLBuffer, pItem) == -1)) {
+		if(!pItem || (DPA_AppendPtr(properties.pEnumResult->hPIDLBuffer, pItem) == -1)) {
 			ILFree(pIDLSubItem);
 			hr = E_OUTOFMEMORY;
 			break;	//goto Done;
@@ -250,45 +250,45 @@ STDMETHODIMP ShTvwBackgroundItemEnumTask::DoInternalResume(void)
 	}
 
 Done:
-	EnterCriticalSection(pCriticalSection);
+	EnterCriticalSection(properties.pCriticalSection);
 	#ifdef USE_STL
-		pEnumratedItemsQueue->push(pEnumResult);
+		properties.pEnumratedItemsQueue->push(properties.pEnumResult);
 	#else
-		pEnumratedItemsQueue->AddTail(pEnumResult);
+		properties.pEnumratedItemsQueue->AddTail(properties.pEnumResult);
 	#endif
-	pEnumResult = NULL;
-	LeaveCriticalSection(pCriticalSection);
+	properties.pEnumResult = NULL;
+	LeaveCriticalSection(properties.pCriticalSection);
 
-	if(IsWindow(hWndToNotify)) {
-		PostMessage(hWndToNotify, WM_TRIGGER_ITEMENUMCOMPLETE, 0, 0);
+	if(IsWindow(properties.hWndToNotify)) {
+		PostMessage(properties.hWndToNotify, WM_TRIGGER_ITEMENUMCOMPLETE, 0, 0);
 	}
 	return hr;
 }
 
 STDMETHODIMP ShTvwBackgroundItemEnumTask::DoRun(void)
 {
-	if(pMarshaledParentISI) {
-		CoGetInterfaceAndReleaseStream(pMarshaledParentISI, IID_PPV_ARGS(&pParentISI));
-		pMarshaledParentISI = NULL;
+	if(properties.pMarshaledParentISI) {
+		CoGetInterfaceAndReleaseStream(properties.pMarshaledParentISI, IID_PPV_ARGS(&properties.pParentISI));
+		properties.pMarshaledParentISI = NULL;
 	} else if(APIWrapper::IsSupported_SHCreateItemFromIDList()) {
-		APIWrapper::SHCreateItemFromIDList(pIDLParent, IID_PPV_ARGS(&pParentISI), NULL);
+		APIWrapper::SHCreateItemFromIDList(properties.pIDLParent, IID_PPV_ARGS(&properties.pParentISI), NULL);
 	}
-	if(!pParentISI) {
-		EnterCriticalSection(pCriticalSection);
+	if(!properties.pParentISI) {
+		EnterCriticalSection(properties.pCriticalSection);
 		#ifdef USE_STL
-			pEnumratedItemsQueue->push(pEnumResult);
+			properties.pEnumratedItemsQueue->push(properties.pEnumResult);
 		#else
-			pEnumratedItemsQueue->AddTail(pEnumResult);
+			properties.pEnumratedItemsQueue->AddTail(properties.pEnumResult);
 		#endif
-		pEnumResult = NULL;
-		LeaveCriticalSection(pCriticalSection);
+		properties.pEnumResult = NULL;
+		LeaveCriticalSection(properties.pCriticalSection);
 
-		if(IsWindow(hWndToNotify)) {
-			PostMessage(hWndToNotify, WM_TRIGGER_ITEMENUMCOMPLETE, 0, 0);
+		if(IsWindow(properties.hWndToNotify)) {
+			PostMessage(properties.hWndToNotify, WM_TRIGGER_ITEMENUMCOMPLETE, 0, 0);
 		}
 		return E_FAIL;
 	}
-	isSlowNamespace = IsSlowItem(pParentISI, FALSE, TRUE);
+	properties.isSlowNamespace = IsSlowItem(properties.pParentISI, FALSE, TRUE);
 
 	return E_PENDING;
 }
