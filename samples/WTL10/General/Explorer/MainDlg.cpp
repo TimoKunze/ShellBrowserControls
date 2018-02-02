@@ -146,7 +146,7 @@ LRESULT CMainDlg::OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam
 
 	if(IsComctl32Version600OrNewer()) {
 		imageLists[0].Create(16, 16, ILC_COLOR32, 2, 0);
-		HICON hIcon = reinterpret_cast<HICON>(LoadImage(ModuleHelper::GetResourceInstance(), MAKEINTRESOURCE(IDI_UP161632), IMAGE_ICON, 16, 16, LR_DEFAULTCOLOR));
+		hIcon = reinterpret_cast<HICON>(LoadImage(ModuleHelper::GetResourceInstance(), MAKEINTRESOURCE(IDI_UP161632), IMAGE_ICON, 16, 16, LR_DEFAULTCOLOR));
 		imageLists[0].AddIcon(hIcon);
 		DestroyIcon(hIcon);
 		hIcon = reinterpret_cast<HICON>(LoadImage(ModuleHelper::GetResourceInstance(), MAKEINTRESOURCE(IDI_FIND161632), IMAGE_ICON, 16, 16, LR_DEFAULTCOLOR));
@@ -170,7 +170,7 @@ LRESULT CMainDlg::OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam
 		DestroyIcon(hIcon);
 	} else {
 		imageLists[0].Create(16, 16, ILC_COLOR24, 2, 0);
-		HICON hIcon = reinterpret_cast<HICON>(LoadImage(ModuleHelper::GetResourceInstance(), MAKEINTRESOURCE(IDI_UP16168), IMAGE_ICON, 16, 16, LR_DEFAULTCOLOR));
+		hIcon = reinterpret_cast<HICON>(LoadImage(ModuleHelper::GetResourceInstance(), MAKEINTRESOURCE(IDI_UP16168), IMAGE_ICON, 16, 16, LR_DEFAULTCOLOR));
 		imageLists[0].AddIcon(hIcon);
 		DestroyIcon(hIcon);
 		hIcon = reinterpret_cast<HICON>(LoadImage(ModuleHelper::GetResourceInstance(), MAKEINTRESOURCE(IDI_FIND16168), IMAGE_ICON, 16, 16, LR_DEFAULTCOLOR));
