@@ -2297,11 +2297,11 @@ STDMETHODIMP ShellTreeView::CreateShellContextMenu(VARIANT items, OLE_HANDLE* pM
 	HTREEITEM* pItems = NULL;
 	hr = VariantToItemHandles(items, pItems, itemCount);
 	if(SUCCEEDED(hr)) {
+		HMENU hMenu = NULL;
 		if(itemCount > 0) {
 			ATLASSERT_ARRAYPOINTER(pItems, LONG, itemCount);
+			hr = CreateShellContextMenu(pItems, itemCount, CMF_NORMAL, hMenu);
 		}
-		HMENU hMenu = NULL;
-		hr = CreateShellContextMenu(pItems, itemCount, CMF_NORMAL, hMenu);
 		*pMenu = HandleToLong(hMenu);
 	}
 	if(pItems) {
@@ -2510,8 +2510,8 @@ STDMETHODIMP ShellTreeView::DisplayShellContextMenu(VARIANT items, OLE_XPOS_PIXE
 	if(SUCCEEDED(hr)) {
 		if(itemCount > 0) {
 			ATLASSERT_ARRAYPOINTER(pItems, LONG, itemCount);
+			hr = DisplayShellContextMenu(pItems, itemCount, position);
 		}
-		hr = DisplayShellContextMenu(pItems, itemCount, position);
 	}
 	if(pItems) {
 		delete[] pItems;
@@ -2926,8 +2926,8 @@ STDMETHODIMP ShellTreeView::InvokeDefaultShellContextMenuCommand(VARIANT items)
 	if(SUCCEEDED(hr)) {
 		if(itemCount > 0) {
 			ATLASSERT_ARRAYPOINTER(pItems, LONG, itemCount);
+			hr = InvokeDefaultShellContextMenuCommand(pItems, itemCount);
 		}
-		hr = InvokeDefaultShellContextMenuCommand(pItems, itemCount);
 	}
 	if(pItems) {
 		HeapFree(GetProcessHeap(), 0, pItems);
